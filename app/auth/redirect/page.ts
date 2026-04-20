@@ -8,9 +8,7 @@ export default async function RedirectPage() {
 
   const role = session?.user?.role;
 
-  if (role === "admin") redirect("/dashboard/admin");
-  if (role === "teacher") redirect("/dashboard/teacher");
-  if (role === "student") redirect("/dashboard/student");
+  if (role === "admin") redirect("/dashboard");
 
   redirect("/");
 }

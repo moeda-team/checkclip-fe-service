@@ -3,18 +3,12 @@ import type { NextAuthOptions, User } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import type { AdapterUser } from "next-auth/adapters";
 import type { UserRole } from "@/types/next-auth";
-import { API_BASE_URL } from "./api";
 
 type LoginResponseUser = {
   id: string;
   name: string;
   email: string;
   role: UserRole;
-};
-
-type LoginResponse = {
-  data: LoginResponseUser;
-  accessToken: string;
 };
 
 type AppUser = LoginResponseUser & {
@@ -39,7 +33,25 @@ export const authOptions: NextAuthOptions = {
         if (!credentials?.email || !credentials.password) {
           return null;
         }
-        
+
+        // ✅ STATIC LOGIN
+        if (
+          credentials.email === "tanaka@sakura-tech.co.jp" &&
+          credentials.password === "sakura2026"
+        ) {
+          return {
+            id: "1",
+            name: "Tanaka",
+            email: "tanaka@sakura-tech.co.jp",
+            role: "admin", // sesuaikan dengan UserRole kamu
+            accessToken: "static-token-123",
+          };
+        }
+
+        return null;
+
+        // ❌ API CALL (DISABLED)
+        /*
         const username = process.env.NEXT_PUBLIC_BASIC_AUTH_USERNAME || '';
         const password = process.env.NEXT_PUBLIC_BASIC_AUTH_PASSWORD || '';
 
@@ -58,40 +70,21 @@ export const authOptions: NextAuthOptions = {
             }),
           });
 
-          console.log(res);
-          if (!res.ok) {
-            const text = await res.text().catch(() => "");
-            console.error(
-              "[AUTH] Login failed:",
-              res.status,
-              res.statusText,
-              text
-            );
-
-            // 401 / 400 → kemungkinan besar email/password salah
-            if (res.status === 400 || res.status === 401) {
-              return null; // NextAuth → CredentialsSignin
-            }
-
-            // status lain → server error, tetap di-anggap gagal login
-            return null;
-          }
+          if (!res.ok) return null;
 
           const data: LoginResponse = await res.json();
 
-          const appUser: AppUser = {
+          return {
             id: data.data.id,
             name: data.data.name,
             email: data.data.email,
             role: data.data.role,
             accessToken: data.accessToken,
           };
-
-          return appUser;
-        } catch (error) {
-          console.error("[AUTH] Login exception:", error);
-          return null; // tetap CredentialsSignin
+        } catch {
+          return null;
         }
+        */
       },
     }),
   ],

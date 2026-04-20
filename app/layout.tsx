@@ -4,9 +4,9 @@ import "./globals.css";
 import { SessionProvider } from "@/components/SessionProvider";
 
 export const metadata: Metadata = {
-  title: "Online Learning Platform",
+  title: "Marketing Technology",
   description:
-    "Platform pembelajaran online dengan fitur CRUD kelas, materi, dan quiz.",
+    "Real-time business overview",
 };
 
 export default function RootLayout({
@@ -16,7 +16,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="min-h-screen bg-slate-950 text-slate-50">
+      <body className="min-h-screen bg-white text-gray-900">
         <SessionProvider>{children}</SessionProvider>
       </body>
     </html>

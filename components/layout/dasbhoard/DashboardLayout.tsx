@@ -1,7 +1,7 @@
 // app/dashboard/layout.tsx
 import type { ReactNode } from "react";
-import { DashboardHeader } from "@/components/layout/student/DashboardHeader";
-import { DashboardFooter } from "@/components/layout/student/DashboardFooter";
+import { DashboardHeader } from "@/components/layout/dasbhoard/DashboardHeader";
+import { DashboardFooter } from "@/components/layout/dasbhoard/DashboardFooter";
 import { GlobalBreadcrumb } from "@/components/layout/GlobalBreadcrumb";
 
 export default function DashboardLayout({
@@ -15,8 +15,8 @@ export default function DashboardLayout({
 
       <GlobalBreadcrumb />
 
-      <main className="flex-1">
-        <div className="">
+      <main className="flex-1 overflow-auto">
+        <div className="p-6">
           {children}
         </div>
       </main>

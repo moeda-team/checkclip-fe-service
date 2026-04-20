@@ -13,11 +13,14 @@ import {
   User,
   Menu,
   X,
+  Search,
+  HelpCircle,
 } from "lucide-react";
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Input } from "@/components/ui/input";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -42,9 +45,9 @@ export function DashboardHeader() {
     <>
       {/* ================= HEADER ================= */}
       <header className="bg-white border-b sticky top-0 z-50 border-gray-200">
-        <div className="max-w-[1400px] mx-auto px-4 md:px-6 py-4">
+        <div className="mx-auto px-4 md:px-6 py-4">
           <div className="flex items-center justify-between">
-            {/* Left side */}
+            {/* Left side - Dashboard Title */}
             <div className="flex items-center gap-3">
               {/* MOBILE MENU BUTTON */}
               <button
@@ -54,93 +57,66 @@ export function DashboardHeader() {
                 <Menu className="w-5 h-5" />
               </button>
 
-              {/* Logo */}
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg" />
-                <span className="font-semibold text-gray-900">Cogie</span>
+              {/* Dashboard Title */}
+              <div className="flex gap-2 items-end" >
+                <h1 className="text-xl font-semibold text-gray-900">Dashboard</h1>
+                <p className="text-sm text-gray-500">Real-time business overview</p>
               </div>
-
-              {/* Desktop Navigation */}
-              <nav className="hidden lg:flex items-center gap-8 text-sm ml-10">
-                <Link
-                  href="/dashboard/student"
-                  className={`relative pb-1 ${
-                    isOverview
-                      ? "text-gray-900"
-                      : "text-gray-500 hover:text-gray-900"
-                  }`}
-                >
-                  <span>Overview</span>
-                  {isOverview && (
-                    <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600" />
-                  )}
-                </Link>
-
-                <Link
-                  href="/dashboard/student/classrooms"
-                  className={`relative pb-1 ${
-                    isClassrooms
-                      ? "text-gray-900"
-                      : "text-gray-500 hover:text-gray-900"
-                  }`}
-                >
-                  <span>Kelas</span>
-                  {isClassrooms && (
-                    <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600" />
-                  )}
-                </Link>
-
-                <button className="text-gray-500 hover:text-gray-900">
-                  File Storage
-                </button>
-
-                <button className="text-gray-500 hover:text-gray-900">
-                  Message
-                </button>
-              </nav>
             </div>
 
             {/* Right Side */}
             <div className="flex items-center gap-3">
-              {/* Courses (Desktop Only) */}
-              <Link href="/dashboard/student/courses" className="hidden md:block">
-                <Button variant="ghost" size="sm">
-                  <Grid3x3 className="w-4 h-4 mr-2" />
-                  Courses
-                </Button>
-              </Link>
-
-              {/* Icons */}
+              {/* Middle - Search Bar */}
+              <div className="hidden md:flex flex-1 min-w-[400px] mx-8">
+                <div className="relative w-full">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  <Input
+                    type="text"
+                    placeholder="Search contacts, deals, campaigns..."
+                    className="pl-10 pr-4 bg-gray-50 border-gray-200 focus:border-gray-300"
+                  />
+                </div>
+              </div>
+              {/* Help Icon */}
               <Button variant="ghost" size="icon" className="hidden md:flex">
-                <Settings className="w-5 h-5" />
+                <HelpCircle className="w-5 h-5 text-gray-600" />
               </Button>
 
+              {/* Bell with Notification */}
               <Button variant="ghost" size="icon" className="relative">
-                <Bell className="w-5 h-5" />
+                <Bell className="w-5 h-5 text-gray-600" />
                 <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full" />
               </Button>
 
-              {/* Avatar */}
+              {/* User Avatar Dropdown */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="gap-2 px-2">
                     <Avatar className="w-8 h-8">
-                      <AvatarImage src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&q=80" />
-                      <AvatarFallback>ME</AvatarFallback>
+                      <AvatarFallback className="bg-gray-100 text-gray-700 font-medium">TY</AvatarFallback>
                     </Avatar>
-                    <ChevronDown className="w-4 h-4 hidden md:block" />
+                    <ChevronDown className="w-4 h-4 hidden md:block text-gray-600" />
                   </Button>
                 </DropdownMenuTrigger>
 
                 <DropdownMenuContent
                   align="end"
-                  className="w-52 bg-white text-gray-900 border border-gray-200 shadow-lg"
+                  className="w-64 bg-white text-gray-900 border border-gray-200 shadow-lg"
                 >
                   <DropdownMenuLabel className="flex flex-col gap-1 text-gray-900">
-                    <span className="text-[11px] text-gray-500">
-                      Signed in as
-                    </span>
-                    <span className="text-sm font-medium">admin@example.com</span>
+                    <div className="flex items-center gap-2">
+                      <Avatar className="w-8 h-8">
+                        <AvatarFallback className="bg-gray-100 text-gray-700 font-medium">TY</AvatarFallback>
+                      </Avatar>
+                      <div>
+                        <p className="text-sm font-medium">Tanaka Yuki</p>
+                        <p className="text-xs text-gray-500">tanaka@sakura-tech.co.jp</p>
+                      </div>
+                    </div>
+                    <div className="flex gap-2 mt-2">
+                      <span className="bg-blue-100 text-blue-700 text-xs px-2 py-1 rounded-full">Administrator</span>
+                      <span className="bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded-full">Sakura Technologies</span>
+                    </div>
                   </DropdownMenuLabel>
 
                   <DropdownMenuSeparator className="bg-gray-200" />
@@ -148,7 +124,7 @@ export function DashboardHeader() {
                   <DropdownMenuItem asChild className="cursor-pointer hover:bg-gray-50">
                     <Link href="/profile" className="flex items-center gap-2">
                       <User className="w-4 h-4 text-gray-700" />
-                      <span>Profile</span>
+                      <span>Profile & Account</span>
                     </Link>
                   </DropdownMenuItem>
 
@@ -168,6 +144,19 @@ export function DashboardHeader() {
                     <LogOut className="w-4 h-4 mr-2" />
                     <span>Logout</span>
                   </DropdownMenuItem>
+
+                  <DropdownMenuSeparator className="bg-gray-200" />
+                  
+                  <div className="px-2 py-2 text-xs text-gray-500">
+                    <div className="flex items-center gap-1 mb-1">
+                      <div className="w-2 h-2 bg-green-500 rounded-full" />
+                      <span>Session active</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <div className="w-2 h-2 bg-green-500 rounded-full" />
+                      <span>Secure connection</span>
+                    </div>
+                  </div>
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>

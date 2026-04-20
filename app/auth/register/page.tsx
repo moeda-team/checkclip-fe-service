@@ -30,7 +30,7 @@ export default function RegisterPage() {
     setFormError(null);
     resetError();
 
-    // validasi front-end
+    // front-end validation
     if (password !== confirmPassword) {
       setFormError("Passwords do not match.");
       return;
@@ -41,15 +41,15 @@ export default function RegisterPage() {
       return;
     }
 
-    // hit API lewat hook
+    // call API through hook
     const result = await register({ name, email, password, confirmPassword });
 
     if (!result.ok) {
-      // error detail sudah di `apiError`, tapi kalau mau override bisa pakai result.message
+      // error details are in `apiError`, but if you want to override you can use result.message
       return;
     }
     
-    // sukses -> redirect ke login
+    // success -> redirect to login
     router.push("/auth/login?registered=1");
   };
 

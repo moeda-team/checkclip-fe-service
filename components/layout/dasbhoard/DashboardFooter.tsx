@@ -19,7 +19,7 @@ export function DashboardFooter() {
         "
       >
         <span className="text-center md:text-left">
-          © {year} Cogie. All rights reserved.
+          © {year} Marketing technology. All rights reserved.
         </span>
 
         <div className="flex flex-wrap items-center justify-center md:justify-end gap-3 md:gap-4">
