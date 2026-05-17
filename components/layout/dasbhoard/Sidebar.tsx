@@ -20,6 +20,7 @@ import {
   Database,
   User
 } from "lucide-react";
+import { useSession } from "next-auth/react";
 
 const navigationItems = [
   {
@@ -126,7 +127,7 @@ const navigationItems = [
 
 export function Sidebar() {
   const pathname = usePathname();
-
+  const { data: session} = useSession()
   return (
     <div className="fixed lg:relative lg:translate-x-0 -translate-x-full transition-transform duration-300 ease-in-out z-50 w-64 top-0 left-0 bg-white border-r border-gray-200 text-gray-900 h-full flex flex-col" data-sidebar="sidebar">
       {/* Logo */}
@@ -178,11 +179,19 @@ export function Sidebar() {
       <div className="px-4 py-2 border-t border-gray-200">
         <div className="flex items-center space-x-3">
           <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
-            <User className="w-4 h-4 text-gray-600" />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={session?.user?.profilePictureUrl ?? `https://ui-avatars.com/api/?name=${encodeURIComponent(session?.user?.name ?? "User")}&color=FFFFFF&background=09308D&size=400`}
+              alt="Profile picture"
+              width={32}
+              height={32}
+              className="rounded-full w-8 h-8 object-cover"
+            />
+
           </div>
           <div>
-            <p className="text-sm font-medium text-gray-900">Tanaka Yuki</p>
-            <p className="text-xs text-gray-500">Administrator</p>
+            <p className="text-sm font-medium text-gray-900">{ session?.user?.name}</p>
+            <p className="text-xs text-gray-500">{session?.user?.role}</p>
           </div>
         </div>
       </div>
