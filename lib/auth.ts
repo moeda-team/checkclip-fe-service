@@ -113,6 +113,7 @@ export const authOptions: NextAuthOptions = {
         prompt:   { label: "Prompt",   type: "text" },
         iss:      { label: "Iss",      type: "text" },
       },
+
       async authorize(credentials): Promise<AppUser | null> {
         if (!credentials?.code) return null;
 
@@ -138,6 +139,61 @@ export const authOptions: NextAuthOptions = {
           const { access_token, refresh_token } = callbackJson.data;
 
           // Ambil user profile
+          const meRes = await fetch(`${API_BASE_URL}/auth/me`, {
+            method: "GET",
+            headers: { Authorization: access_token },
+          });
+
+          if (!meRes.ok) return null;
+
+          const meJson: MeApiResponse = await meRes.json();
+          if (!meJson.status || !meJson.data) return null;
+
+          const user = meJson.data;
+
+          return {
+            id: user.id,
+            name: user.full_name,
+            email: user.email,
+            role: user.role as UserRole,
+            accessToken: access_token,
+            refreshToken: refresh_token,
+            phoneNumber: user.phone_number,
+            profilePictureUrl: user.profile_picture_url,
+          };
+        } catch {
+          return null;
+        }
+      },
+    }),
+    CredentialsProvider({
+      id: "yahoo-oauth",
+      name: "Yahoo",
+      credentials: {
+        code:  { label: "Code",  type: "text" },
+        state: { label: "State", type: "text" },
+      },
+      async authorize(credentials): Promise<AppUser | null> {
+        if (!credentials?.code) return null;
+
+        try {
+          const params = new URLSearchParams({
+            code:  credentials.code,
+            state: credentials.state ?? "",
+          });
+
+          const callbackRes = await fetch(
+            `${API_BASE_URL}/auth/yahoo/callback?${params.toString()}`,
+            { method: "GET" }
+          );
+
+          if (!callbackRes.ok) return null;
+
+          const callbackJson: LoginApiResponse = await callbackRes.json();
+          if (!callbackJson.status || !callbackJson.data?.access_token) return null;
+
+          const { access_token, refresh_token } = callbackJson.data;
+
           const meRes = await fetch(`${API_BASE_URL}/auth/me`, {
             method: "GET",
             headers: { Authorization: access_token },

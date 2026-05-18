@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { getGoogleOAuthUrl } from "@/lib/google-oauth";
+import { getYahooOAuthUrl } from "@/lib/yahoo-oauth";
 
 function LoginPageInner() {
   const router = useRouter();
@@ -67,6 +68,10 @@ function LoginPageInner() {
 
   const handleGoogleLogin = () => {
     window.location.href = getGoogleOAuthUrl();
+  };
+
+  const handleYahooLogin = () => {
+    window.location.href = getYahooOAuthUrl();
   };
 
   const features = [
@@ -253,6 +258,7 @@ function LoginPageInner() {
                 type="button"
                 variant="outline"
                 className="w-full h-10 rounded-lg border-gray-200 text-sm font-medium text-gray-700 hover:bg-gray-50 flex items-center justify-center gap-2"
+                onClick={handleYahooLogin}
               >
                 <svg className="w-4 h-4" viewBox="0 0 24 24" fill="#6001D2">
                   <path d="M0 0h24v24H0z" fill="none" />
