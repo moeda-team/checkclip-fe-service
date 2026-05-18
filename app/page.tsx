@@ -6,9 +6,10 @@ import { authOptions } from "@/lib/auth";
 export default async function HomePage() {
   const session = await getServerSession(authOptions);
 
-  if (session) {
-    redirect("/auth/redirect");
+  if (!session) {
+    redirect("/auth/login");
   }
 
-  redirect("/auth/login");
+  // Sudah login — arahkan langsung ke dashboard tanpa lewat /auth/redirect
+  redirect("/dashboard");
 }

@@ -3,23 +3,24 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { 
-  LayoutDashboard, 
-  Users, 
-  Calendar, 
-  FileText, 
-  Target, 
-  Megaphone, 
-  Mail, 
-  TrendingUp, 
-  Brain, 
-  BarChart3, 
-  FileSpreadsheet, 
-  Settings, 
-  Shield, 
+import {
+  LayoutDashboard,
+  Users,
+  Calendar,
+  FileText,
+  Target,
+  Megaphone,
+  Mail,
+  TrendingUp,
+  Brain,
+  BarChart3,
+  FileSpreadsheet,
+  Settings,
+  Shield,
   Database,
-  User
+  User,
 } from "lucide-react";
+import { useSession } from "next-auth/react";
 
 const navigationItems = [
   {
@@ -30,95 +31,55 @@ const navigationItems = [
         href: "/dashboard",
         icon: LayoutDashboard,
       },
-      {
-        title: "Calendar",
-        href: "/dashboard/calendar",
-        icon: Calendar,
-      },
     ],
   },
   {
     title: "CRM",
     items: [
       {
-        title: "Customers",
+        title: "Contacts",
         href: "/dashboard/customers",
         icon: Users,
       },
       {
-        title: "Leads",
+        title: "Deals",
         href: "/dashboard/leads",
         icon: Target,
       },
       {
-        title: "Deals",
+        title: "CRM",
         href: "/dashboard/deals",
         icon: FileText,
       },
     ],
   },
   {
-    title: "MARKETING",
+    title: "Campaigns",
     items: [
       {
-        title: "Campaigns",
+        title: "Campaign",
         href: "/dashboard/campaigns",
         icon: Megaphone,
       },
       {
-        title: "Email Marketing",
+        title: "Campaign Planner",
         href: "/dashboard/email-marketing",
         icon: Mail,
       },
       {
-        title: "Analytics",
-        href: "/dashboard/marketing-analytics",
+        title: "Campaign Briefs",
+        href: "/dashboard/campaign-briefs",
         icon: TrendingUp,
       },
-    ],
-  },
-  {
-    title: "AI / INTELLIGENCE",
-    items: [
       {
-        title: "AI Assistant",
-        href: "/dashboard/ai-assistant",
-        icon: Brain,
-      },
-    ],
-  },
-  {
-    title: "REPORTS",
-    items: [
-      {
-        title: "Sales Reports",
-        href: "/dashboard/sales-reports",
-        icon: BarChart3,
+        title: "Campaign Monitor",
+        href: "/dashboard/campaign-monitor",
+        icon: TrendingUp,
       },
       {
-        title: "Financial Reports",
-        href: "/dashboard/financial-reports",
-        icon: FileSpreadsheet,
-      },
-    ],
-  },
-  {
-    title: "SYSTEM",
-    items: [
-      {
-        title: "Settings",
-        href: "/dashboard/settings",
-        icon: Settings,
-      },
-      {
-        title: "Security",
-        href: "/dashboard/security",
-        icon: Shield,
-      },
-      {
-        title: "Database",
-        href: "/dashboard/database",
-        icon: Database,
+        title: "Strategy Planner",
+        href: "/dashboard/strategy-planner",
+        icon: TrendingUp,
       },
     ],
   },
@@ -126,9 +87,12 @@ const navigationItems = [
 
 export function Sidebar() {
   const pathname = usePathname();
-
+  const { data: session } = useSession();
   return (
-    <div className="fixed lg:relative lg:translate-x-0 -translate-x-full transition-transform duration-300 ease-in-out z-50 w-64 top-0 left-0 bg-white border-r border-gray-200 text-gray-900 h-full flex flex-col" data-sidebar="sidebar">
+    <div
+      className="fixed lg:relative lg:translate-x-0 -translate-x-full transition-transform duration-300 ease-in-out z-50 w-64 top-0 left-0 bg-white border-r border-gray-200 text-gray-900 h-full flex flex-col"
+      data-sidebar="sidebar"
+    >
       {/* Logo */}
       <div className="px-6 py-4 border-b border-gray-200">
         <div className="flex items-center space-x-2">
@@ -136,7 +100,9 @@ export function Sidebar() {
             <span className="text-white font-semibold text-sm">S</span>
           </div>
           <div>
-            <h1 className="text-sm font-semibold text-gray-900">Sakura Technologies</h1>
+            <h1 className="text-sm font-semibold text-gray-900">
+              Sakura Technologies
+            </h1>
             <p className="text-xs text-gray-500">Enterprise</p>
           </div>
         </div>
@@ -160,7 +126,7 @@ export function Sidebar() {
                         "flex items-center space-x-3 px-3 py-2 rounded-lg text-sm transition-colors",
                         isActive
                           ? "bg-gray-100 text-gray-900"
-                          : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+                          : "text-gray-600 hover:bg-gray-100 hover:text-gray-900",
                       )}
                     >
                       <item.icon className="w-4 h-4" />
@@ -178,11 +144,23 @@ export function Sidebar() {
       <div className="px-4 py-2 border-t border-gray-200">
         <div className="flex items-center space-x-3">
           <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
-            <User className="w-4 h-4 text-gray-600" />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={
+                session?.user?.profilePictureUrl ??
+                `https://ui-avatars.com/api/?name=${encodeURIComponent(session?.user?.name ?? "User")}&color=FFFFFF&background=09308D&size=400`
+              }
+              alt="Profile picture"
+              width={32}
+              height={32}
+              className="rounded-full w-8 h-8 object-cover"
+            />
           </div>
           <div>
-            <p className="text-sm font-medium text-gray-900">Tanaka Yuki</p>
-            <p className="text-xs text-gray-500">Administrator</p>
+            <p className="text-sm font-medium text-gray-900">
+              {session?.user?.name}
+            </p>
+            <p className="text-xs text-gray-500">{session?.user?.role}</p>
           </div>
         </div>
       </div>
