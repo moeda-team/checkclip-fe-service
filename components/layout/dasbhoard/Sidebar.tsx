@@ -68,7 +68,7 @@ const navigationItems = [
       },
       {
         title: "Campaign Briefs",
-        href: "/dashboard/campaign-briefs",
+        href: "/campaign/brief",
         icon: TrendingUp,
       },
       {
@@ -90,7 +90,7 @@ export function Sidebar() {
   const { data: session } = useSession();
   return (
     <div
-      className="fixed lg:relative lg:translate-x-0 -translate-x-full transition-transform duration-300 ease-in-out z-50 w-64 top-0 left-0 bg-white border-r border-gray-200 text-gray-900 h-full flex flex-col"
+      className="fixed lg:translate-x-0 -translate-x-full transition-transform duration-300 ease-in-out z-50 w-64 top-0 left-0 bg-white border-r border-gray-200 text-gray-900 h-screen flex flex-col"
       data-sidebar="sidebar"
     >
       {/* Logo */}
@@ -101,7 +101,7 @@ export function Sidebar() {
           </div>
           <div>
             <h1 className="text-sm font-semibold text-gray-900">
-              Sakura Technologies
+              ATLAS
             </h1>
             <p className="text-xs text-gray-500">Enterprise</p>
           </div>
@@ -109,7 +109,7 @@ export function Sidebar() {
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 p-4 space-y-4 overflow-y-auto max-h-[calc(100vh-120px)]">
+      <nav className="flex-1 p-4 space-y-4 overflow-y-auto">
         {navigationItems.map((section) => (
           <div key={section.title}>
             <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
