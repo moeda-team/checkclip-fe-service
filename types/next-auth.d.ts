@@ -15,6 +15,8 @@ declare module "next-auth" {
       image?: string | null;
     };
     accessToken: string;
+    /** Set to "RefreshTokenExpired" when refresh token is no longer valid */
+    error?: "RefreshTokenExpired";
   }
 
   interface User extends DefaultUser {
@@ -32,7 +34,10 @@ declare module "next-auth/jwt" {
     role?: UserRole;
     accessToken?: string;
     refreshToken?: string;
+    /** Unix timestamp (ms) when accessToken expires */
+    accessTokenExpiry?: number;
     phoneNumber?: string | null;
     profilePictureUrl?: string | null;
+    error?: "RefreshTokenExpired";
   }
 }

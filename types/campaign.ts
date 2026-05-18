@@ -20,3 +20,34 @@ export type SubtypeOption = {
   label: string;
   description: string;
 };
+
+// ─── Campaign Form Types ──────────────────────────────────────────────────────
+
+export type BrandProductData = {
+  brandName: string;
+};
+
+export type BudgetScheduleData = {
+  budgetType: string;
+  budget: string;
+  startDate: string;
+  startTime: string;
+  endDate: string;
+  endTime: string;
+  endDays: string;
+  hasEndDate: boolean;
+};
+
+export type AudienceData = {
+  location: string;
+  age: string;
+  language: string;
+  gender: "all" | "men" | "women";
+  interest: string;
+};
+
+export type CampaignFormData = {
+  brand: BrandProductData;
+  budget: BudgetScheduleData;
+  audience: AudienceData;
+};
