@@ -8,9 +8,11 @@ import { Sidebar } from "@/components/layout/dasbhoard/Sidebar";
 import { SidebarProvider, useSidebar } from "@/components/layout/dasbhoard/ResponsiveSidebarProvider";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useAutoSignOut } from "@/hooks/useAutoSignOut";
 
 function DashboardLayoutContent({ children }: { children: ReactNode }) {
   const { sidebarOpen, toggleSidebar } = useSidebar();
+  useAutoSignOut();
 
   return (
     <div className="min-h-screen bg-white flex">

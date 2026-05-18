@@ -7,8 +7,15 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { AdsTypeSelector } from "@/components/card/AdsTypeSelector";
 import { CampaignObjective, objectives } from "@/components/card/CampaignObjective";
-import { CampaignSubtype, campaignSubtypeOptions } from "@/components/card/CampaignSubtype";
-import type { AdsType, CampaignObjectiveKey } from "@/types/campaign";
+import { CampaignSubtype } from "@/components/card/CampaignSubtype";
+import { CampaignFormByObjective } from "@/components/form/campaign/forms";
+import { CampaignAlertModal } from "@/components/modal/CampaignAlertModal";
+import { apiPost } from "@/lib/api";
+import type {
+  AdsType,
+  CampaignObjectiveKey,
+  CampaignFormData,
+} from "@/types/campaign";
 
 // ─── Campaign type mapping ────────────────────────────────────────────────────
 
@@ -20,29 +27,155 @@ const campaignTypeMap: Record<CampaignObjectiveKey, string> = {
   app_install: "App · App Installs",
 };
 
+// ─── Default form state ───────────────────────────────────────────────────────
+
+const defaultFormData: CampaignFormData = {
+  brand: { brandName: "" },
+  budget: {
+    budgetType: "",
+    budget: "",
+    startDate: "",
+    startTime: "",
+    endDate: "",
+    endTime: "",
+    endDays: "",
+    hasEndDate: false,
+  },
+  audience: {
+    location: "",
+    age: "",
+    language: "",
+    gender: "all",
+    interest: "",
+  },
+};
+
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function CampaignBriefPage() {
+  const [step, setStep] = useState<1 | 2>(1);
+
+  // Step 1 state
   const [selectedAds, setSelectedAds] = useState<AdsType>("google");
   const [campaignName, setCampaignName] = useState("");
   const [selectedObjective, setSelectedObjective] = useState<CampaignObjectiveKey | null>(null);
   const [selectedSubtype, setSelectedSubtype] = useState<string>("");
+
+  // Step 2 state
+  const [formData, setFormData] = useState<CampaignFormData>(defaultFormData);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Modal state
+  type ModalState =
+    | { open: false }
+    | { open: true; variant: "confirm" }
+    | { open: true; variant: "success" }
+    | { open: true; variant: "failed"; errorMessage?: string };
+
+  const [modal, setModal] = useState<ModalState>({ open: false });
 
   const handleObjectiveSelect = (key: CampaignObjectiveKey) => {
     setSelectedObjective(key);
     setSelectedSubtype("");
   };
 
-  const handleNext = () => {
-    console.log({ selectedAds, campaignName, selectedObjective, selectedSubtype });
+  // Step 2 footer "Create" → show confirm modal first
+  const handleCreateClick = () => {
+    setModal({ open: true, variant: "confirm" });
   };
 
+  // Confirm modal "Continue" → actually submit
+  const handleConfirmedCreate = async () => {
+    if (!selectedObjective) return;
+
+    setModal({ open: false });
+    setIsSubmitting(true);
+
+    try {
+      await apiPost("/campaign/strategy-brief/", {
+        title: campaignName,
+        type_ads: selectedAds,
+        objective_type: selectedObjective,
+        sub_type: selectedSubtype,
+        form: formData,
+      });
+
+      setModal({ open: true, variant: "success" });
+    } catch (err) {
+      setModal({
+        open: true,
+        variant: "failed",
+        errorMessage: err instanceof Error ? err.message : undefined,
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleModalClose = () => {
+    setModal({ open: false });
+  };
+
+  const canProceed = !!selectedObjective && campaignName.trim().length > 0;
+
+  // ── Step 2 ──────────────────────────────────────────────────────────────────
+  if (step === 2 && selectedObjective) {
+    return (
+      <div className="flex flex-col min-h-[calc(100vh-56px)]">
+        <div className="flex-1 overflow-y-auto p-6 max-w-3xl mx-auto w-full">
+          <CampaignFormByObjective
+            objective={selectedObjective}
+            data={formData}
+            onChange={setFormData}
+          />
+        </div>
+
+        <div className="border-t border-gray-200 bg-white px-6 py-4 flex items-center justify-end gap-3">
+          <Button
+            variant="outline"
+            onClick={() => setStep(1)}
+            disabled={isSubmitting}
+            className="px-8 h-10 rounded-lg text-sm font-medium border-gray-200"
+          >
+            Back
+          </Button>
+          <Button
+            onClick={handleCreateClick}
+            disabled={isSubmitting}
+            className="bg-gray-900 hover:bg-gray-800 text-white px-8 h-10 rounded-lg text-sm font-medium"
+          >
+            {isSubmitting ? "Creating..." : "Create"}
+          </Button>
+        </div>
+
+        {/* Modals */}
+        <CampaignAlertModal
+          variant="confirm"
+          open={modal.open && modal.variant === "confirm"}
+          onClose={handleModalClose}
+          onContinue={handleConfirmedCreate}
+        />
+        <CampaignAlertModal
+          variant="success"
+          open={modal.open && modal.variant === "success"}
+          onClose={handleModalClose}
+        />
+        <CampaignAlertModal
+          variant="failed"
+          open={modal.open && modal.variant === "failed"}
+          errorMessage={modal.open && modal.variant === "failed" ? modal.errorMessage : undefined}
+          onClose={handleModalClose}
+        />
+      </div>
+    );
+  }
+
+  // ── Step 1 ──────────────────────────────────────────────────────────────────
   return (
     <div className="flex flex-col min-h-[calc(100vh-56px)]">
-      {/* Scrollable content */}
       <div className="flex-1 overflow-y-auto p-6 space-y-8">
 
-        {/* ── Campaign Setup ─────────────────────────────────────────────── */}
+        {/* Campaign Setup */}
         <section>
           <div className="flex items-center gap-3 mb-4">
             <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center">
@@ -79,7 +212,7 @@ export default function CampaignBriefPage() {
           </div>
         </section>
 
-        {/* ── Campaign Objective ─────────────────────────────────────────── */}
+        {/* Campaign Objective */}
         <section>
           <div className="flex items-center gap-3 mb-4">
             <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center">
@@ -96,11 +229,10 @@ export default function CampaignBriefPage() {
           <CampaignObjective selected={selectedObjective} onSelect={handleObjectiveSelect} />
         </section>
 
-        {/* ── Campaign Type & Subtype ────────────────────────────────────── */}
+        {/* Campaign Type & Subtype */}
         {selectedObjective && (
           <section>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Campaign Type (read-only) */}
               <div>
                 <Label className="text-sm font-medium text-gray-700 mb-1.5 block">
                   Campaign Type
@@ -113,7 +245,6 @@ export default function CampaignBriefPage() {
                 </p>
               </div>
 
-              {/* Campaign Subtype */}
               <CampaignSubtype
                 objective={selectedObjective}
                 value={selectedSubtype}
@@ -124,11 +255,10 @@ export default function CampaignBriefPage() {
         )}
       </div>
 
-      {/* ── Sticky Footer ─────────────────────────────────────────────────── */}
       <div className="border-t border-gray-200 bg-white px-6 py-4 flex justify-end">
         <Button
-          onClick={handleNext}
-          disabled={!selectedObjective || !campaignName.trim()}
+          onClick={() => setStep(2)}
+          disabled={!canProceed}
           className="bg-gray-900 hover:bg-gray-800 text-white px-8 h-10 rounded-lg text-sm font-medium"
         >
           Next
