@@ -14,6 +14,14 @@ import type {
 } from "@/types/campaign";
 import { useCallback } from "react";
 
+// Get timezone offset in format +HH:00 or -HH:00
+const getTimezoneOffset = (): string => {
+  const offset = new Date().getTimezoneOffset();
+  const hours = Math.abs(Math.floor(offset / 60));
+  const sign = offset <= 0 ? "+" : "-";
+  return `${sign}${String(hours).padStart(2, "0")}:00`;
+};
+
 // Transform campaign form data to strategy planner payload
 const buildStrategyPlannerPayload = (data: {
   campaignName: string;
@@ -39,11 +47,11 @@ const buildStrategyPlannerPayload = (data: {
       type: data.formData.budget.budgetType,
       budget: Number(data.formData.budget.budget) || 0,
       start_date: data.formData.budget.startDate
-        ? `${data.formData.budget.startDate}${data.formData.budget.startTime ? `T${data.formData.budget.startTime}` : "T00:00:00"}`
+        ? `${data.formData.budget.startDate}T${data.formData.budget.startTime ? data.formData.budget.startTime + ":00" : "00:00:00"}${getTimezoneOffset()}`
         : new Date().toISOString(),
       end_date:
         data.formData.budget.endDate && data.formData.budget.hasEndDate
-          ? `${data.formData.budget.endDate}${data.formData.budget.endTime ? `T${data.formData.budget.endTime}` : "T23:59:59"}`
+          ? `${data.formData.budget.endDate}T${data.formData.budget.endTime ? data.formData.budget.endTime + ":00" : "23:59:59"}${getTimezoneOffset()}`
           : data.formData.budget.endDays
             ? new Date(
                 Date.now() +
@@ -53,7 +61,7 @@ const buildStrategyPlannerPayload = (data: {
     },
     audience: {
       location: data.formData.audience.location,
-      age: Number(data.formData.audience.age) || 0,
+      age: data.formData.audience.age || "all",
       language: data.formData.audience.language,
       gender: data.formData.audience.gender as "all" | "women" | "men",
       detail_audience: data.formData.audience.interest

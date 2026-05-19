@@ -20,7 +20,7 @@ import type {
   ApiResponsePagination
 } from "@/types/api";
 
-const STRATEGY_PLANNER_URL = `${env.apiBaseUrl}/strategy-planner`;
+const STRATEGY_PLANNER_URL = `${env.apiBaseUrl}/campaign/strategy-planner/`;
 const axios = axiosConfig(env.apiBaseUrl);
 
 /*
@@ -36,7 +36,7 @@ export const usePostStrategyPlanner = () => {
   >({
     mutationFn: async (payload) => {
       const response = await axios.post<ApiResponse<StrategyPlannerDto>>(
-        `${STRATEGY_PLANNER_URL}`,
+        STRATEGY_PLANNER_URL,
         payload
       );
       return response.data;
@@ -68,7 +68,7 @@ export const useGetStrategyPlanners = (filter: StrategyPlannerFilter) =>
     queryFn: async () => {
       const response = await axios.get<
         ApiResponsePagination<StrategyPlannerTableRow[]>
-      >(`${STRATEGY_PLANNER_URL}/`, { params: filter });
+      >(`${STRATEGY_PLANNER_URL}`, { params: filter });
 
       return response.data;
     },
@@ -90,7 +90,7 @@ export const useGetStrategyPlanner = (strategyPlannerId: string) =>
 
     queryFn: async () => {
       const response = await axios.get<ApiResponse<StrategyPlannerDto>>(
-        `${STRATEGY_PLANNER_URL}/${strategyPlannerId}`
+        `${STRATEGY_PLANNER_URL}${strategyPlannerId}`
       );
 
       return response.data;
@@ -117,7 +117,7 @@ export const usePutStrategyPlanner = () => {
   >({
     mutationFn: async ({ strategyPlannerId, payload }) => {
       const response = await axios.put<ApiResponse<StrategyPlannerDto>>(
-        `${STRATEGY_PLANNER_URL}/${strategyPlannerId}`,
+        `${STRATEGY_PLANNER_URL}${strategyPlannerId}`,
         payload
       );
 
@@ -153,7 +153,7 @@ export const useDeleteStrategyPlanner = () => {
   >({
     mutationFn: async (strategyPlannerId: string) => {
       const response = await axios.delete<ApiResponse<null>>(
-        `${STRATEGY_PLANNER_URL}/${strategyPlannerId}`
+        `${STRATEGY_PLANNER_URL}${strategyPlannerId}`
       );
 
       return response.data;

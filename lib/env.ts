@@ -38,12 +38,12 @@ validateRequired();
 
 export const env = {
   // API
-  apiBaseUrl: required.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:3000",
+  apiBaseUrl: required.NEXT_PUBLIC_API_BASE_URL,
   apiGatewayUrl:
     optional.NEXT_PUBLIC_API_GATEWAY_URL ?? "http://localhost:3000",
 
   // NextAuth
-  nextAuthSecret: required.NEXTAUTH_SECRET ?? "",
+  nextAuthSecret: required.NEXTAUTH_SECRET,
   nextAuthUrl: required.NEXTAUTH_URL ?? "http://localhost:3000",
 
   // Google OAuth
