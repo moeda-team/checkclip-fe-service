@@ -3,10 +3,13 @@
 import type { ReactNode } from "react";
 import { CampaignHeader } from "@/components/layout/dasbhoard/CampaignHeader";
 import { Sidebar } from "@/components/layout/dasbhoard/Sidebar";
-import { SidebarProvider, useSidebar } from "@/components/layout/dasbhoard/ResponsiveSidebarProvider";
+import {
+  SidebarProvider,
+  useSidebar
+} from "@/components/layout/dasbhoard/ResponsiveSidebarProvider";
 import { useAutoSignOut } from "@/hooks/useAutoSignOut";
 
-function CampaignLayoutContent({ children }: { children: ReactNode }) {
+function CampaignBriefLayoutContent({ children }: { children: ReactNode }) {
   const { sidebarOpen, toggleSidebar } = useSidebar();
   useAutoSignOut();
 
@@ -36,10 +39,14 @@ function CampaignLayoutContent({ children }: { children: ReactNode }) {
   );
 }
 
-export default function CampaignLayout({ children }: { children: ReactNode }) {
+export default function CampaignBriefLayout({
+  children
+}: {
+  children: ReactNode;
+}) {
   return (
     <SidebarProvider>
-      <CampaignLayoutContent>{children}</CampaignLayoutContent>
+      <CampaignBriefLayoutContent>{children}</CampaignBriefLayoutContent>
     </SidebarProvider>
   );
 }

@@ -3,68 +3,55 @@
 import * as React from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { DayPicker } from "react-day-picker";
-
 import { cn } from "./utils";
-import { buttonVariants } from "./button";
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker>;
 
 const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>(
-  (
-    {
-      className,
-      classNames,
-      showOutsideDays = true,
-      ...props
-    },
-    ref
-  ) => {
+  ({ className, classNames, showOutsideDays = true, ...props }, ref) => {
     return (
-      <div ref={ref}>
+      <div ref={ref} className={cn("p-4 w-full", className)}>
         <DayPicker
           showOutsideDays={showOutsideDays}
-          className={cn("p-3", className)}
           classNames={{
-            months: "flex flex-col sm:flex-row gap-2",
+            months: "flex flex-col",
             month: "flex flex-col gap-4",
-            caption: "flex justify-center pt-1 relative items-center w-full",
-            caption_label: "text-sm font-medium",
-            nav: "flex items-center gap-1",
-            nav_button: cn(
-              buttonVariants({ variant: "outline" }),
-              "size-7 bg-transparent p-0 opacity-50 hover:opacity-100",
-            ),
-            nav_button_previous: "absolute left-1",
-            nav_button_next: "absolute right-1",
-            table: "w-full border-collapse space-x-1",
-            head_row: "flex",
-            head_cell:
-              "text-muted-foreground rounded-md w-8 font-normal text-[0.8rem]",
-            row: "flex w-full mt-2",
-            cell: cn(
-              "relative p-0 text-center text-sm focus-within:relative focus-within:z-20 [&:has([aria-selected])]:bg-accent [&:has([aria-selected].day-range-end)]:rounded-r-md",
-              props.mode === "range"
-                ? "[&:has(>.day-range-end)]:rounded-r-md [&:has(>.day-range-start)]:rounded-l-md first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md"
-                : "[&:has([aria-selected])]:rounded-md",
-            ),
-            day: cn(
-              buttonVariants({ variant: "ghost" }),
-              "size-8 p-0 font-normal aria-selected:opacity-100",
-            ),
-            day_range_start:
-              "day-range-start aria-selected:bg-primary aria-selected:text-primary-foreground",
-            day_range_end:
-              "day-range-end aria-selected:bg-primary aria-selected:text-primary-foreground",
-            day_selected:
-              "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground",
-            day_today: "bg-accent text-accent-foreground",
-            day_outside:
-              "day-outside text-muted-foreground aria-selected:text-muted-foreground",
-            day_disabled: "text-muted-foreground opacity-50",
-            day_range_middle:
-              "aria-selected:bg-accent aria-selected:text-accent-foreground",
-            day_hidden: "invisible",
-            ...classNames,
+
+            month_caption: "flex justify-center items-center relative h-9 mb-1",
+            caption_label: "text-sm font-semibold text-gray-900",
+
+            nav: "absolute inset-x-0 top-0 flex justify-between items-center h-9 px-1",
+            button_previous:
+              "h-7 w-7 flex items-center justify-center rounded-md border border-gray-200 bg-white hover:bg-gray-50 text-gray-600 transition-colors",
+            button_next:
+              "h-7 w-7 flex items-center justify-center rounded-md border border-gray-200 bg-white hover:bg-gray-50 text-gray-600 transition-colors",
+
+            month_grid: "w-full border-collapse",
+            weekdays: "grid grid-cols-7 mb-1",
+            weekday:
+              "text-center text-xs font-medium text-gray-400 py-2 w-full",
+
+            weeks: "flex flex-col gap-1",
+            week: "grid grid-cols-7",
+
+            day: "flex items-center justify-center p-0 h-10",
+            day_button:
+              "h-9 w-9 text-sm font-normal text-gray-700 rounded-lg hover:bg-gray-100 transition-colors flex items-center justify-center",
+
+            selected:
+              "!bg-gray-900 !text-white rounded-lg font-medium hover:!bg-gray-800",
+            today: "font-semibold text-gray-900",
+            outside: "text-gray-300",
+            disabled: "text-gray-200 cursor-not-allowed",
+            range_middle: "bg-gray-100 rounded-none",
+            range_start: "bg-gray-900 text-white rounded-lg",
+            range_end: "bg-gray-900 text-white rounded-lg",
+            hidden: "invisible",
+            ...classNames
+          }}
+          formatters={{
+            formatWeekdayName: (date) =>
+              ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"][date.getDay()]
           }}
           {...props}
         />
@@ -74,5 +61,4 @@ const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>(
 );
 
 Calendar.displayName = "Calendar";
-
 export { Calendar };

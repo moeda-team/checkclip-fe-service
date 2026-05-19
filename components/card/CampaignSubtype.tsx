@@ -146,7 +146,7 @@ export function CampaignSubtype({ objective, value, onChange }: Props) {
                 <span className="font-medium text-gray-900 text-sm">
                   {sub.label}
                 </span>
-                <span className="text-xs text-gray-500 whitespace-normal max-w-[280px] leading-relaxed">
+                <span className="text-xs text-gray-500 whitespace-normal max-w-70 leading-relaxed">
                   {sub.description}
                 </span>
               </div>
