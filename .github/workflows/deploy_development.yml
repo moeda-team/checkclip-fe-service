@@ -1,0 +1,68 @@
+name: Build Docker Image and Deploy (Development)
+
+on:
+  push:
+    branches: [ development ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    outputs:
+      IMAGE_NAME: ${{ steps.build-image.outputs.IMAGE_NAME }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Environment File
+        run: |
+          touch .env
+          echo '${{ secrets.DEVELOPMENT_ENV_FILE }}' > .env
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.DEVELOPMENT_AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.DEVELOPMENT_AWS_SECRET_KEY }}
+          aws-region: ${{ vars.DEVELOPMENT_AWS_REGION }}
+          mask-aws-account-id: false
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build and Push Image to ECR
+        id: build-image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: "altimeda-atlas/aimos-frontend"
+          IMAGE_TAG: "development-${{ github.sha }}"
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          echo "IMAGE_NAME=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+          echo "### ✅ Build Result" >> $GITHUB_STEP_SUMMARY
+          echo "📦 Image Name: $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_STEP_SUMMARY
+          echo "🏷️ Image Tag: $IMAGE_TAG" >> $GITHUB_STEP_SUMMARY
+
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-slim
+    needs: build
+    env:
+      IMAGE_NAME: ${{ needs.build.outputs.IMAGE_NAME }}
+
+    steps:
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v3
+
+      - name: Configure Kube Config
+        run: |
+          mkdir -p $HOME/.kube
+          echo "${{ secrets.DEVELOPMENT_KUBE_CONFIG_B64 }}" | base64 --decode > $HOME/.kube/config
+
+      - name: Deploy to Kubernetes Cluster
+        run: |
+          kubectl set image deployment ${{ vars.DEVELOPMENT_DEPLOYMENT_NAME }} ${{ vars.DEVELOPMENT_CONTAINER_NAME }}=$IMAGE_NAME -n ${{ vars.DEVELOPMENT_NAMESPACE }}
+          kubectl rollout status deployment ${{ vars.DEVELOPMENT_DEPLOYMENT_NAME }} -n ${{ vars.DEVELOPMENT_NAMESPACE }}
