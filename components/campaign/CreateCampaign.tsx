@@ -1,11 +1,12 @@
 // components/campaign/CreateCampaign.tsx
-// Reusable 2-step campaign creation wizard container.
+// Reusable 3-step campaign creation wizard (Setup → Details → Review).
 
 "use client";
 
 import { useState } from "react";
 import { CampaignSetupStep } from "./CampaignSetupStep";
 import { CampaignDetailsStep } from "./CampaignDetailsStep";
+import { CampaignReviewStep } from "./CampaignReviewStep";
 import { useCampaignBrief } from "@/hooks/use-campaign-brief";
 import type {
   AdsType,
@@ -14,7 +15,7 @@ import type {
 } from "@/types/campaign";
 
 const defaultFormData: CampaignFormData = {
-  brand: { brandName: "" },
+  brand: { brandName: "", description: "" },
   budget: {
     budgetType: "",
     budget: "",
@@ -39,10 +40,15 @@ type ModalVariant = "confirm" | "success" | "failed";
 interface CreateCampaignProps {
   onSuccess?: () => void;
   onError?: (error: Error) => void;
+  hideAdsType?: boolean;
 }
 
-export function CreateCampaign({ onSuccess, onError }: CreateCampaignProps) {
-  const [step, setStep] = useState<1 | 2>(1);
+export function CreateCampaign({
+  onSuccess,
+  onError,
+  hideAdsType = false
+}: CreateCampaignProps) {
+  const [step, setStep] = useState<1 | 2 | 3>(1);
 
   // Step 1 state
   const [selectedAds, setSelectedAds] = useState<AdsType>("google");
@@ -81,8 +87,12 @@ export function CreateCampaign({ onSuccess, onError }: CreateCampaignProps) {
   };
 
   const handleBack = () => {
-    setStep(1);
-    reset();
+    if (step === 3) {
+      setStep(2);
+    } else {
+      setStep(1);
+      reset();
+    }
   };
 
   const handleObjectiveChange = (objective: CampaignObjectiveKey) => {
@@ -92,8 +102,7 @@ export function CreateCampaign({ onSuccess, onError }: CreateCampaignProps) {
   };
 
   const handleCreateClick = () => {
-    setModalVariant("confirm");
-    setModalOpen(true);
+    setStep(3);
   };
 
   const handleConfirm = async () => {
@@ -123,6 +132,30 @@ export function CreateCampaign({ onSuccess, onError }: CreateCampaignProps) {
     }
   };
 
+  const handleReviewBack = () => {
+    setStep(2);
+  };
+
+  if (step === 3 && selectedObjective) {
+    return (
+      <CampaignReviewStep
+        campaignName={campaignName}
+        selectedObjective={selectedObjective}
+        selectedSubtype={selectedSubtype}
+        selectedConversionGoals={selectedConversionGoals}
+        formData={formData}
+        onBack={handleReviewBack}
+        onConfirm={handleConfirm}
+        isSubmitting={isSubmitting}
+        modalOpen={modalOpen}
+        modalVariant={modalVariant}
+        errorMessage={errorMessage}
+        onModalClose={handleModalClose}
+        entityName="campaign"
+      />
+    );
+  }
+
   if (step === 2 && selectedObjective) {
     return (
       <CampaignDetailsStep
@@ -132,11 +165,6 @@ export function CreateCampaign({ onSuccess, onError }: CreateCampaignProps) {
         onBack={handleBack}
         onCreate={handleCreateClick}
         isSubmitting={isSubmitting}
-        modalOpen={modalOpen}
-        modalVariant={modalVariant}
-        errorMessage={errorMessage}
-        onModalClose={handleModalClose}
-        onConfirm={handleConfirm}
       />
     );
   }
@@ -155,6 +183,7 @@ export function CreateCampaign({ onSuccess, onError }: CreateCampaignProps) {
       onConversionGoalsChange={setSelectedConversionGoals}
       onNext={handleNext}
       canProceed={canProceed}
+      hideAdsType={hideAdsType}
     />
   );
 }

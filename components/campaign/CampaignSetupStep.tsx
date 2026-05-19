@@ -37,6 +37,7 @@ interface CampaignSetupStepProps {
   onConversionGoalsChange?: (goals: string[]) => void;
   onNext: () => void;
   canProceed: boolean;
+  hideAdsType?: boolean;
 }
 
 export function CampaignSetupStep({
@@ -51,7 +52,8 @@ export function CampaignSetupStep({
   selectedConversionGoals = [],
   onConversionGoalsChange,
   onNext,
-  canProceed
+  canProceed,
+  hideAdsType = false
 }: CampaignSetupStepProps) {
   const handleObjectiveSelect = (key: CampaignObjectiveKey) => {
     onObjectiveChange(key);
@@ -78,12 +80,17 @@ export function CampaignSetupStep({
           </div>
 
           <div className="space-y-4">
-            <div>
-              <Label className="text-sm font-medium text-gray-700 mb-2 block">
-                Ads Type <span className="text-red-500">*</span>
-              </Label>
-              <AdsTypeSelector selected={selectedAds} onSelect={onAdsChange} />
-            </div>
+            {!hideAdsType && (
+              <div>
+                <Label className="text-sm font-medium text-gray-700 mb-2 block">
+                  Ads Type <span className="text-red-500">*</span>
+                </Label>
+                <AdsTypeSelector
+                  selected={selectedAds}
+                  onSelect={onAdsChange}
+                />
+              </div>
+            )}
 
             <div>
               <Label

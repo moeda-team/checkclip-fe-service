@@ -83,31 +83,27 @@ const navigationItems: NavSection[] = [
     items: [
       {
         title: "Campaign",
-        href: "/dashboard/campaigns",
+        href: "/campaigns",
         icon: Megaphone
       },
       {
         title: "Campaign Planner",
-        href: "/dashboard/campaign-planner",
+        href: "/campaign-planner",
         icon: ClipboardList
       },
       {
         title: "Campaign Briefs",
-        href: "/campaign/brief",
-        icon: FileText,
-        children: [
-          { title: "Create New", href: "/campaign/brief" },
-          { title: "All Briefs", href: "/campaign/brief/list" }
-        ]
+        href: "/campaign-brief",
+        icon: FileText
       },
       {
         title: "Campaign Monitor",
-        href: "/dashboard/campaign-monitor",
+        href: "/campaign-monitor",
         icon: Radio
       },
       {
         title: "Strategy Planner",
-        href: "/dashboard/strategy-planner",
+        href: "/strategy-planner",
         icon: Sparkles
       }
     ]

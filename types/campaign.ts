@@ -25,6 +25,7 @@ export type SubtypeOption = {
 
 export type BrandProductData = {
   brandName: string;
+  description?: string;
 };
 
 export type BudgetScheduleData = {

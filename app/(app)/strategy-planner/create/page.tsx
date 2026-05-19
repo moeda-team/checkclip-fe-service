@@ -1,4 +1,4 @@
-// app/campaign-brief/create/page.tsx
+// app/(app)/campaign-brief/create/page.tsx
 // Campaign brief creation page — thin wrapper around reusable CreateCampaign.
 
 "use client";
@@ -10,6 +10,7 @@ export default function CampaignBriefCreatePage() {
     <CreateCampaign
       onSuccess={() => console.log("Campaign created successfully")}
       onError={(err: Error) => console.error("Campaign creation failed:", err)}
+      hideAdsType={true}
     />
   );
 }

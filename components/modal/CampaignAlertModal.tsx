@@ -15,31 +15,33 @@ type Props = {
   onClose: () => void;
   /** Only used when variant === "confirm" */
   onContinue?: () => void;
+  /** Entity name for dynamic messages (e.g., "campaign", "strategy planner") */
+  entityName?: string;
 };
 
 // ─── Config per variant ───────────────────────────────────────────────────────
 
-const config = {
+const getConfig = (entityName: string) => ({
   confirm: {
     iconBg: "bg-blue-100",
     icon: <Info className="w-6 h-6 text-blue-500" />,
-    title: "Confirm Campaign Setup",
+    title: `Confirm ${entityName} Setup`,
     description:
-      "Please review your campaign details before proceeding. Make sure all required fields are filled correctly",
+      "Please review your details before proceeding. Make sure all required fields are filled correctly"
   },
   success: {
     iconBg: "bg-green-100",
     icon: <Check className="w-6 h-6 text-green-500" strokeWidth={2.5} />,
     title: "Success",
-    description: "Successfully created campaign setup",
+    description: `Successfully created ${entityName} setup`
   },
   failed: {
     iconBg: "bg-red-100",
     icon: <X className="w-6 h-6 text-red-500" strokeWidth={2.5} />,
     title: "Failed",
-    description: "Failed to create campaign setup",
-  },
-};
+    description: `Failed to create ${entityName} setup`
+  }
+});
 
 // ─── Component ───────────────────────────────────────────────────────────────
 
@@ -49,11 +51,14 @@ export function CampaignAlertModal({
   errorMessage,
   onClose,
   onContinue,
+  entityName = "campaign"
 }: Props) {
   if (!open) return null;
 
+  const config = getConfig(entityName);
   const { iconBg, icon, title, description } = config[variant];
-  const desc = variant === "failed" && errorMessage ? errorMessage : description;
+  const desc =
+    variant === "failed" && errorMessage ? errorMessage : description;
 
   return (
     /* Backdrop */
@@ -67,7 +72,9 @@ export function CampaignAlertModal({
         onClick={(e) => e.stopPropagation()}
       >
         {/* Icon circle */}
-        <div className={`w-16 h-16 rounded-full flex items-center justify-center ${iconBg}`}>
+        <div
+          className={`w-16 h-16 rounded-full flex items-center justify-center ${iconBg}`}
+        >
           {icon}
         </div>
 

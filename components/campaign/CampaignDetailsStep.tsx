@@ -26,7 +26,6 @@ import {
   SelectTrigger,
   SelectValue
 } from "@/components/ui/select";
-import { CampaignAlertModal } from "@/components/modal/CampaignAlertModal";
 import { cn } from "@/lib/utils";
 import type { CampaignObjectiveKey, CampaignFormData } from "@/types/campaign";
 
@@ -37,11 +36,6 @@ interface CampaignDetailsStepProps {
   onBack: () => void;
   onCreate: () => void;
   isSubmitting: boolean;
-  modalOpen: boolean;
-  modalVariant: "confirm" | "success" | "failed";
-  errorMessage?: string;
-  onModalClose: () => void;
-  onConfirm: () => void;
 }
 
 export function CampaignDetailsStep({
@@ -50,14 +44,8 @@ export function CampaignDetailsStep({
   onFormChange,
   onBack,
   onCreate,
-  isSubmitting,
-  modalOpen,
-  modalVariant,
-  errorMessage,
-  onModalClose,
-  onConfirm
+  isSubmitting
 }: CampaignDetailsStepProps) {
-  const [description, setDescription] = useState("");
   const [locationQuery, setLocationQuery] = useState("");
   const [locationSuggestions, setLocationSuggestions] = useState<string[]>([]);
   const [showLocationSuggestions, setShowLocationSuggestions] = useState(false);
@@ -185,8 +173,8 @@ export function CampaignDetailsStep({
                 </Label>
                 <Input
                   placeholder="Input description"
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
+                  value={formData.brand.description || ""}
+                  onChange={(e) => updateBrand("description", e.target.value)}
                   className="mt-1.5 h-10 border-gray-200 text-sm"
                 />
               </div>
@@ -579,28 +567,11 @@ export function CampaignDetailsStep({
           disabled={isSubmitting}
           className="bg-gray-900 hover:bg-gray-800 text-white px-8 h-10 rounded-lg text-sm font-medium"
         >
-          {isSubmitting ? "Creating..." : "Create"}
+          Review
         </Button>
       </div>
 
-      {/* Modals */}
-      <CampaignAlertModal
-        variant="confirm"
-        open={modalOpen && modalVariant === "confirm"}
-        onClose={onModalClose}
-        onContinue={onConfirm}
-      />
-      <CampaignAlertModal
-        variant="success"
-        open={modalOpen && modalVariant === "success"}
-        onClose={onModalClose}
-      />
-      <CampaignAlertModal
-        variant="failed"
-        open={modalOpen && modalVariant === "failed"}
-        errorMessage={errorMessage}
-        onClose={onModalClose}
-      />
+      {/* Modals - only success/failed shown from review step */}
     </div>
   );
 }
