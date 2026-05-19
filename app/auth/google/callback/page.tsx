@@ -17,11 +17,11 @@ function GoogleCallbackInner() {
     if (hasFired.current) return;
     hasFired.current = true;
 
-    const code     = searchParams.get("code");
-    const scope    = searchParams.get("scope")    ?? "";
+    const code = searchParams.get("code");
+    const scope = searchParams.get("scope") ?? "";
     const authuser = searchParams.get("authuser") ?? "";
-    const prompt   = searchParams.get("prompt")   ?? "";
-    const iss      = searchParams.get("iss")      ?? "";
+    const prompt = searchParams.get("prompt") ?? "";
+    const iss = searchParams.get("iss") ?? "";
 
     if (!code) {
       router.replace("/auth/login?error=google_no_code");
@@ -35,7 +35,7 @@ function GoogleCallbackInner() {
       prompt,
       iss,
       redirect: false,
-      callbackUrl: "/auth/redirect",
+      callbackUrl: "/auth/redirect"
     }).then((result) => {
       if (!result || result.error) {
         router.replace("/auth/login?error=google_failed");
@@ -48,8 +48,10 @@ function GoogleCallbackInner() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#f3f0ff]">
       <div className="flex flex-col items-center gap-4">
-        <div className="w-10 h-10 border-4 border-purple-200 border-t-purple-600 rounded-full animate-spin" />
-        <p className="text-sm text-gray-500">Completing sign in with Google...</p>
+        <div className="w-10 h-10 border-4 border-primary-200 border-t-primary-600 rounded-full animate-spin" />
+        <p className="text-sm text-gray-500">
+          Completing sign in with Google...
+        </p>
       </div>
     </div>
   );
@@ -60,7 +62,7 @@ export default function GoogleCallbackPage() {
     <Suspense
       fallback={
         <div className="min-h-screen flex items-center justify-center bg-[#f3f0ff]">
-          <div className="w-10 h-10 border-4 border-purple-200 border-t-purple-600 rounded-full animate-spin" />
+          <div className="w-10 h-10 border-4 border-primary-200 border-t-primary-600 rounded-full animate-spin" />
         </div>
       }
     >

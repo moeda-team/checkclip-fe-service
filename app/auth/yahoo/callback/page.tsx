@@ -17,7 +17,7 @@ function YahooCallbackInner() {
     if (hasFired.current) return;
     hasFired.current = true;
 
-    const code  = searchParams.get("code");
+    const code = searchParams.get("code");
     const state = searchParams.get("state") ?? "";
 
     if (!code) {
@@ -29,7 +29,7 @@ function YahooCallbackInner() {
       code,
       state,
       redirect: false,
-      callbackUrl: "/auth/redirect",
+      callbackUrl: "/auth/redirect"
     }).then((result) => {
       if (!result || result.error) {
         router.replace("/auth/login?error=yahoo_failed");
@@ -42,8 +42,10 @@ function YahooCallbackInner() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#f3f0ff]">
       <div className="flex flex-col items-center gap-4">
-        <div className="w-10 h-10 border-4 border-purple-200 border-t-purple-600 rounded-full animate-spin" />
-        <p className="text-sm text-gray-500">Completing sign in with Yahoo...</p>
+        <div className="w-10 h-10 border-4 border-primary-200 border-t-primary-600 rounded-full animate-spin" />
+        <p className="text-sm text-gray-500">
+          Completing sign in with Yahoo...
+        </p>
       </div>
     </div>
   );
@@ -54,7 +56,7 @@ export default function YahooCallbackPage() {
     <Suspense
       fallback={
         <div className="min-h-screen flex items-center justify-center bg-[#f3f0ff]">
-          <div className="w-10 h-10 border-4 border-purple-200 border-t-purple-600 rounded-full animate-spin" />
+          <div className="w-10 h-10 border-4 border-primary-200 border-t-primary-600 rounded-full animate-spin" />
         </div>
       }
     >

@@ -4,11 +4,11 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import type { AdapterUser } from "next-auth/adapters";
 import type { JWT } from "next-auth/jwt";
 import type { UserRole } from "@/types/next-auth";
-import { API_BASE_URL } from "./api";
+import { env } from "./env";
 
 // Access token lifetime: 1 hour (in ms), with 60s buffer to refresh early
 const ACCESS_TOKEN_TTL_MS = 60 * 60 * 1000;
-const REFRESH_BUFFER_MS  = 60 * 1000;
+const REFRESH_BUFFER_MS = 60 * 1000;
 
 type LoginApiResponse = {
   status: boolean;
@@ -51,7 +51,7 @@ function isAppUser(user: User | AdapterUser): user is AppUser {
 
 async function refreshAccessToken(token: JWT): Promise<JWT> {
   try {
-    const res = await fetch(`${API_BASE_URL}/auth/refresh-token`, {
+    const res = await fetch(`${env.apiBaseUrl}/auth/refresh-token`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ refresh_token: token.refreshToken }),
@@ -82,14 +82,14 @@ export const authOptions: NextAuthOptions = {
     CredentialsProvider({
       name: "Email & Password",
       credentials: {
-        email:    { label: "Email",    type: "email" },
+        email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials): Promise<AppUser | null> {
         if (!credentials?.email || !credentials.password) return null;
 
         try {
-          const loginRes = await fetch(`${API_BASE_URL}/auth/login`, {
+          const loginRes = await fetch(`${env.apiBaseUrl}/auth/login`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -105,7 +105,7 @@ export const authOptions: NextAuthOptions = {
 
           const { access_token, refresh_token } = loginJson.data;
 
-          const meRes = await fetch(`${API_BASE_URL}/auth/me`, {
+          const meRes = await fetch(`${env.apiBaseUrl}/auth/me`, {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
@@ -140,26 +140,26 @@ export const authOptions: NextAuthOptions = {
       id: "google-oauth",
       name: "Google",
       credentials: {
-        code:     { label: "Code",     type: "text" },
-        scope:    { label: "Scope",    type: "text" },
+        code: { label: "Code", type: "text" },
+        scope: { label: "Scope", type: "text" },
         authuser: { label: "AuthUser", type: "text" },
-        prompt:   { label: "Prompt",   type: "text" },
-        iss:      { label: "Iss",      type: "text" },
+        prompt: { label: "Prompt", type: "text" },
+        iss: { label: "Iss", type: "text" },
       },
       async authorize(credentials): Promise<AppUser | null> {
         if (!credentials?.code) return null;
 
         try {
           const params = new URLSearchParams({
-            code:     credentials.code,
-            scope:    credentials.scope    ?? "",
+            code: credentials.code,
+            scope: credentials.scope ?? "",
             authuser: credentials.authuser ?? "",
-            prompt:   credentials.prompt   ?? "",
-            iss:      credentials.iss      ?? "",
+            prompt: credentials.prompt ?? "",
+            iss: credentials.iss ?? "",
           });
 
           const callbackRes = await fetch(
-            `${API_BASE_URL}/auth/google/callback?${params.toString()}`,
+            `${env.apiBaseUrl}/auth/google/callback?${params.toString()}`,
             { method: "GET" }
           );
 
@@ -170,7 +170,7 @@ export const authOptions: NextAuthOptions = {
 
           const { access_token, refresh_token } = callbackJson.data;
 
-          const meRes = await fetch(`${API_BASE_URL}/auth/me`, {
+          const meRes = await fetch(`${env.apiBaseUrl}/auth/me`, {
             method: "GET",
             headers: { Authorization: access_token },
           });
@@ -202,7 +202,7 @@ export const authOptions: NextAuthOptions = {
       id: "yahoo-oauth",
       name: "Yahoo",
       credentials: {
-        code:  { label: "Code",  type: "text" },
+        code: { label: "Code", type: "text" },
         state: { label: "State", type: "text" },
       },
       async authorize(credentials): Promise<AppUser | null> {
@@ -210,12 +210,12 @@ export const authOptions: NextAuthOptions = {
 
         try {
           const params = new URLSearchParams({
-            code:  credentials.code,
+            code: credentials.code,
             state: credentials.state ?? "",
           });
 
           const callbackRes = await fetch(
-            `${API_BASE_URL}/auth/yahoo/callback?${params.toString()}`,
+            `${env.apiBaseUrl}/auth/yahoo/callback?${params.toString()}`,
             { method: "GET" }
           );
 
@@ -226,7 +226,7 @@ export const authOptions: NextAuthOptions = {
 
           const { access_token, refresh_token } = callbackJson.data;
 
-          const meRes = await fetch(`${API_BASE_URL}/auth/me`, {
+          const meRes = await fetch(`${env.apiBaseUrl}/auth/me`, {
             method: "GET",
             headers: { Authorization: access_token },
           });
@@ -295,15 +295,15 @@ export const authOptions: NextAuthOptions = {
 
     async session({ session, token }) {
       if (session.user) {
-        session.user.id               = token.id as string;
-        session.user.name             = token.name as string;
-        session.user.email            = token.email as string;
-        session.user.role             = (token.role as UserRole) ?? "student";
-        session.user.phoneNumber      = token.phoneNumber as string | null;
+        session.user.id = token.id as string;
+        session.user.name = token.name as string;
+        session.user.email = token.email as string;
+        session.user.role = (token.role as UserRole) ?? "student";
+        session.user.phoneNumber = token.phoneNumber as string | null;
         session.user.profilePictureUrl = token.profilePictureUrl as string | null;
       }
       session.accessToken = token.accessToken as string;
-      session.error       = token.error;
+      session.error = token.error;
       return session;
     },
   },

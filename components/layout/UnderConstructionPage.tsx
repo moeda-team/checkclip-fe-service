@@ -18,7 +18,7 @@ export function UnderConstructionPage() {
       <header className="w-full border-b border-slate-200 bg-white/70 backdrop-blur">
         <div className="max-w-5xl mx-auto flex items-center justify-between px-4 py-3">
           <Link href="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600" />
+            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-blue-500 to-primary-600" />
             <span className="font-semibold tracking-tight text-slate-900">
               Cogie
             </span>

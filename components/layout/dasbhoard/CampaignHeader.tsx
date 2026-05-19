@@ -10,7 +10,7 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuTrigger,
+  DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
 import { useSidebar } from "./ResponsiveSidebarProvider";
@@ -33,7 +33,7 @@ const segmentLabels: Record<string, string> = {
   settings: "Settings",
   security: "Security",
   database: "Database",
-  calendar: "Calendar",
+  calendar: "Calendar"
 };
 
 function getBreadcrumbs(pathname: string) {
@@ -60,7 +60,6 @@ export function CampaignHeader() {
   return (
     <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
       <div className="px-4 md:px-6 h-14 flex items-center justify-between">
-
         {/* Left — hamburger (mobile) + icon + breadcrumb */}
         <div className="flex items-center gap-2">
           {/* Hamburger — only on mobile */}
@@ -75,7 +74,7 @@ export function CampaignHeader() {
           </Button>
 
           {/* Purple square icon */}
-          <div className="w-8 h-8 bg-purple-600 rounded-lg flex items-center justify-center shrink-0">
+          <div className="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center shrink-0">
             <svg
               className="w-4 h-4 text-white"
               viewBox="0 0 24 24"
@@ -94,7 +93,9 @@ export function CampaignHeader() {
           <nav className="flex items-center gap-1.5 text-sm">
             {breadcrumbs.map((crumb, i) => (
               <span key={i} className="flex items-center gap-1.5">
-                {i > 0 && <ChevronRight className="w-3.5 h-3.5 text-gray-400" />}
+                {i > 0 && (
+                  <ChevronRight className="w-3.5 h-3.5 text-gray-400" />
+                )}
                 <span
                   className={
                     i === breadcrumbs.length - 1
@@ -148,7 +149,9 @@ export function CampaignHeader() {
                   <p className="text-sm font-medium text-gray-900">
                     {session?.user?.name}
                   </p>
-                  <p className="text-xs text-gray-500">{session?.user?.email}</p>
+                  <p className="text-xs text-gray-500">
+                    {session?.user?.email}
+                  </p>
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
@@ -159,7 +162,10 @@ export function CampaignHeader() {
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild className="cursor-pointer">
-                <Link href="/dashboard/settings" className="flex items-center gap-2">
+                <Link
+                  href="/dashboard/settings"
+                  className="flex items-center gap-2"
+                >
                   <Settings className="w-4 h-4" />
                   Settings
                 </Link>

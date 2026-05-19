@@ -22,9 +22,9 @@ export default function RegisterPage() {
 
   const [formError, setFormError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  
+
   const { register, isLoading, error: apiError, resetError } = useRegister();
-  
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setFormError(null);
@@ -48,7 +48,7 @@ export default function RegisterPage() {
       // error details are in `apiError`, but if you want to override you can use result.message
       return;
     }
-    
+
     // success -> redirect to login
     router.push("/auth/login?registered=1");
   };
@@ -62,8 +62,8 @@ export default function RegisterPage() {
       {/* Left Side - Decorative */}
       <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden bg-gradient-to-br from-[#0a0a0a] via-[#0f0f1e] to-[#0a0a0a] rounded-3xl">
         {/* Glowing Circle with Gradient */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-gradient-to-b from-purple-600 via-purple-500 to-blue-500 opacity-90 blur-[80px]" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full bg-gradient-to-b from-purple-500 to-blue-400" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-gradient-to-b from-primary-600 via-primary-500 to-blue-500 opacity-90 blur-[80px]" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full bg-gradient-to-b from-primary-500 to-blue-400" />
 
         <div className="relative z-10 flex flex-col justify-between p-10 text-white w-full rounded-[40px]">
           <div>
@@ -95,7 +95,6 @@ export default function RegisterPage() {
       {/* Right Side - Register Form */}
       <div className="flex-1 flex items-center justify-center bg-gray-50 text-black">
         <div className="w-full max-w-md border p-8 rounded-lg">
-
           <div className="mb-8 text-center">
             <h2 className="mb-2" style={{ fontFamily: "serif" }}>
               Create Account
@@ -104,7 +103,7 @@ export default function RegisterPage() {
               Fill in your details to create a new account
             </p>
           </div>
-          
+
           {(formError || apiError) && (
             <div className="mb-4 text-sm text-red-600 bg-red-50 border border-red-200 rounded-md px-3 py-2">
               {formError ?? apiError}
@@ -178,9 +177,7 @@ export default function RegisterPage() {
                 />
                 <button
                   type="button"
-                  onClick={() =>
-                    setShowConfirmPassword(!showConfirmPassword)
-                  }
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
                 >
                   {showConfirmPassword ? (
@@ -206,17 +203,11 @@ export default function RegisterPage() {
                 className="text-sm cursor-pointer leading-relaxed"
               >
                 I agree to the{" "}
-                <button
-                  type="button"
-                  className="hover:underline"
-                >
+                <button type="button" className="hover:underline">
                   Terms and Conditions
                 </button>{" "}
                 and{" "}
-                <button
-                  type="button"
-                  className="hover:underline"
-                >
+                <button type="button" className="hover:underline">
                   Privacy Policy
                 </button>
               </label>
@@ -230,11 +221,7 @@ export default function RegisterPage() {
               {isLoading ? "Signing up..." : "Sign Up"}
             </Button>
 
-            <Button
-              type="button"
-              variant="outline"
-              className="w-full"
-            >
+            <Button type="button" variant="outline" className="w-full">
               <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
                 <path
                   fill="#4285F4"
