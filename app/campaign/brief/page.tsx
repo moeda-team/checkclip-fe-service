@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Settings2 } from "lucide-react";
+import { LocateFixed, Settings, Settings2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -189,7 +189,7 @@ export default function CampaignBriefPage() {
         <section>
           <div className="flex items-center gap-3 mb-4">
             <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center">
-              <Settings2 className="w-4 h-4 text-purple-600" />
+              <Settings className="w-4 h-4 text-purple-600" />
             </div>
             <div>
               <h2 className="text-base font-semibold text-gray-900">
@@ -234,7 +234,7 @@ export default function CampaignBriefPage() {
         <section>
           <div className="flex items-center gap-3 mb-4">
             <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center">
-              <Settings2 className="w-4 h-4 text-purple-600" />
+              <LocateFixed className="w-4 h-4 text-purple-600" />
             </div>
             <div>
               <h2 className="text-base font-semibold text-gray-900">
