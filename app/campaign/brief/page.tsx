@@ -188,8 +188,8 @@ export default function CampaignBriefPage() {
         {/* Campaign Setup */}
         <section>
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center">
-              <Settings className="w-4 h-4 text-purple-600" />
+            <div className="w-8 h-8 rounded-full bg-primary-100 flex items-center justify-center">
+              <Settings className="w-4 h-4 text-primary-600" />
             </div>
             <div>
               <h2 className="text-base font-semibold text-gray-900">
@@ -224,7 +224,7 @@ export default function CampaignBriefPage() {
                 placeholder="Type here"
                 value={campaignName}
                 onChange={(e) => setCampaignName(e.target.value)}
-                className="h-10 border-gray-200 text-sm placeholder:text-gray-400 focus-visible:ring-purple-500"
+                className="h-10 border-gray-200 text-sm placeholder:text-gray-400 focus-visible:ring-primary-500"
               />
             </div>
           </div>
@@ -233,8 +233,8 @@ export default function CampaignBriefPage() {
         {/* Campaign Objective */}
         <section>
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center">
-              <LocateFixed className="w-4 h-4 text-purple-600" />
+            <div className="w-8 h-8 rounded-full bg-primary-100 flex items-center justify-center">
+              <LocateFixed className="w-4 h-4 text-primary-600" />
             </div>
             <div>
               <h2 className="text-base font-semibold text-gray-900">
@@ -260,7 +260,7 @@ export default function CampaignBriefPage() {
                 <Label className="text-sm font-medium text-gray-700 mb-1.5 block">
                   Campaign Type
                 </Label>
-                <p className="text-xs text-purple-600 font-medium mb-1">
+                <p className="text-xs text-primary-600 font-medium mb-1">
                   {campaignTypeMap[selectedObjective]}
                 </p>
                 <p className="text-xs text-gray-500">

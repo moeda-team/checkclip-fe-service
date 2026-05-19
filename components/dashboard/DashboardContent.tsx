@@ -17,7 +17,7 @@ export function DashboardContent() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <Loader2 className="w-8 h-8 animate-spin text-purple-600" />
+        <Loader2 className="w-8 h-8 animate-spin text-primary-600" />
         <span className="ml-3 text-gray-600">Loading campaigns...</span>
       </div>
     );
@@ -31,11 +31,13 @@ export function DashboardContent() {
           Failed to load campaigns
         </h3>
         <p className="text-sm text-gray-500 mt-1">
-          {error instanceof Error ? error.message : "An unexpected error occurred"}
+          {error instanceof Error
+            ? error.message
+            : "An unexpected error occurred"}
         </p>
         <button
           onClick={() => refetch()}
-          className="mt-4 px-4 py-2 text-sm font-medium text-white bg-purple-600 rounded-lg hover:bg-purple-700 transition-colors"
+          className="mt-4 px-4 py-2 text-sm font-medium text-white bg-primary-600 rounded-lg hover:bg-primary-700 transition-colors"
         >
           Try Again
         </button>
@@ -50,7 +52,9 @@ export function DashboardContent() {
     return (
       <div className="flex flex-col items-center justify-center py-20 text-center">
         <FolderOpen className="w-12 h-12 text-gray-400 mb-4" />
-        <h3 className="text-lg font-semibold text-gray-900">No campaigns yet</h3>
+        <h3 className="text-lg font-semibold text-gray-900">
+          No campaigns yet
+        </h3>
         <p className="text-sm text-gray-500 mt-1">
           Create your first campaign to get started.
         </p>
@@ -81,10 +85,10 @@ export function DashboardContent() {
                   campaign.status === "active"
                     ? "bg-green-100 text-green-700"
                     : campaign.status === "draft"
-                    ? "bg-gray-100 text-gray-700"
-                    : campaign.status === "paused"
-                    ? "bg-yellow-100 text-yellow-700"
-                    : "bg-blue-100 text-blue-700"
+                      ? "bg-gray-100 text-gray-700"
+                      : campaign.status === "paused"
+                        ? "bg-yellow-100 text-yellow-700"
+                        : "bg-blue-100 text-blue-700"
                 }`}
               >
                 {campaign.status}

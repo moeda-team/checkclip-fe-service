@@ -22,7 +22,7 @@ import {
   Handshake,
   Radio,
   Sparkles,
-  ClipboardList,
+  ClipboardList
 } from "lucide-react";
 import { useSession } from "next-auth/react";
 
@@ -54,9 +54,9 @@ const navigationItems: NavSection[] = [
       {
         title: "Dashboard",
         href: "/dashboard",
-        icon: LayoutDashboard,
-      },
-    ],
+        icon: LayoutDashboard
+      }
+    ]
   },
   {
     title: "CRM",
@@ -64,19 +64,19 @@ const navigationItems: NavSection[] = [
       {
         title: "Contacts",
         href: "/dashboard/customers",
-        icon: Users,
+        icon: Users
       },
       {
         title: "Deals",
         href: "/dashboard/leads",
-        icon: Handshake,
+        icon: Handshake
       },
       {
         title: "CRM",
         href: "/dashboard/deals",
-        icon: Database,
-      },
-    ],
+        icon: Database
+      }
+    ]
   },
   {
     title: "Campaigns",
@@ -84,12 +84,12 @@ const navigationItems: NavSection[] = [
       {
         title: "Campaign",
         href: "/dashboard/campaigns",
-        icon: Megaphone,
+        icon: Megaphone
       },
       {
         title: "Campaign Planner",
         href: "/dashboard/campaign-planner",
-        icon: ClipboardList,
+        icon: ClipboardList
       },
       {
         title: "Campaign Briefs",
@@ -97,21 +97,21 @@ const navigationItems: NavSection[] = [
         icon: FileText,
         children: [
           { title: "Create New", href: "/campaign/brief" },
-          { title: "All Briefs",  href: "/campaign/brief/list" },
-        ],
+          { title: "All Briefs", href: "/campaign/brief/list" }
+        ]
       },
       {
         title: "Campaign Monitor",
         href: "/dashboard/campaign-monitor",
-        icon: Radio,
+        icon: Radio
       },
       {
         title: "Strategy Planner",
         href: "/dashboard/strategy-planner",
-        icon: Sparkles,
-      },
-    ],
-  },
+        icon: Sparkles
+      }
+    ]
+  }
 ];
 
 // ─── Component ───────────────────────────────────────────────────────────────
@@ -147,8 +147,14 @@ export function Sidebar() {
       <div className="px-4 py-4 border-b border-gray-200">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-purple-600 rounded-lg flex items-center justify-center">
-              <svg className="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <div className="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center">
+              <svg
+                className="w-4 h-4 text-white"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
                 <rect x="3" y="3" width="7" height="7" rx="1" />
                 <rect x="14" y="3" width="7" height="7" rx="1" />
                 <rect x="3" y="14" width="7" height="7" rx="1" />
@@ -189,18 +195,23 @@ export function Sidebar() {
                         className={cn(
                           "w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm transition-colors",
                           isActive
-                            ? "bg-purple-50 text-purple-700 font-semibold"
+                            ? "bg-primary-50 text-primary-700 font-semibold"
                             : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
                         )}
                       >
                         <span className="flex items-center gap-3">
-                          <item.icon className={cn("w-4 h-4", isActive && "text-purple-600")} />
+                          <item.icon
+                            className={cn(
+                              "w-4 h-4",
+                              isActive && "text-primary-600"
+                            )}
+                          />
                           {item.title}
                         </span>
                         <ChevronRight
                           className={cn(
                             "w-4 h-4 transition-transform duration-200",
-                            isActive ? "text-purple-600" : "text-gray-400",
+                            isActive ? "text-primary-600" : "text-gray-400",
                             isOpen && "rotate-90"
                           )}
                         />
@@ -211,15 +222,25 @@ export function Sidebar() {
                         className={cn(
                           "flex items-center justify-between px-3 py-2 rounded-lg text-sm transition-colors",
                           isActive
-                            ? "bg-purple-50 text-purple-700 font-semibold"
+                            ? "bg-primary-50 text-primary-700 font-semibold"
                             : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
                         )}
                       >
                         <span className="flex items-center gap-3">
-                          <item.icon className={cn("w-4 h-4", isActive && "text-purple-600")} />
+                          <item.icon
+                            className={cn(
+                              "w-4 h-4",
+                              isActive && "text-primary-600"
+                            )}
+                          />
                           {item.title}
                         </span>
-                        <ChevronRight className={cn("w-4 h-4", isActive ? "text-purple-600" : "text-gray-400")} />
+                        <ChevronRight
+                          className={cn(
+                            "w-4 h-4",
+                            isActive ? "text-primary-600" : "text-gray-400"
+                          )}
+                        />
                       </Link>
                     )}
 
@@ -235,7 +256,7 @@ export function Sidebar() {
                                 className={cn(
                                   "block px-2 py-1.5 rounded-md text-xs transition-colors",
                                   isChildActive
-                                    ? "text-purple-700 font-semibold bg-purple-50"
+                                    ? "text-primary-700 font-semibold bg-primary-50"
                                     : "text-gray-500 hover:text-gray-900 hover:bg-gray-50"
                                 )}
                               >
@@ -272,7 +293,9 @@ export function Sidebar() {
             <p className="text-sm font-medium text-gray-900 truncate">
               {session?.user?.name}
             </p>
-            <p className="text-xs text-gray-500 truncate">{session?.user?.role}</p>
+            <p className="text-xs text-gray-500 truncate">
+              {session?.user?.role}
+            </p>
           </div>
         </div>
       </div>

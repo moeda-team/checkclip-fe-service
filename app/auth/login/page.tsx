@@ -94,7 +94,7 @@ function LoginPageInner() {
   return (
     <div className="min-h-screen flex">
       {/* ── LEFT SIDE ── */}
-      <div className="hidden lg:flex lg:w-[45%] bg-gradient-to-br from-[#7c3aed] via-[#6d28d9] to-[#5b21b6] p-12 flex-col justify-between">
+      <div className="hidden lg:flex lg:w-[45%] bg-gradient-to-br from-primary-500 via-primary-600 to-primary-700 p-12 flex-col justify-between">
         <div />
 
         <div className="space-y-8">
@@ -165,7 +165,7 @@ function LoginPageInner() {
                     id="email"
                     type="email"
                     placeholder="Input email address"
-                    className="pl-9 h-10 rounded-lg border-gray-200 bg-white text-sm placeholder:text-gray-400 focus-visible:ring-purple-500"
+                    className="pl-9 h-10 rounded-lg border-gray-200 bg-white text-sm placeholder:text-gray-400 focus-visible:ring-primary-500"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
@@ -186,7 +186,7 @@ function LoginPageInner() {
                   <button
                     type="button"
                     onClick={() => router.push("/auth/forgot-password")}
-                    className="text-xs text-purple-600 hover:underline font-medium"
+                    className="text-xs text-primary-600 hover:underline font-medium"
                   >
                     Forgot password?
                   </button>
@@ -197,7 +197,7 @@ function LoginPageInner() {
                     id="password"
                     type={showPassword ? "text" : "password"}
                     placeholder="Input password"
-                    className="pl-9 pr-10 h-10 rounded-lg border-gray-200 bg-white text-sm placeholder:text-gray-400 focus-visible:ring-purple-500"
+                    className="pl-9 pr-10 h-10 rounded-lg border-gray-200 bg-white text-sm placeholder:text-gray-400 focus-visible:ring-primary-500"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
@@ -222,7 +222,7 @@ function LoginPageInner() {
                   id="remember"
                   checked={rememberMe}
                   onCheckedChange={handleRememberChange}
-                  className="rounded data-[state=checked]:bg-purple-600 data-[state=checked]:border-purple-600"
+                  className="rounded data-[state=checked]:bg-primary-600 data-[state=checked]:border-primary-600"
                 />
                 <Label
                   htmlFor="remember"
@@ -236,7 +236,7 @@ function LoginPageInner() {
               <Button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full h-10 rounded-lg bg-purple-600 hover:bg-purple-700 text-white font-medium text-sm flex items-center justify-center gap-2"
+                className="w-full h-10 rounded-lg bg-primary-600 hover:bg-primary-700 text-white font-medium text-sm flex items-center justify-center gap-2"
               >
                 <span>→</span>
                 {isSubmitting ? "Signing in..." : "Sign In"}
@@ -295,7 +295,7 @@ function LoginPageInner() {
               <button
                 type="button"
                 onClick={() => router.push("/auth/register")}
-                className="text-purple-600 font-semibold hover:underline"
+                className="text-primary-600 font-semibold hover:underline"
               >
                 Sign Up
               </button>
