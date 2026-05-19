@@ -6,16 +6,22 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { AdsTypeSelector } from "@/components/card/AdsTypeSelector";
-import { CampaignObjective, objectives } from "@/components/card/CampaignObjective";
+import {
+  CampaignObjective,
+  objectives
+} from "@/components/card/CampaignObjective";
 import { CampaignSubtype } from "@/components/card/CampaignSubtype";
 import { CampaignFormByObjective } from "@/components/form/campaign/forms";
 import { CampaignAlertModal } from "@/components/modal/CampaignAlertModal";
-import { apiPost } from "@/lib/api";
+import { axiosConfig } from "@/lib/axios";
+import { env } from "@/lib/env";
 import type {
   AdsType,
   CampaignObjectiveKey,
-  CampaignFormData,
+  CampaignFormData
 } from "@/types/campaign";
+
+const axios = axiosConfig(env.apiBaseUrl);
 
 // ─── Campaign type mapping ────────────────────────────────────────────────────
 
@@ -24,7 +30,7 @@ const campaignTypeMap: Record<CampaignObjectiveKey, string> = {
   traffic: "Search · Display",
   sales: "Performance Max",
   leads: "Performance Max",
-  app_install: "App · App Installs",
+  app_install: "App · App Installs"
 };
 
 // ─── Default form state ───────────────────────────────────────────────────────
@@ -39,15 +45,15 @@ const defaultFormData: CampaignFormData = {
     endDate: "",
     endTime: "",
     endDays: "",
-    hasEndDate: false,
+    hasEndDate: false
   },
   audience: {
     location: "",
     age: "",
     language: "",
     gender: "all",
-    interest: "",
-  },
+    interest: ""
+  }
 };
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
@@ -58,7 +64,8 @@ export default function CampaignBriefPage() {
   // Step 1 state
   const [selectedAds, setSelectedAds] = useState<AdsType>("google");
   const [campaignName, setCampaignName] = useState("");
-  const [selectedObjective, setSelectedObjective] = useState<CampaignObjectiveKey | null>(null);
+  const [selectedObjective, setSelectedObjective] =
+    useState<CampaignObjectiveKey | null>(null);
   const [selectedSubtype, setSelectedSubtype] = useState<string>("");
 
   // Step 2 state
@@ -92,12 +99,12 @@ export default function CampaignBriefPage() {
     setIsSubmitting(true);
 
     try {
-      await apiPost("/campaign/strategy-brief/", {
+      await axios.post("/campaign/strategy-brief/", {
         title: campaignName,
         type_ads: selectedAds,
         objective_type: selectedObjective,
         sub_type: selectedSubtype,
-        form: formData,
+        form: formData
       });
 
       setModal({ open: true, variant: "success" });
@@ -105,7 +112,7 @@ export default function CampaignBriefPage() {
       setModal({
         open: true,
         variant: "failed",
-        errorMessage: err instanceof Error ? err.message : undefined,
+        errorMessage: err instanceof Error ? err.message : undefined
       });
     } finally {
       setIsSubmitting(false);
@@ -163,7 +170,11 @@ export default function CampaignBriefPage() {
         <CampaignAlertModal
           variant="failed"
           open={modal.open && modal.variant === "failed"}
-          errorMessage={modal.open && modal.variant === "failed" ? modal.errorMessage : undefined}
+          errorMessage={
+            modal.open && modal.variant === "failed"
+              ? modal.errorMessage
+              : undefined
+          }
           onClose={handleModalClose}
         />
       </div>
@@ -174,7 +185,6 @@ export default function CampaignBriefPage() {
   return (
     <div className="flex flex-col min-h-[calc(100vh-56px)]">
       <div className="flex-1 overflow-y-auto p-6 space-y-8">
-
         {/* Campaign Setup */}
         <section>
           <div className="flex items-center gap-3 mb-4">
@@ -182,7 +192,9 @@ export default function CampaignBriefPage() {
               <Settings2 className="w-4 h-4 text-purple-600" />
             </div>
             <div>
-              <h2 className="text-base font-semibold text-gray-900">Campaign Setup</h2>
+              <h2 className="text-base font-semibold text-gray-900">
+                Campaign Setup
+              </h2>
               <p className="text-xs text-gray-500">
                 Configure the basic settings for your new marketing campaign.
               </p>
@@ -194,11 +206,17 @@ export default function CampaignBriefPage() {
               <Label className="text-sm font-medium text-gray-700 mb-2 block">
                 Ads Type <span className="text-red-500">*</span>
               </Label>
-              <AdsTypeSelector selected={selectedAds} onSelect={setSelectedAds} />
+              <AdsTypeSelector
+                selected={selectedAds}
+                onSelect={setSelectedAds}
+              />
             </div>
 
             <div>
-              <Label htmlFor="campaign-name" className="text-sm font-medium text-gray-700 mb-1.5 block">
+              <Label
+                htmlFor="campaign-name"
+                className="text-sm font-medium text-gray-700 mb-1.5 block"
+              >
                 Campaign Name <span className="text-red-500">*</span>
               </Label>
               <Input
@@ -219,14 +237,19 @@ export default function CampaignBriefPage() {
               <Settings2 className="w-4 h-4 text-purple-600" />
             </div>
             <div>
-              <h2 className="text-base font-semibold text-gray-900">Campaign Objective</h2>
+              <h2 className="text-base font-semibold text-gray-900">
+                Campaign Objective
+              </h2>
               <p className="text-xs text-gray-500">
                 Select one objective that best aligns with your campaign goals.
               </p>
             </div>
           </div>
 
-          <CampaignObjective selected={selectedObjective} onSelect={handleObjectiveSelect} />
+          <CampaignObjective
+            selected={selectedObjective}
+            onSelect={handleObjectiveSelect}
+          />
         </section>
 
         {/* Campaign Type & Subtype */}
@@ -241,7 +264,10 @@ export default function CampaignBriefPage() {
                   {campaignTypeMap[selectedObjective]}
                 </p>
                 <p className="text-xs text-gray-500">
-                  {objectives.find((o) => o.key === selectedObjective)?.description}
+                  {
+                    objectives.find((o) => o.key === selectedObjective)
+                      ?.description
+                  }
                 </p>
               </div>
 
