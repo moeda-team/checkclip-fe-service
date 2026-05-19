@@ -41,12 +41,23 @@ interface CreateCampaignProps {
   onSuccess?: () => void;
   onError?: (error: Error) => void;
   hideAdsType?: boolean;
+  entityName?: string;
+  onSubmit?: (data: {
+    campaignName: string;
+    selectedAds: AdsType;
+    selectedObjective: CampaignObjectiveKey;
+    selectedSubtype: string;
+    selectedConversionGoals: string[];
+    formData: CampaignFormData;
+  }) => Promise<void>;
 }
 
 export function CreateCampaign({
   onSuccess,
   onError,
-  hideAdsType = false
+  hideAdsType = false,
+  entityName = "campaign",
+  onSubmit
 }: CreateCampaignProps) {
   const [step, setStep] = useState<1 | 2 | 3>(1);
 
@@ -66,21 +77,14 @@ export function CreateCampaign({
   // Modal state
   const [modalOpen, setModalOpen] = useState(false);
   const [modalVariant, setModalVariant] = useState<ModalVariant>("confirm");
-
-  const { submit, isSubmitting, errorMessage, reset } = useCampaignBrief({
-    onSuccess: () => {
-      setModalVariant("success");
-      setModalOpen(true);
-      onSuccess?.();
-    },
-    onError: (err) => {
-      setModalVariant("failed");
-      setModalOpen(true);
-      onError?.(err);
-    }
-  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | undefined>();
 
   const canProceed = !!selectedObjective && campaignName.trim().length > 0;
+
+  const reset = () => {
+    setErrorMessage(undefined);
+  };
 
   const handleNext = () => {
     if (canProceed) setStep(2);
@@ -97,7 +101,7 @@ export function CreateCampaign({
 
   const handleObjectiveChange = (objective: CampaignObjectiveKey) => {
     setSelectedObjective(objective);
-    setSelectedConversionGoals([]); // Reset conversion goals when objective changes
+    setSelectedConversionGoals([]);
     setSelectedSubtype("");
   };
 
@@ -109,14 +113,57 @@ export function CreateCampaign({
     if (!selectedObjective) return;
 
     setModalOpen(false);
+    setIsSubmitting(true);
+    setErrorMessage(undefined);
 
-    await submit({
-      title: campaignName,
-      type_ads: selectedAds,
-      objective_type: selectedObjective,
-      sub_type: selectedSubtype,
-      form: formData
-    });
+    try {
+      if (onSubmit) {
+        // Custom submit handler
+        await onSubmit({
+          campaignName,
+          selectedAds,
+          selectedObjective,
+          selectedSubtype,
+          selectedConversionGoals,
+          formData
+        });
+      } else {
+        // Default campaign brief submit
+        const { submit } = useCampaignBrief({
+          onSuccess: () => {
+            setModalVariant("success");
+            setModalOpen(true);
+            onSuccess?.();
+          },
+          onError: (err) => {
+            setModalVariant("failed");
+            setModalOpen(true);
+            onError?.(err);
+          }
+        });
+        await submit({
+          title: campaignName,
+          type_ads: selectedAds,
+          objective_type: selectedObjective,
+          sub_type: selectedSubtype,
+          form: formData
+        });
+        return;
+      }
+
+      setModalVariant("success");
+      setModalOpen(true);
+      onSuccess?.();
+    } catch (err) {
+      const message =
+        err instanceof Error ? err.message : "Failed to create " + entityName;
+      setErrorMessage(message);
+      setModalVariant("failed");
+      setModalOpen(true);
+      onError?.(err instanceof Error ? err : new Error(message));
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleModalClose = () => {
@@ -151,7 +198,7 @@ export function CreateCampaign({
         modalVariant={modalVariant}
         errorMessage={errorMessage}
         onModalClose={handleModalClose}
-        entityName="campaign"
+        entityName={entityName}
       />
     );
   }

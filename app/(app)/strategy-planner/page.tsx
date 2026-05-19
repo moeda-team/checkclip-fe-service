@@ -34,7 +34,7 @@ export default function StrategyPlannerPage() {
         <div className="relative flex-1 max-w-md">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
           <Input
-            placeholder="Search campaign briefs..."
+            placeholder="Search stratefy planners..."
             className="pl-10 h-10"
           />
         </div>
@@ -50,18 +50,18 @@ export default function StrategyPlannerPage() {
           <FileText className="w-8 h-8 text-gray-400" />
         </div>
         <h3 className="text-lg font-medium text-gray-900 mb-2">
-          No campaign briefs yet
+          No stratefy planners yet
         </h3>
         <p className="text-sm text-gray-500 mb-6 max-w-sm mx-auto">
-          Get started by creating your first campaign brief. This will help you
-          organize your marketing campaigns.
+          Get started by creating your first stratefy planner. This will help
+          you organize your marketing campaigns.
         </p>
         <Button
           onClick={() => router.push("/strategy-planner/create")}
           className="bg-gray-900 hover:bg-gray-800 text-white"
         >
           <Plus className="w-4 h-4 mr-2" />
-          Create Campaign Brief
+          Create stratefy planner
         </Button>
       </div>
     </div>

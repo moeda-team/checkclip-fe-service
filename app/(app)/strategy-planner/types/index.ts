@@ -17,7 +17,7 @@ export interface StrategyPlannerBudget {
 
 export interface StrategyPlannerAudience {
   location: string;
-  age: number;
+  age: string;
   language: string;
   gender: "all" | "women" | "men";
   detail_audience: string;
