@@ -140,7 +140,7 @@ export function CampaignReviewStep({
   );
 
   return (
-    <div className="flex flex-col min-h-[calc(100vh-56px)] bg-gray-50/50">
+    <div className="flex flex-col min-h-[calc(100vh-56px)] bg-white">
       {/* Header */}
       <div className="bg-white border-b border-gray-200 px-6 py-4">
         <div className="flex items-center gap-2 mb-2">
@@ -168,7 +168,7 @@ export function CampaignReviewStep({
       </div>
 
       {/* Review Content */}
-      <div className="flex-1 overflow-y-auto px-6 py-4 space-y-4">
+      <div className="flex-1 overflow-y-auto py-4 space-y-4">
         {/* Campaign Setup */}
         <ReviewSection icon={Settings} title="Campaign Setup">
           <ReviewRow label="Campaign Name" value={campaignName || "-"} />

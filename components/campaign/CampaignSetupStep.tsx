@@ -62,7 +62,7 @@ export function CampaignSetupStep({
 
   return (
     <div className="flex flex-col min-h-[calc(100vh-56px)]">
-      <div className="flex-1 overflow-y-auto p-6 space-y-8">
+      <div className="flex-1 overflow-y-auto p-6 space-y-8 border rounded-xl">
         {/* Campaign Setup */}
         <section>
           <div className="flex items-center gap-3 mb-4">

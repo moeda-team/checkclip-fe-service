@@ -36,7 +36,7 @@ export const usePostStrategyPlanner = () => {
   >({
     mutationFn: async (payload) => {
       const response = await axios.post<ApiResponse<StrategyPlannerDto>>(
-        `${STRATEGY_PLANNER_URL}/`,
+        `${STRATEGY_PLANNER_URL}`,
         payload
       );
       return response.data;
