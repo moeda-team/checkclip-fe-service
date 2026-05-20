@@ -2,18 +2,14 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { Mail, Building2, Phone, MapPin } from "lucide-react";
 import {
-  Mail,
-  Building2,
-  Twitter,
-  Phone,
-  MapPin,
-  Facebook,
-  Youtube,
-  Linkedin,
-  Instagram
-} from "lucide-react";
-
+  FaFacebook,
+  FaInstagram,
+  FaLinkedin,
+  FaXTwitter,
+  FaYoutube
+} from "react-icons/fa6";
 // ─── Marquee items ────────────────────────────────────────────────────────────
 
 const marqueeItems = [
@@ -1252,7 +1248,7 @@ export default function LandingPage() {
                   <span>Altimeda Cipta Visitama</span>
                 </li>
                 <li className="flex items-center gap-2">
-                  <Twitter className="w-4 h-4 shrink-0" />
+                  <FaXTwitter className="w-4 h-4 shrink-0" />
                   <a href="#" className="hover:text-gray-900 transition-colors">
                     @Altimeda Cipta Visitama
                   </a>
@@ -1298,11 +1294,11 @@ export default function LandingPage() {
             </p>
             <div className="flex items-center gap-4">
               {[
-                { icon: Facebook, href: "#" },
-                { icon: Twitter, href: "#" },
-                { icon: Instagram, href: "#" },
-                { icon: Linkedin, href: "#" },
-                { icon: Youtube, href: "#" }
+                { icon: FaFacebook, href: "#" },
+                { icon: FaXTwitter, href: "#" },
+                { icon: FaInstagram, href: "#" },
+                { icon: FaLinkedin, href: "#" },
+                { icon: FaYoutube, href: "#" }
               ].map(({ icon: Icon, href }, i) => (
                 <a
                   key={i}
