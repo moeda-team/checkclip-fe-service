@@ -1,5 +1,3 @@
-// app/(app)/campaign-brief/hooks/useCampaignBrief.ts
-// Hook for campaign brief submission with loading and error states.
 
 "use client";
 

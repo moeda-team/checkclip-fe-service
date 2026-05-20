@@ -1,5 +1,3 @@
-// app/(app)/strategy-planner/hooks/useStrategyPlanner.ts
-// TanStack Query hooks for Strategy Planner API
 
 "use client";
 
