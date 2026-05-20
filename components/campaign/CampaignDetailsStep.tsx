@@ -268,7 +268,6 @@ export function CampaignDetailsStep({
                             setStartDateOpen(false);
                           }
                         }}
-                        initialFocus
                       />
                     </PopoverContent>
                   </Popover>
@@ -363,7 +362,6 @@ export function CampaignDetailsStep({
                               setEndDateOpen(false);
                             }
                           }}
-                          initialFocus
                         />
                       </PopoverContent>
                     </Popover>
