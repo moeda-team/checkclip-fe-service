@@ -11,7 +11,7 @@ import {
   Facebook,
   Youtube,
   Linkedin,
-  Instagram
+  Instagram,
 } from "lucide-react";
 
 // ─── Marquee items ────────────────────────────────────────────────────────────
@@ -23,7 +23,7 @@ const marqueeItems = [
   "REAL-TIME SYNTHESIS",
   "CAMPAIGN INTELLIGENCE",
   "PERFORMANCE ALIGNMENT",
-  "DATA-DRIVEN DECISIONS"
+  "DATA-DRIVEN DECISIONS",
 ];
 
 // ─── Translations ─────────────────────────────────────────────────────────────
@@ -38,13 +38,13 @@ const t = {
       services: "Services",
       portfolio: "Portfolio",
       pricing: "Pricing",
-      cta: "Let's Talk"
+      cta: "Let's Talk",
     },
     hero: {
       h1: ["Marketing Operations", "That Actually Align"],
       sub: "Atlas helps teams unify marketing data, automate decisions, and improve campaign performance across channels.",
       demo: "Book a Demo",
-      deploy: "See Deployment"
+      deploy: "See Deployment",
     },
     planSmarter: {
       h2a: "Plan Smarter.",
@@ -53,22 +53,22 @@ const t = {
       features: [
         {
           title: "AI-Powered Recommendations",
-          desc: "Get smart strategy and brief suggestions based on your goals, audience and historical performance."
+          desc: "Get smart strategy and brief suggestions based on your goals, audience and historical performance.",
         },
         {
           title: "Structured & Consistent",
-          desc: "Use standardized frameworks to ensure every strategy and brief is clear, complete, and on-brand."
+          desc: "Use standardized frameworks to ensure every strategy and brief is clear, complete, and on-brand.",
         },
         {
           title: "Collaborative & Aligned",
-          desc: "Keep your team aligned with real-time collaboration, feedback, and centralized campaign information."
-        }
-      ]
+          desc: "Keep your team aligned with real-time collaboration, feedback, and centralized campaign information.",
+        },
+      ],
     },
     japanese: {
       h2: "Built with Japanese Precision",
       sub: "Built for Japan, designed for global growth. Our platform combines strategic planning, campaign execution, collaboration, and performance analytics into one seamless ecosystem for modern marketing teams.",
-      kanji: "日本向けに構築"
+      kanji: "日本向けに構築",
     },
     evidence: {
       h2: "Evidence Over Vibes",
@@ -76,7 +76,7 @@ const t = {
       stats: [
         { value: "+34 %", label: "Marketing Efficiency Lift" },
         { value: "− 28 %", label: "Manual Analysis Time" },
-        { value: "12 d", label: "Median Time-To-Value" }
+        { value: "12 d", label: "Median Time-To-Value" },
       ],
       opinionsH: "Opinions we're willing to deploy",
       opinionsSub:
@@ -85,19 +85,19 @@ const t = {
         {
           num: "1",
           title: "Unify fragmented operations",
-          desc: "CRM, ad platforms, ERP, finance — built independently, now speaking one language. AIMOS consolidates without forklift upgrades."
+          desc: "CRM, ad platforms, ERP, finance — built independently, now speaking one language. AIMOS consolidates without forklift upgrades.",
         },
         {
           num: "2",
           title: "Evidence Over Dashboard",
-          desc: "We refuse to show projections. Every number is from a live production deployment. Ask and we'll show you the audit trail."
+          desc: "We refuse to show projections. Every number is from a live production deployment. Ask and we'll show you the audit trail.",
         },
         {
           num: "3",
           title: "Operators OverAlgorithms",
-          desc: "If the recommendation can't be acted on in under 10 seconds by a non-technical marketer, we didn't ship it."
-        }
-      ]
+          desc: "If the recommendation can't be acted on in under 10 seconds by a non-technical marketer, we didn't ship it.",
+        },
+      ],
     },
     shipped: {
       h2: "Shipped. In production.",
@@ -106,42 +106,42 @@ const t = {
         {
           tag: "STRATEGY & INVESTMENT",
           title: "CRM Agent",
-          desc: "Identify high-potential segments and shift budget to the right channels for stronger returns."
+          desc: "Identify high-potential segments and shift budget to the right channels for stronger returns.",
         },
         {
           tag: "PROMOTION",
           title: "Marketing Agent",
-          desc: "Align promotions with inventory in real time to maximize sell-through and reduce waste."
+          desc: "Align promotions with inventory in real time to maximize sell-through and reduce waste.",
         },
         {
           tag: "CHANNEL MANAGEMENT",
           title: "Finance Agent",
-          desc: "Dynamically rebalance channels based on performance to capture every growth opportunity."
+          desc: "Dynamically rebalance channels based on performance to capture every growth opportunity.",
         },
         {
           tag: "PERFORMANCE & OPTIMIZATION",
           title: "Inventory Agent",
-          desc: "Monitor results in real time and continuously learn to improve future campaigns."
-        }
-      ]
+          desc: "Monitor results in real time and continuously learn to improve future campaigns.",
+        },
+      ],
     },
     planCampaigns: {
       h2: "Plan Campaigns Your Way",
       sub: "Plan smarter campaigns with AI-powered recommendations and structured workflows built for modern marketing teams.",
       card1: {
         title: "Strategy Planner",
-        desc: "Create smarter marketing strategies with AI-powered recommendations tailored to your goals, audience, budget, and campaign objectives."
+        desc: "Create smarter marketing strategies with AI-powered recommendations tailored to your goals, audience, budget, and campaign objectives.",
       },
       card2: {
         title: "Create Campaign Brief",
-        desc: "Create structured campaign briefs with AI-powered recommendations or manual workflows tailored to your campaign goals and requirements."
-      }
+        desc: "Create structured campaign briefs with AI-powered recommendations or manual workflows tailored to your campaign goals and requirements.",
+      },
     },
     cta: {
       h2: "Let's Unify Your  Marketing Operations",
       sub: "Talk to an engineer. We'll share a case study from your vertical before the first call.",
       btn: "Request Brief",
-      placeholder: "Enter your email here"
+      placeholder: "Enter your email here",
     },
     footer: {
       tagline:
@@ -159,10 +159,10 @@ const t = {
         "CRM Intelligence",
         "Marketing Intelligence",
         "Finance Intelligence",
-        "Inventory Intelligence"
+        "Inventory Intelligence",
       ],
-      companyLinks: ["Deployment", "Customers", "Research", "Careers", "Press"]
-    }
+      companyLinks: ["Deployment", "Customers", "Research", "Careers", "Press"],
+    },
   },
   ja: {
     nav: {
@@ -171,13 +171,13 @@ const t = {
       services: "サービス",
       portfolio: "実績",
       pricing: "料金",
-      cta: "お問い合わせ"
+      cta: "お問い合わせ",
     },
     hero: {
       h1: ["マーケティング業務を", "一元化する"],
       sub: "Atlasはチームがマーケティングデータを統合し、意思決定を自動化し、チャネル全体のキャンペーンパフォーマンスを向上させるお手伝いをします。",
       demo: "デモを予約",
-      deploy: "導入事例を見る"
+      deploy: "導入事例を見る",
     },
     planSmarter: {
       h2a: "賢く計画。",
@@ -186,22 +186,22 @@ const t = {
       features: [
         {
           title: "AIによる推奨",
-          desc: "目標、オーディエンス、過去の実績に基づいたスマートな戦略とブリーフの提案を取得します。"
+          desc: "目標、オーディエンス、過去の実績に基づいたスマートな戦略とブリーフの提案を取得します。",
         },
         {
           title: "構造化された一貫性",
-          desc: "標準化されたフレームワークを使用して、すべての戦略とブリーフが明確で完全かつブランドに沿ったものになるようにします。"
+          desc: "標準化されたフレームワークを使用して、すべての戦略とブリーフが明確で完全かつブランドに沿ったものになるようにします。",
         },
         {
           title: "協調的な連携",
-          desc: "リアルタイムのコラボレーション、フィードバック、一元化されたキャンペーン情報でチームの連携を維持します。"
-        }
-      ]
+          desc: "リアルタイムのコラボレーション、フィードバック、一元化されたキャンペーン情報でチームの連携を維持します。",
+        },
+      ],
     },
     japanese: {
       h2: "日本の精度で構築",
       sub: "日本向けに構築され、グローバルな成長のために設計されています。私たちのプラットフォームは、戦略的計画、キャンペーン実行、コラボレーション、パフォーマンス分析を現代のマーケティングチームのためのシームレスなエコシステムに統合します。",
-      kanji: "日本向けに構築"
+      kanji: "日本向けに構築",
     },
     evidence: {
       h2: "データが証明する成果",
@@ -209,7 +209,7 @@ const t = {
       stats: [
         { value: "+34 %", label: "マーケティング効率向上" },
         { value: "− 28 %", label: "手動分析時間削減" },
-        { value: "12 日", label: "価値実現までの中央値" }
+        { value: "12 日", label: "価値実現までの中央値" },
       ],
       opinionsH: "私たちが自信を持って展開する考え方",
       opinionsSub:
@@ -218,19 +218,19 @@ const t = {
         {
           num: "1",
           title: "分断された業務を統合",
-          desc: "CRM、広告プラットフォーム、ERP、財務 — 独立して構築され、今や一つの言語で話しています。AIMOSは大規模な移行なしに統合します。"
+          desc: "CRM、広告プラットフォーム、ERP、財務 — 独立して構築され、今や一つの言語で話しています。AIMOSは大規模な移行なしに統合します。",
         },
         {
           num: "2",
           title: "ダッシュボードより証拠",
-          desc: "予測は表示しません。すべての数字は本番導入からのものです。監査証跡をお見せします。"
+          desc: "予測は表示しません。すべての数字は本番導入からのものです。監査証跡をお見せします。",
         },
         {
           num: "3",
           title: "アルゴリズムより運用者",
-          desc: "非技術系マーケターが10秒以内に実行できない推奨事項は、私たちは出荷しません。"
-        }
-      ]
+          desc: "非技術系マーケターが10秒以内に実行できない推奨事項は、私たちは出荷しません。",
+        },
+      ],
     },
     shipped: {
       h2: "本番環境で稼働中。",
@@ -239,42 +239,42 @@ const t = {
         {
           tag: "戦略・投資",
           title: "CRMエージェント",
-          desc: "高ポテンシャルセグメントを特定し、より強いリターンのために適切なチャネルに予算をシフトします。"
+          desc: "高ポテンシャルセグメントを特定し、より強いリターンのために適切なチャネルに予算をシフトします。",
         },
         {
           tag: "プロモーション",
           title: "マーケティングエージェント",
-          desc: "在庫とプロモーションをリアルタイムで連携させ、売上を最大化し廃棄を削減します。"
+          desc: "在庫とプロモーションをリアルタイムで連携させ、売上を最大化し廃棄を削減します。",
         },
         {
           tag: "チャネル管理",
           title: "ファイナンスエージェント",
-          desc: "パフォーマンスに基づいてチャネルを動的に再調整し、すべての成長機会を捉えます。"
+          desc: "パフォーマンスに基づいてチャネルを動的に再調整し、すべての成長機会を捉えます。",
         },
         {
           tag: "パフォーマンス最適化",
           title: "在庫エージェント",
-          desc: "リアルタイムで結果を監視し、将来のキャンペーンを改善するために継続的に学習します。"
-        }
-      ]
+          desc: "リアルタイムで結果を監視し、将来のキャンペーンを改善するために継続的に学習します。",
+        },
+      ],
     },
     planCampaigns: {
       h2: "自分のやり方でキャンペーンを計画",
       sub: "現代のマーケティングチームのために構築されたAI搭載の推奨事項と構造化されたワークフローで、よりスマートなキャンペーンを計画します。",
       card1: {
         title: "戦略プランナー",
-        desc: "目標、オーディエンス、予算、キャンペーン目標に合わせたAI搭載の推奨事項でよりスマートなマーケティング戦略を作成します。"
+        desc: "目標、オーディエンス、予算、キャンペーン目標に合わせたAI搭載の推奨事項でよりスマートなマーケティング戦略を作成します。",
       },
       card2: {
         title: "キャンペーンブリーフ作成",
-        desc: "キャンペーンの目標と要件に合わせたAI搭載の推奨事項または手動ワークフローで構造化されたキャンペーンブリーフを作成します。"
-      }
+        desc: "キャンペーンの目標と要件に合わせたAI搭載の推奨事項または手動ワークフローで構造化されたキャンペーンブリーフを作成します。",
+      },
     },
     cta: {
       h2: "マーケティング業務を統合しましょう",
       sub: "エンジニアとお話しください。最初の通話前にあなたの業界のケーススタディをお伝えします。",
       btn: "ブリーフを依頼",
-      placeholder: "メールアドレスを入力"
+      placeholder: "メールアドレスを入力",
     },
     footer: {
       tagline:
@@ -292,11 +292,11 @@ const t = {
         "CRMインテリジェンス",
         "マーケティングインテリジェンス",
         "ファイナンスインテリジェンス",
-        "在庫インテリジェンス"
+        "在庫インテリジェンス",
       ],
-      companyLinks: ["導入事例", "顧客", "研究", "採用", "プレス"]
-    }
-  }
+      companyLinks: ["導入事例", "顧客", "研究", "採用", "プレス"],
+    },
+  },
 } as const;
 
 // ─── Orbit animation ──────────────────────────────────────────────────────────
@@ -320,12 +320,12 @@ function OrbitRings() {
       { r: 150 },
       { r: 210 },
       { r: 280 },
-      { r: 350 }
+      { r: 350 },
     ];
 
     const orbitDots = [
       { ringIndex: 4, speed: 0.45, dotR: 5, color: "#3b82f6" },
-      { ringIndex: 5, speed: -0.45, dotR: 6, color: "#8b5cf6" }
+      { ringIndex: 5, speed: -0.45, dotR: 6, color: "#8b5cf6" },
     ];
 
     function resize() {
@@ -394,7 +394,7 @@ function OrbitRings() {
 
 function FadeInSection({
   children,
-  className = ""
+  className = "",
 }: {
   children: React.ReactNode;
   className?: string;
@@ -410,7 +410,7 @@ function FadeInSection({
         // Toggle on both enter and leave — animates in both scroll directions
         setVisible(entry.isIntersecting);
       },
-      { threshold: 0.12 }
+      { threshold: 0.12 },
     );
     observer.observe(el);
     return () => observer.disconnect();
@@ -544,7 +544,20 @@ export default function LandingPage() {
       </div>
 
       {/* ── Plan Smarter Section ───────────────────────────────────────── */}
-      <section className="bg-white py-20 px-4">
+      <section className="relative bg-white py-20 px-4">
+        <img
+          src="/img-plan-smarter-execute-better-background.svg"
+          alt=""
+          aria-hidden
+          className="
+      absolute inset-0
+      w-full h-full
+      object-cover
+      opacity-40
+      pointer-events-none
+      select-none
+    "
+        />
         <div className="max-w-5xl mx-auto">
           {/* Heading */}
           <FadeInSection className="text-center mb-12">
@@ -599,7 +612,7 @@ export default function LandingPage() {
                           <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
                           <circle cx="9" cy="7" r="4" />
                           <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
-                        </svg>
+                        </svg>,
                       ][i]
                     }
                   </div>
@@ -618,176 +631,76 @@ export default function LandingPage() {
 
           {/* App screenshot mockup */}
           <FadeInSection>
-            <div className="rounded-2xl overflow-hidden border-4 border-blue-600 shadow-2xl bg-[#f8faff]">
-              {/* Mock browser bar */}
-              <div className="bg-blue-600 px-4 py-3 flex items-center gap-2">
-                <div className="flex gap-1.5">
-                  <span className="w-3 h-3 rounded-full bg-white/30" />
-                  <span className="w-3 h-3 rounded-full bg-white/30" />
-                  <span className="w-3 h-3 rounded-full bg-white/30" />
-                </div>
-                <span className="text-white text-xs font-medium ml-2">
-                  Strategy Planner — AIMOS
-                </span>
-              </div>
-              {/* Mock app content */}
-              <div className="flex h-72">
-                {/* Sidebar mock */}
-                <div className="w-44 bg-white border-r border-gray-100 p-3 shrink-0">
-                  <div className="flex items-center gap-2 mb-4 pb-3 border-b border-gray-100">
-                    <div className="w-6 h-6 bg-blue-600 rounded-md" />
-                    <div>
-                      <div className="text-xs font-bold text-gray-900">
-                        ATLAS
-                      </div>
-                      <div className="text-[10px] text-gray-400">
-                        Enterprise
-                      </div>
-                    </div>
-                  </div>
-                  <div className="text-[10px] text-gray-400 uppercase tracking-wider mb-2">
-                    Overview
-                  </div>
-                  <div className="flex items-center gap-2 px-2 py-1.5 rounded-md bg-gray-50 mb-1">
-                    <div className="w-3 h-3 bg-gray-300 rounded" />
-                    <span className="text-xs text-gray-600">Dashboard</span>
-                  </div>
-                  <div className="text-[10px] text-gray-400 uppercase tracking-wider mt-3 mb-2">
-                    CRM
-                  </div>
-                  {["Contacts", "Deals", "CRM"].map((item) => (
-                    <div
-                      key={item}
-                      className="flex items-center gap-2 px-2 py-1.5 mb-0.5"
-                    >
-                      <div className="w-3 h-3 bg-gray-200 rounded" />
-                      <span className="text-xs text-gray-500">{item}</span>
-                    </div>
-                  ))}
-                </div>
-                {/* Main content mock */}
-                <div className="flex-1 p-5">
-                  <div className="flex items-center gap-2 mb-4">
-                    <div className="w-6 h-6 bg-blue-100 rounded-md flex items-center justify-center">
-                      <div className="w-3 h-3 bg-blue-600 rounded-sm" />
-                    </div>
-                    <span className="text-sm font-semibold text-gray-900">
-                      Strategy Planner
-                    </span>
-                  </div>
-                  <div className="flex gap-2 mb-5">
-                    <span className="text-xs border border-gray-200 rounded-full px-3 py-1 text-gray-600 flex items-center gap-1">
-                      <div className="w-2 h-2 bg-blue-400 rounded-sm" />{" "}
-                      Scenario Comparison
-                    </span>
-                    <span className="text-xs border border-gray-200 rounded-full px-3 py-1 text-gray-600 flex items-center gap-1">
-                      <div className="w-2 h-2 bg-blue-400 rounded-sm" />{" "}
-                      Campaign Strategies
-                    </span>
-                  </div>
-                  <div className="grid grid-cols-3 gap-3">
-                    {["Conservative", "Base Case", "Aggressive"].map(
-                      (label) => (
-                        <div
-                          key={label}
-                          className="border border-gray-200 rounded-xl p-3 bg-white"
-                        >
-                          <p className="text-xs text-gray-400 mb-1">{label}</p>
-                          <p className="text-xl font-bold text-gray-900">2</p>
-                        </div>
-                      )
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
+            <img
+              src="/img-plan-smarter-execute-better.svg"
+              alt="Plan Smarter Executer"
+              className="w-full h-full object-cover"
+            />
           </FadeInSection>
         </div>
       </section>
 
       {/* ── Built with Japanese Precision Section ──────────────────────── */}
-      <section className="bg-white py-20 px-4 overflow-hidden">
-        <div className="max-w-6xl mx-auto">
+      <section className="relative bg-white py-24 px-4 overflow-hidden">
+        {/* Background */}
+        <img
+          src="/img-built-with-japanese-background.svg"
+          alt=""
+          aria-hidden
+          className="
+      absolute inset-0
+      w-full h-full
+      object-cover
+      opacity-40
+      pointer-events-none
+      select-none
+    "
+        />
+
+        <div className="relative max-w-7xl mx-auto">
           <FadeInSection>
-            {/* Heading + description */}
-            <div className="mb-10">
-              <h2 className="text-4xl md:text-5xl font-black text-gray-900 leading-tight mb-4">
+            {/* TITLE OVERLAY */}
+            <div className="relative z-20 mb-[-80px] md:mb-[-120px]">
+              <h2 className="max-w-4xl text-5xl md:text-7xl font-black leading-[0.95] tracking-tight text-gray-900">
                 {tx.japanese.h2}
               </h2>
-              <p className="text-base text-gray-500 max-w-md leading-relaxed">
-                {tx.japanese.sub}
-              </p>
             </div>
 
-            {/* Two photos side by side */}
-            <div className="grid grid-cols-2 gap-4 h-[420px] md:h-[500px]">
-              {/* Left photo — team */}
-              <div className="relative rounded-2xl overflow-hidden bg-gray-100">
-                {/* Pink blob decoration */}
-                <div className="absolute -bottom-10 -left-10 w-48 h-48 bg-pink-200/50 rounded-full blur-2xl pointer-events-none" />
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src="/images/japan-team.jpg"
-                  alt="Japanese marketing team collaborating"
-                  className="w-full h-full object-cover"
-                  onError={(e) => {
-                    (e.currentTarget as HTMLImageElement).style.display =
-                      "none";
-                  }}
-                />
-                {/* Fallback */}
-                <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-gray-300 bg-gray-50">
-                  <svg
-                    className="w-12 h-12"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.2"
-                  >
-                    <rect x="3" y="3" width="18" height="18" rx="2" />
-                    <circle cx="8.5" cy="8.5" r="1.5" />
-                    <polyline points="21 15 16 10 5 21" />
-                  </svg>
-                  <span className="text-xs">
-                    Place image at /images/japan-team.jpg
-                  </span>
+            {/* CONTENT AREA */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+              {/* LEFT COLUMN */}
+              <div className="flex flex-col gap-8 pt-28 md:pt-40">
+                {/* DESCRIPTION */}
+                <div className="max-w-md">
+                  <p className="text-base md:text-lg text-gray-500 leading-relaxed">
+                    {tx.japanese.sub}
+                  </p>
+                </div>
+
+                {/* LEFT IMAGE */}
+                <div className="relative rounded-[32px] overflow-hidden h-[420px] md:h-[520px]">
+                  {/* Decoration */}
+                  <div className="absolute -top-20 right-0 w-72 h-72 bg-pink-200/40 rounded-full blur-3xl z-10" />
+
+                  <img
+                    src="/img-built-with-japanese-right.svg"
+                    alt="Japanese marketing team collaborating"
+                    className="w-full h-full object-cover"
+                  />
                 </div>
               </div>
 
-              {/* Right photo — Mt. Fuji / Japan */}
-              <div className="relative rounded-2xl overflow-hidden bg-gray-100">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src="/images/japan-fuji.jpg"
-                  alt="Mount Fuji with pagoda"
-                  className="w-full h-full object-cover"
-                  onError={(e) => {
-                    (e.currentTarget as HTMLImageElement).style.display =
-                      "none";
-                  }}
-                />
-                {/* Fallback */}
-                <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-gray-300 bg-gray-50">
-                  <svg
-                    className="w-12 h-12"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.2"
-                  >
-                    <rect x="3" y="3" width="18" height="18" rx="2" />
-                    <circle cx="8.5" cy="8.5" r="1.5" />
-                    <polyline points="21 15 16 10 5 21" />
-                  </svg>
-                  <span className="text-xs">
-                    Place image at /images/japan-fuji.jpg
-                  </span>
-                </div>
-                {/* Japanese text overlay */}
-                <div className="absolute bottom-4 right-4 text-white text-right leading-tight">
-                  <p className="text-2xl font-bold [writing-mode:vertical-rl] tracking-widest drop-shadow-lg">
-                    {tx.japanese.kanji}
-                  </p>
+              {/* RIGHT COLUMN */}
+              <div className="relative pt-10">
+                <div className="relative rounded-[32px] overflow-hidden h-[560px] md:h-[760px]">
+                  <img
+                    src="/img-built-with-japanese-right-1.svg"
+                    alt="Mount Fuji with pagoda"
+                    className="w-full h-full object-cover"
+                  />
+
+                  {/* Overlay gradient */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
                 </div>
               </div>
             </div>
@@ -875,7 +788,7 @@ export default function LandingPage() {
               style={{
                 backgroundImage:
                   "linear-gradient(rgba(59,130,246,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(59,130,246,0.06) 1px, transparent 1px)",
-                backgroundSize: "40px 40px"
+                backgroundSize: "40px 40px",
               }}
             />
 
@@ -901,7 +814,7 @@ export default function LandingPage() {
                       <line x1="1" y1="12" x2="4" y2="12" />
                       <line x1="20" y1="12" x2="23" y2="12" />
                     </svg>
-                  )
+                  ),
                 },
                 {
                   tag: tx.shipped.cards[1].tag,
@@ -919,7 +832,7 @@ export default function LandingPage() {
                       <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
                       <line x1="12" y1="22.08" x2="12" y2="12" />
                     </svg>
-                  )
+                  ),
                 },
                 {
                   tag: tx.shipped.cards[2].tag,
@@ -937,7 +850,7 @@ export default function LandingPage() {
                       <polyline points="2 17 12 22 22 17" />
                       <polyline points="2 12 12 17 22 12" />
                     </svg>
-                  )
+                  ),
                 },
                 {
                   tag: tx.shipped.cards[3].tag,
@@ -953,8 +866,8 @@ export default function LandingPage() {
                     >
                       <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
                     </svg>
-                  )
-                }
+                  ),
+                },
               ].map((card, i) => (
                 <FadeInSection key={i}>
                   <div className="bg-blue-600 hover:bg-blue-700 transition-colors rounded-2xl p-7 flex flex-col gap-5 h-full cursor-default">
@@ -1102,69 +1015,76 @@ export default function LandingPage() {
 
       {/* ── CTA Section ────────────────────────────────────────────────── */}
       <section className="bg-white py-10 px-4">
-        <FadeInSection className="max-w-5xl mx-auto">
-          <div className="relative bg-blue-600 rounded-2xl px-10 py-12 overflow-hidden">
-            {/* Wireframe mesh SVG background */}
-            <div className="absolute right-0 top-0 h-full w-1/2 pointer-events-none opacity-30">
-              <svg
-                viewBox="0 0 400 300"
-                className="w-full h-full"
-                preserveAspectRatio="xMidYMid slice"
-              >
-                {/* Perspective grid lines — horizontal */}
-                {[0, 1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
-                  <line
-                    key={`h${i}`}
-                    x1={100 + i * 30}
-                    y1={0}
-                    x2={0 + i * 20}
-                    y2={300}
-                    stroke="white"
-                    strokeWidth="0.6"
-                  />
-                ))}
-                {/* Perspective grid lines — vertical */}
-                {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => (
-                  <line
-                    key={`v${i}`}
-                    x1={0}
-                    y1={i * 30}
-                    x2={400}
-                    y2={i * 28 + 10}
-                    stroke="white"
-                    strokeWidth="0.6"
-                  />
-                ))}
-                {/* Extra diagonal lines for depth */}
-                {[0, 1, 2, 3, 4].map((i) => (
-                  <line
-                    key={`d${i}`}
-                    x1={200 + i * 50}
-                    y1={0}
-                    x2={400}
-                    y2={100 + i * 40}
-                    stroke="white"
-                    strokeWidth="0.4"
-                  />
-                ))}
-              </svg>
-            </div>
+        <FadeInSection className="max-w-6xl mx-auto">
+          <div
+            className="
+        relative
+        rounded-[32px]
+        overflow-hidden
+        px-8 md:px-12
+        py-12 md:py-16
+        bg-[#2155F5]
+      "
+          >
+            {/* BACKGROUND IMAGE */}
+            <img
+              src="/img-lets-unify-your-marketing-operations-background.svg"
+              alt=""
+              aria-hidden
+              className="
+          absolute inset-0
+          w-full h-full
+          object-cover
+          opacity-70
+          pointer-events-none
+          select-none
+        "
+            />
 
-            {/* Content */}
-            <div className="relative z-10 max-w-xl">
-              <h2 className="text-2xl md:text-3xl font-bold text-white mb-3 leading-snug">
+            {/* Optional dark overlay */}
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-600/40 to-blue-500/10" />
+
+            {/* CONTENT */}
+            <div className="relative z-10 max-w-3xl">
+              <h2 className="text-4xl md:text-6xl font-light tracking-tight text-white leading-tight mb-5">
                 {tx.cta.h2}
               </h2>
-              <p className="text-sm text-blue-100 mb-6 leading-relaxed">
+
+              <p className="text-lg text-blue-100 leading-relaxed mb-8 max-w-2xl">
                 {tx.cta.sub}
               </p>
-              <div className="flex gap-3">
+
+              {/* FORM */}
+              <div className="flex flex-col sm:flex-row gap-4 max-w-2xl">
                 <input
                   type="email"
                   placeholder={tx.cta.placeholder}
-                  className="h-10 px-4 text-sm rounded-lg bg-white text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-white/50 w-64"
+                  className="
+              h-14 flex-1
+              px-5
+              rounded-xl
+              bg-white
+              text-gray-900
+              placeholder:text-gray-400
+              focus:outline-none
+              focus:ring-2
+              focus:ring-white/40
+            "
                 />
-                <button className="h-10 px-5 bg-blue-500 hover:bg-blue-400 border border-white/30 text-white text-sm font-semibold rounded-lg transition-colors shrink-0">
+
+                <button
+                  className="
+              h-14
+              px-8
+              rounded-xl
+              bg-white
+              text-blue-600
+              font-semibold
+              hover:bg-blue-50
+              transition-colors
+              shrink-0
+            "
+                >
                   {tx.cta.btn}
                 </button>
               </div>
@@ -1302,7 +1222,7 @@ export default function LandingPage() {
                 { icon: Twitter, href: "#" },
                 { icon: Instagram, href: "#" },
                 { icon: Linkedin, href: "#" },
-                { icon: Youtube, href: "#" }
+                { icon: Youtube, href: "#" },
               ].map(({ icon: Icon, href }, i) => (
                 <a
                   key={i}
