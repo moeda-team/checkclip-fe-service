@@ -10,11 +10,19 @@ import { useCampaignBrief } from "@/app/(app)/campaign-brief/hooks/useCampaignBr
 import type {
   AdsType,
   CampaignFormData,
-  CampaignObjectiveKey
+  CampaignObjectiveKey,
 } from "@/types/campaign";
 
 export default function CampaignBriefCreatePage() {
   const { submit } = useCampaignBrief();
+
+  const campaignTypeMap: Record<CampaignObjectiveKey, string> = {
+    awareness: "Reach · Video",
+    traffic: "Search · Display",
+    sales: "Performance Max",
+    leads: "Performance Max",
+    app_install: "App · App Installs",
+  };
 
   const handleOnSubmit = useCallback(
     async (data: {
@@ -30,10 +38,10 @@ export default function CampaignBriefCreatePage() {
         type_ads: data.selectedAds,
         objective_type: data.selectedObjective,
         sub_type: data.selectedSubtype,
-        form: data.formData
+        form: data.formData,
       });
     },
-    [submit]
+    [submit],
   );
 
   return (
