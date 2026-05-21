@@ -7,6 +7,8 @@
 // Client env vars MUST be present at build time (inlined into bundle)
 const clientRequired = {
   NEXT_PUBLIC_API_BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL,
+  NEXT_PUBLIC_GOOGLE_REDIRECT_URI: process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URI,
+  NEXT_PUBLIC_YAHOO_REDIRECT_URI: process.env.NEXT_PUBLIC_YAHOO_REDIRECT_URI
 } as const;
 
 // Server env vars are injected at container runtime; validate lazily
@@ -66,11 +68,11 @@ export const env = {
 
   // Google OAuth
   googleClientId: optional.NEXT_PUBLIC_GOOGLE_CLIENT_ID ?? "",
-  googleRedirectUri: `${clientRequired.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:3000"}/auth/google/callback`,
+  googleRedirectUri: clientRequired.NEXT_PUBLIC_GOOGLE_REDIRECT_URI!,
 
   // Yahoo OAuth
   yahooClientId: optional.NEXT_PUBLIC_YAHOO_CLIENT_ID ?? "",
-  yahooRedirectUri: `${clientRequired.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:3000"}/auth/yahoo/callback`,
+  yahooRedirectUri: clientRequired.NEXT_PUBLIC_YAHOO_REDIRECT_URI!,
 
   // Azure AD
   azureAdClientId: optional.AZURE_AD_CLIENT_ID ?? "",
