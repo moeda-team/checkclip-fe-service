@@ -224,13 +224,16 @@ export function CampaignDetailsStep({
                   <Label className="text-sm font-medium text-gray-700">
                     Budget <span className="text-red-500">*</span>
                   </Label>
-                  <Input
-                    type="number"
-                    placeholder="Input budget"
-                    value={formData.budget.budget}
-                    onChange={(e) => updateBudget("budget", e.target.value)}
-                    className="mt-1.5 h-10 border-gray-200 text-sm"
-                  />
+                  <div className="relative mt-1.5">
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm font-medium">$</span>
+                    <Input
+                      type="number"
+                      placeholder="0.00"
+                      value={formData.budget.budget}
+                      onChange={(e) => updateBudget("budget", e.target.value)}
+                      className="h-10 border-gray-200 text-sm pl-7 pr-3"
+                    />
+                  </div>
                 </div>
               </div>
 
