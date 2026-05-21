@@ -25,7 +25,7 @@ export function getGoogleOAuthUrl(): string {
       "profile",
       "https://www.googleapis.com/auth/adwords",
     ].join(" "),
-    access_type: "offline",
+    access_type: "online",
     prompt: "consent",
   });
 
