@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { Mail, Building2, Phone, MapPin } from "lucide-react";
+import { Mail, Building2, Phone, MapPin, Sparkles } from "lucide-react";
 import {
   FaFacebook,
   FaInstagram,
@@ -294,7 +294,45 @@ const t = {
     },
   },
 } as const;
+function drawSparkle(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  size: number,
+  color: string
+) {
+  ctx.save();
 
+  ctx.translate(x, y);
+  ctx.rotate(Date.now() * 0.001);
+
+  ctx.beginPath();
+
+  // atas
+  ctx.moveTo(0, -size);
+
+  // kanan
+  ctx.lineTo(size * 0.35, -size * 0.35);
+  ctx.lineTo(size, 0);
+
+  // bawah
+  ctx.lineTo(size * 0.35, size * 0.35);
+  ctx.lineTo(0, size);
+
+  // kiri
+  ctx.lineTo(-size * 0.35, size * 0.35);
+  ctx.lineTo(-size, 0);
+
+  // kembali atas
+  ctx.lineTo(-size * 0.35, -size * 0.35);
+
+  ctx.closePath();
+
+  ctx.fillStyle = color;
+  ctx.fill();
+
+  ctx.restore();
+}
 // ─── Orbit animation ──────────────────────────────────────────────────────────
 
 function OrbitRings() {
@@ -319,10 +357,10 @@ function OrbitRings() {
       { r: 350 },
     ];
 
-    const orbitDots = [
-      { ringIndex: 4, speed: 0.45, dotR: 5, color: "#3b82f6" },
-      { ringIndex: 5, speed: -0.45, dotR: 6, color: "#8b5cf6" },
-    ];
+const orbitDots = [
+  { ringIndex: 4, speed: 0.85, dotR: 7, color: "#d4d4d8" },
+  { ringIndex: 5, speed: -0.85, dotR: 9, color: "#e5e7eb" },
+];
 
     function resize() {
       canvas!.width = canvas!.offsetWidth;
@@ -348,25 +386,26 @@ function OrbitRings() {
         ctx!.stroke();
       });
 
-      orbitDots.forEach((dot) => {
-        const ring = rings[dot.ringIndex];
-        const angle = elapsed * dot.speed;
-        const dx = cx + Math.cos(angle) * ring.r;
-        const dy = cy + Math.sin(angle) * ring.r;
+orbitDots.forEach((dot) => {
+  const ring = rings[dot.ringIndex];
+  const angle = elapsed * dot.speed;
 
-        const grad = ctx!.createRadialGradient(dx, dy, 0, dx, dy, dot.dotR * 4);
-        grad.addColorStop(0, dot.color + "cc");
-        grad.addColorStop(1, dot.color + "00");
-        ctx!.beginPath();
-        ctx!.arc(dx, dy, dot.dotR * 4, 0, Math.PI * 2);
-        ctx!.fillStyle = grad;
-        ctx!.fill();
+  const dx = cx + Math.cos(angle) * ring.r;
+  const dy = cy + Math.sin(angle) * ring.r;
 
-        ctx!.beginPath();
-        ctx!.arc(dx, dy, dot.dotR, 0, Math.PI * 2);
-        ctx!.fillStyle = dot.color;
-        ctx!.fill();
-      });
+  // glow
+  const grad = ctx!.createRadialGradient(dx, dy, 0, dx, dy, 20);
+  grad.addColorStop(0, dot.color + "44");
+  grad.addColorStop(1, dot.color + "00");
+
+  ctx!.beginPath();
+  ctx!.arc(dx, dy, 20, 0, Math.PI * 2);
+  ctx!.fillStyle = grad;
+  ctx!.fill();
+
+  // sparkle
+  drawSparkle(ctx!, dx, dy, dot.dotR, dot.color);
+});
 
       animRef.current = requestAnimationFrame(draw);
     }
@@ -443,7 +482,7 @@ export default function LandingPage() {
       >
         <nav className="bg-white/90 backdrop-blur-md rounded-full px-6 py-2.5 flex items-center justify-between gap-6 shadow-sm border border-gray-200/60 w-full max-w-3xl">
           <span className="text-lg font-black tracking-tight text-gray-900">
-            A<span className="text-blue-600">i</span>mos
+            <img src="/logo.svg"/>
           </span>
           <div className="hidden md:flex items-center gap-6 text-sm text-gray-600">
             <a href="#" className="font-semibold text-gray-900">
@@ -500,7 +539,7 @@ export default function LandingPage() {
         />
         <OrbitRings />
         <div className="relative z-10 max-w-4xl mx-auto space-y-6">
-          <h1 className="text-5xl md:text-7xl font-black text-gray-900 leading-tight tracking-tight">
+          <h1 className="text-7xl md:text-7xl font-black text-gray-900 leading-tight tracking-tight">
             {tx.hero.h1[0]}
             <br />
             {tx.hero.h1[1]}
@@ -639,25 +678,26 @@ export default function LandingPage() {
       {/* ── Built with Japanese Precision Section ──────────────────────── */}
       <section className="relative bg-white py-24 px-4 overflow-hidden">
         {/* Background */}
-        <img
-          src="/img-built-with-japanese-background.svg"
-          alt=""
-          aria-hidden
-          className="
-      absolute inset-0
-      w-full h-full
-      object-cover
-      opacity-40
-      pointer-events-none
-      select-none
-    "
-        />
+<img
+  src="/img-built-with-japanese-background.svg"
+  alt=""
+  aria-hidden
+  className="
+    absolute
+    top-1/2 left-1/2
+    -translate-x-1/2 -translate-y-1/2
+    w-[900px]
+    opacity-40
+    pointer-events-none
+    select-none
+  "
+/>
 
         <div className="relative max-w-7xl mx-auto">
           <FadeInSection>
             {/* TITLE OVERLAY */}
             <div className="relative z-20 mb-[-80px] md:mb-[-120px]">
-              <h2 className="max-w-4xl text-5xl md:text-7xl font-black leading-[0.95] tracking-tight text-gray-900">
+              <h2 className="max-w-4xl text-5xl md:text-7xl font-normal leading-[0.95] tracking-tight text-gray-900">
                 {tx.japanese.h2}
               </h2>
             </div>
@@ -667,11 +707,11 @@ export default function LandingPage() {
               {/* LEFT COLUMN */}
               <div className="flex flex-col gap-8 pt-28 md:pt-40">
                 {/* DESCRIPTION */}
-                <div className="max-w-md">
-                  <p className="text-base md:text-lg text-gray-500 leading-relaxed">
+                {/* <div className="max-w-md"> */}
+                  <p className="font-normal text-gray-500 leading-relaxed">
                     {tx.japanese.sub}
                   </p>
-                </div>
+                {/* </div> */}
 
                 {/* LEFT IMAGE */}
                 <div className="relative rounded-[32px] overflow-hidden h-[420px] md:h-[520px]">
@@ -866,9 +906,24 @@ export default function LandingPage() {
                 },
               ].map((card, i) => (
                 <FadeInSection key={i}>
-                  <div className="bg-blue-600 hover:bg-blue-700 transition-colors rounded-2xl p-7 flex flex-col gap-5 h-full cursor-default">
+                  <div
+                    className="group relative rounded-2xl p-7 flex flex-col gap-5 h-full cursor-default overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-blue-900/30"
+                    style={{ backgroundColor: "#3B5BDB" }}
+                  >
+                    {/* Dot pattern — hidden by default, appears on hover */}
+                    <div
+                      className="absolute inset-0 pointer-events-none transition-opacity duration-300 opacity-0 group-hover:opacity-100"
+                      style={{
+                        backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.35) 1.5px, transparent 1.5px)",
+                        backgroundSize: "18px 18px",
+                        backgroundPosition: "right top",
+                        maskImage: "linear-gradient(to left, rgba(0,0,0,1) 30%, rgba(0,0,0,0) 75%)",
+                        WebkitMaskImage: "linear-gradient(to left, rgba(0,0,0,1) 30%, rgba(0,0,0,0) 75%)",
+                      }}
+                    />
+
                     {/* Tag row */}
-                    <div className="flex items-center gap-3">
+                    <div className="relative z-10 flex items-center gap-3">
                       <div className="w-9 h-9 rounded-xl bg-white/15 flex items-center justify-center shrink-0">
                         {card.icon}
                       </div>
@@ -877,7 +932,7 @@ export default function LandingPage() {
                       </span>
                     </div>
                     {/* Content */}
-                    <div>
+                    <div className="relative z-10">
                       <h3 className="text-xl font-bold text-white mb-2">
                         {card.title}
                       </h3>
@@ -897,10 +952,10 @@ export default function LandingPage() {
       <section className="bg-[#f8faff] py-20 px-4">
         <div className="max-w-5xl mx-auto">
           <FadeInSection className="mb-12">
-            <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-3">
+            <h2 className="text-3xl md:text-4xl font-normal text-gray-900 mb-3">
               {tx.planCampaigns.h2}
             </h2>
-            <p className="text-base text-gray-500 max-w-2xl leading-relaxed">
+            <p className="text-3xl text-base text-gray-500  leading-relaxed">
               {tx.planCampaigns.sub}
             </p>
           </FadeInSection>
@@ -908,20 +963,31 @@ export default function LandingPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Card 1 — Strategy Planner */}
             <FadeInSection>
-              <div className="bg-white rounded-2xl border border-gray-200 p-6 flex flex-col gap-4 h-full">
-                <div>
-                  <h3 className="text-lg font-bold text-gray-900 mb-2">
+              <div className="relative bg-white rounded-2xl border border-gray-200 p-6 flex flex-col gap-4 h-full overflow-hidden">
+                {/* Grid background */}
+                <div
+                  className="absolute inset-0 pointer-events-none"
+                  style={{
+                    backgroundImage:
+                      "linear-gradient(rgba(59,130,246,0.07) 1px, transparent 1px), linear-gradient(90deg, rgba(59,130,246,0.07) 1px, transparent 1px)",
+                    backgroundSize: "32px 32px",
+                  }}
+                />
+                {/* Fade-out gradient at bottom so grid doesn't clash with content */}
+                <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-white to-transparent pointer-events-none" />
+
+                <div className="relative z-10">
+                  <h3 className="text-2xl md:text-2xl font-normal text-gray-900 mb-2">
                     {tx.planCampaigns.card1.title}
                   </h3>
-                  <p className="text-sm text-gray-500 leading-relaxed">
+                  <p className="text-base text-gray-500 leading-relaxed">
                     {tx.planCampaigns.card1.desc}
                   </p>
                 </div>
                 {/* Video/GIF placeholder */}
-                <div className="flex-1 rounded-xl overflow-hidden border border-gray-100 bg-gray-50 min-h-[280px] flex items-center justify-center relative">
-                  {/* Replace src with actual gif/video path e.g. /videos/strategy-planner.gif */}
+                <div className="relative z-10 flex-1 rounded-xl overflow-hidden border border-gray-100 bg-gray-50 min-h-[280px] flex items-center justify-center">
                   <video
-                    src="/videos/strategy-planner.mp4"
+                    src="/video/strategy-planner.mp4"
                     autoPlay
                     loop
                     muted
@@ -932,46 +998,37 @@ export default function LandingPage() {
                         "none";
                     }}
                   />
-                  {/* Fallback placeholder shown when video not found */}
-                  <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-gray-300">
-                    <svg
-                      className="w-10 h-10"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                    >
-                      <rect x="2" y="3" width="20" height="14" rx="2" />
-                      <path d="M8 21h8M12 17v4" />
-                      <path d="M10 10l4-2-4-2v4z" fill="currentColor" />
-                    </svg>
-                    <span className="text-xs font-medium">
-                      Strategy Planner Demo
-                    </span>
-                    <span className="text-[10px]">
-                      Place video at /videos/strategy-planner.mp4
-                    </span>
-                  </div>
                 </div>
               </div>
             </FadeInSection>
 
             {/* Card 2 — Create Campaign Brief */}
             <FadeInSection>
-              <div className="bg-white rounded-2xl border border-gray-200 p-6 flex flex-col gap-4 h-full">
-                <div>
-                  <h3 className="text-lg font-bold text-gray-900 mb-2">
+              <div className="relative bg-white rounded-2xl border border-gray-200 p-6 flex flex-col gap-4 h-full overflow-hidden">
+                {/* Grid background */}
+                <div
+                  className="absolute inset-0 pointer-events-none"
+                  style={{
+                    backgroundImage:
+                      "linear-gradient(rgba(59,130,246,0.07) 1px, transparent 1px), linear-gradient(90deg, rgba(59,130,246,0.07) 1px, transparent 1px)",
+                    backgroundSize: "32px 32px",
+                  }}
+                />
+                {/* Fade-out gradient at bottom */}
+                <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-white to-transparent pointer-events-none" />
+
+                <div className="relative z-10">
+                  <h3 className="text-2xl md:text-2xl font-normal text-gray-900 mb-2">
                     {tx.planCampaigns.card2.title}
                   </h3>
-                  <p className="text-sm text-gray-500 leading-relaxed">
+                  <p className="text-base text-gray-500 leading-relaxed">
                     {tx.planCampaigns.card2.desc}
                   </p>
                 </div>
                 {/* Video/GIF placeholder */}
-                <div className="flex-1 rounded-xl overflow-hidden border border-gray-100 bg-gray-50 min-h-[280px] flex items-center justify-center relative">
-                  {/* Replace src with actual gif/video path e.g. /videos/campaign-brief.gif */}
+                <div className="relative z-10 flex-1 rounded-xl overflow-hidden border border-gray-100 bg-gray-50 min-h-[280px] flex items-center justify-center">
                   <video
-                    src="/videos/campaign-brief.mp4"
+                    src="/video/campaign-brief.mp4"
                     autoPlay
                     loop
                     muted
@@ -982,26 +1039,6 @@ export default function LandingPage() {
                         "none";
                     }}
                   />
-                  {/* Fallback placeholder */}
-                  <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-gray-300">
-                    <svg
-                      className="w-10 h-10"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                    >
-                      <rect x="2" y="3" width="20" height="14" rx="2" />
-                      <path d="M8 21h8M12 17v4" />
-                      <path d="M10 10l4-2-4-2v4z" fill="currentColor" />
-                    </svg>
-                    <span className="text-xs font-medium">
-                      Campaign Brief Demo
-                    </span>
-                    <span className="text-[10px]">
-                      Place video at /videos/campaign-brief.mp4
-                    </span>
-                  </div>
                 </div>
               </div>
             </FadeInSection>
@@ -1042,7 +1079,7 @@ export default function LandingPage() {
 
             {/* CONTENT */}
             <div className="relative z-10 max-w-3xl">
-              <h2 className="text-4xl md:text-6xl font-light tracking-tight text-white leading-tight mb-5">
+              <h2 className="text-4xl md:text-4xl font-light tracking-tight text-white leading-tight mb-5">
                 {tx.cta.h2}
               </h2>
 
@@ -1096,12 +1133,7 @@ export default function LandingPage() {
           {/* Brand */}
           <div className="mb-8 pb-8 border-b border-gray-100">
             <div className="text-4xl font-black text-blue-600 mb-3 tracking-tight">
-              A
-              <span className="relative">
-                i
-                <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-blue-600 rounded" />
-              </span>
-              mos
+              <img src="/logo.svg"/>
             </div>
             <p className="text-sm text-gray-500 max-w-2xl leading-relaxed">
               {tx.footer.tagline}
