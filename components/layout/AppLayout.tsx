@@ -40,6 +40,7 @@ const segmentLabels: Record<string, string> = {
   deals: "Deals",
   campaigns: "Campaigns",
   "campaign-brief": "Campaign Briefs",
+  "strategy-planner": "Strategy Planner",
   create: "Create New",
   "create-new": "Create New",
   "email-marketing": "Email Marketing",
@@ -55,15 +56,45 @@ const segmentLabels: Record<string, string> = {
   strategy: "Strategy Planner"
 };
 
-function getBreadcrumbs(pathname: string) {
-  const segments = pathname.split("/").filter(Boolean);
-  // Get last 2 segments for breadcrumb display
-  const relevant = segments.slice(-2);
-  return relevant.map(
-    (seg) =>
-      segmentLabels[seg] ??
-      seg.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())
+// Check if a segment is a dynamic ID (UUID or numeric string)
+function isDynamicId(segment: string): boolean {
+  // UUID format
+  const uuidRegex =
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+  // Numeric ID
+  const numericRegex = /^\d+$/;
+  // MongoDB ObjectId (24 hex chars)
+  const objectIdRegex = /^[0-9a-f]{24}$/i;
+  return (
+    uuidRegex.test(segment) ||
+    numericRegex.test(segment) ||
+    objectIdRegex.test(segment)
   );
+}
+
+interface BreadcrumbItem {
+  label: string;
+  href: string;
+}
+
+function getBreadcrumbs(pathname: string): BreadcrumbItem[] {
+  const segments = pathname.split("/").filter(Boolean);
+  // Filter out ID segments - they don't appear in breadcrumb
+  const meaningfulSegments = segments.filter((seg) => !isDynamicId(seg));
+  // Get last 2 meaningful segments
+  const relevant = meaningfulSegments.slice(-2);
+
+  return relevant.map((seg, index) => {
+    const label =
+      segmentLabels[seg] ??
+      seg.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+
+    // Build href from the original segments up to this point
+    const originalIndex = segments.findIndex((s) => s === seg);
+    const href = "/" + segments.slice(0, originalIndex + 1).join("/");
+
+    return { label, href };
+  });
 }
 
 function AppHeader() {
@@ -108,15 +139,20 @@ function AppHeader() {
                   {i > 0 && (
                     <ChevronRight className="w-3.5 h-3.5 text-gray-400" />
                   )}
-                  <span
-                    className={
-                      i === breadcrumbs.length - 1
-                        ? "font-semibold text-gray-900"
-                        : "text-gray-500"
-                    }
-                  >
-                    {crumb}
-                  </span>
+                  {i === breadcrumbs.length - 1 ? (
+                    // Last item - not clickable
+                    <span className="font-semibold text-gray-900">
+                      {crumb.label}
+                    </span>
+                  ) : (
+                    // Parent items - clickable
+                    <Link
+                      href={crumb.href}
+                      className="text-gray-500 hover:text-gray-900 transition-colors"
+                    >
+                      {crumb.label}
+                    </Link>
+                  )}
                 </span>
               ))
             )}

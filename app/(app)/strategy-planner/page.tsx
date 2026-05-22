@@ -119,7 +119,7 @@ export default function StrategyPlannerPage() {
           <DropdownMenuContent align="end">
             <DropdownMenuItem
               onClick={() =>
-                router.push(`/strategy-planner/${row.original.id}`)
+                router.push(`/strategy-planner/${row.original.id}/detail`)
               }
             >
               Detail
