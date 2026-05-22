@@ -44,7 +44,8 @@ export async function proxy(request: NextRequest) {
   }
 
   // ── Authenticated user trying to access auth pages (login, etc.) ────────
-  if (isAuthRoute && isAuthenticated) {
+  // Skip redirect if token has expired — they need to re-authenticate
+  if (isAuthRoute && isAuthenticated && token?.error !== "RefreshTokenExpired") {
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 
