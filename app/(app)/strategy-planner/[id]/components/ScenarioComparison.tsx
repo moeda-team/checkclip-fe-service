@@ -6,7 +6,7 @@ import {
   TableCell,
   TableHead,
   TableHeader,
-  TableRow,
+  TableRow
 } from "@/components/ui/table";
 import { ChevronLeft } from "lucide-react";
 import { useState } from "react";
@@ -15,7 +15,7 @@ interface Scenario {
   id: string;
   name: string;
   description: string;
-  icon: "conservative" | "base" | "aggressive";
+  icon: "shield" | "target" | "aggressive";
   color: string;
   metrics: {
     projectedRevenue: string;
@@ -36,7 +36,7 @@ const scenarios: Scenario[] = [
     id: "conservative",
     name: "Conservative",
     description: "Stability & Risk Mitigation",
-    icon: "conservative",
+    icon: "shield",
     color: "#0ea5e9",
     metrics: {
       projectedRevenue: "$480",
@@ -48,14 +48,14 @@ const scenarios: Scenario[] = [
       ltvCacRatio: "8.4x",
       investment: "$85",
       newHeadcount: "+3",
-      riskLevel: "Low",
-    },
+      riskLevel: "Low"
+    }
   },
   {
     id: "base",
     name: "Base Case",
     description: "Balanced Growth & Efficiency",
-    icon: "base",
+    icon: "target",
     color: "#8b5cf6",
     metrics: {
       projectedRevenue: "$480",
@@ -67,8 +67,8 @@ const scenarios: Scenario[] = [
       ltvCacRatio: "8.4x",
       investment: "$85",
       newHeadcount: "+3",
-      riskLevel: "Low",
-    },
+      riskLevel: "Low"
+    }
   },
   {
     id: "aggressive",
@@ -86,9 +86,9 @@ const scenarios: Scenario[] = [
       ltvCacRatio: "8.4x",
       investment: "$85",
       newHeadcount: "+3",
-      riskLevel: "Low",
-    },
-  },
+      riskLevel: "Low"
+    }
+  }
 ];
 
 const comparisonMetrics = [
@@ -101,7 +101,7 @@ const comparisonMetrics = [
   { key: "ltvCacRatio", label: "LTV:CAC Ratio" },
   { key: "investment", label: "Investment Required" },
   { key: "newHeadcount", label: "New Headcount" },
-  { key: "riskLevel", label: "Risk Level" },
+  { key: "riskLevel", label: "Risk Level" }
 ];
 
 function ScenarioIcon({ type, color }: { type: string; color: string }) {
@@ -111,7 +111,14 @@ function ScenarioIcon({ type, color }: { type: string; color: string }) {
         className="w-8 h-8 rounded-lg flex items-center justify-center"
         style={{ backgroundColor: color }}
       >
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="white"
+          strokeWidth="2"
+        >
           <circle cx="12" cy="12" r="10" />
           <path d="M12 16v-4M12 8h.01" />
         </svg>
@@ -124,7 +131,14 @@ function ScenarioIcon({ type, color }: { type: string; color: string }) {
         className="w-8 h-8 rounded-lg flex items-center justify-center"
         style={{ backgroundColor: color }}
       >
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="white"
+          strokeWidth="2"
+        >
           <circle cx="12" cy="12" r="3" />
           <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
         </svg>
@@ -136,7 +150,14 @@ function ScenarioIcon({ type, color }: { type: string; color: string }) {
       className="w-8 h-8 rounded-lg flex items-center justify-center"
       style={{ backgroundColor: color }}
     >
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
+      <svg
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="white"
+        strokeWidth="2"
+      >
         <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
       </svg>
     </div>
@@ -159,7 +180,9 @@ function ScenarioCard({ scenario }: { scenario: Scenario }) {
       <div className="space-y-3">
         <div className="flex justify-between text-sm">
           <span className="text-gray-500">Projected Revenue</span>
-          <span className="font-medium">{scenario.metrics.projectedRevenue}</span>
+          <span className="font-medium">
+            {scenario.metrics.projectedRevenue}
+          </span>
         </div>
         <div className="flex justify-between text-sm">
           <span className="text-gray-500">Revenue Growth</span>
@@ -235,7 +258,9 @@ export function ScenarioComparison() {
             <path d="M3 3v18h18" />
             <path d="M7 16l4-4 4 4 6-6" />
           </svg>
-          <span className="font-medium text-sm">Detailed Metric Comparison</span>
+          <span className="font-medium text-sm">
+            Detailed Metric Comparison
+          </span>
         </div>
 
         <Table>
@@ -244,7 +269,9 @@ export function ScenarioComparison() {
               <TableHead className="w-12">
                 <input type="checkbox" className="rounded border-gray-300" />
               </TableHead>
-              <TableHead className="text-xs font-medium text-gray-500">Metric</TableHead>
+              <TableHead className="text-xs font-medium text-gray-500">
+                Metric
+              </TableHead>
               <TableHead
                 className="text-xs font-medium"
                 style={{ color: scenarios[0].color }}
@@ -274,18 +301,36 @@ export function ScenarioComparison() {
                 <TableCell>
                   <input type="checkbox" className="rounded border-gray-300" />
                 </TableCell>
-                <TableCell className="text-sm text-gray-900">{metric.label}</TableCell>
-                <TableCell className="text-sm">
-                  {scenarios[0].metrics[metric.key as keyof Scenario["metrics"]]}
+                <TableCell className="text-sm text-gray-900">
+                  {metric.label}
                 </TableCell>
                 <TableCell className="text-sm">
-                  {scenarios[1].metrics[metric.key as keyof Scenario["metrics"]]}
+                  {
+                    scenarios[0].metrics[
+                      metric.key as keyof Scenario["metrics"]
+                    ]
+                  }
                 </TableCell>
                 <TableCell className="text-sm">
-                  {scenarios[2].metrics[metric.key as keyof Scenario["metrics"]]}
+                  {
+                    scenarios[1].metrics[
+                      metric.key as keyof Scenario["metrics"]
+                    ]
+                  }
                 </TableCell>
                 <TableCell className="text-sm">
-                  {scenarios[2].metrics[metric.key as keyof Scenario["metrics"]]}
+                  {
+                    scenarios[2].metrics[
+                      metric.key as keyof Scenario["metrics"]
+                    ]
+                  }
+                </TableCell>
+                <TableCell className="text-sm">
+                  {
+                    scenarios[2].metrics[
+                      metric.key as keyof Scenario["metrics"]
+                    ]
+                  }
                 </TableCell>
               </TableRow>
             ))}
