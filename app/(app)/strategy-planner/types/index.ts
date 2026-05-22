@@ -44,9 +44,16 @@ export interface StrategyPlannerDto {
 export interface StrategyPlannerTableRow {
   id: string;
   title: string;
+  planner_type: StrategyPlannerType;
   status: string;
   createdAt: string;
   updatedAt: string;
+  tenant?: {
+    id: string;
+    code: string;
+    name: string;
+    domain: string;
+  };
 }
 
 export interface CreateStrategyPlannerPayload {

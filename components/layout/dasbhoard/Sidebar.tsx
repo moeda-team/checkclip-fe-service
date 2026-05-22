@@ -58,26 +58,26 @@ const navigationItems: NavSection[] = [
       }
     ]
   },
-  {
-    title: "CRM",
-    items: [
-      {
-        title: "Contacts",
-        href: "/dashboard/customers",
-        icon: Users
-      },
-      {
-        title: "Deals",
-        href: "/dashboard/leads",
-        icon: Handshake
-      },
-      {
-        title: "CRM",
-        href: "/dashboard/deals",
-        icon: Database
-      }
-    ]
-  },
+  // {
+  //   title: "CRM",
+  //   items: [
+  //     {
+  //       title: "Contacts",
+  //       href: "/dashboard/customers",
+  //       icon: Users
+  //     },
+  //     {
+  //       title: "Deals",
+  //       href: "/dashboard/leads",
+  //       icon: Handshake
+  //     },
+  //     {
+  //       title: "CRM",
+  //       href: "/dashboard/deals",
+  //       icon: Database
+  //     }
+  //   ]
+  // },
   {
     title: "Campaigns",
     items: [
@@ -86,21 +86,21 @@ const navigationItems: NavSection[] = [
         href: "/campaigns",
         icon: Megaphone
       },
-      {
-        title: "Campaign Planner",
-        href: "/campaign-planner",
-        icon: ClipboardList
-      },
+      // {
+      //   title: "Campaign Planner",
+      //   href: "/campaign-planner",
+      //   icon: ClipboardList
+      // },
       {
         title: "Campaign Briefs",
         href: "/campaign-brief",
         icon: FileText
       },
-      {
-        title: "Campaign Monitor",
-        href: "/campaign-monitor",
-        icon: Radio
-      },
+      // {
+      //   title: "Campaign Monitor",
+      //   href: "/campaign-monitor",
+      //   icon: Radio
+      // },
       {
         title: "Strategy Planner",
         href: "/strategy-planner",
