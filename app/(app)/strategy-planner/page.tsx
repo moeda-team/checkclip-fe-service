@@ -1,69 +1,228 @@
 "use client";
 
+import { useState, useMemo, Key } from "react";
 import { useRouter } from "next/navigation";
-import { Plus, FileText, Search, Filter } from "lucide-react";
+import { Plus, Search, Trash2, MoreHorizontal } from "lucide-react";
+import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { DataTable } from "@/components/ui/data-table";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger
+} from "@/components/ui/dropdown-menu";
+import {
+  useGetStrategyPlanners,
+  useDeleteStrategyPlanner
+} from "./hooks/useStrategyPlanner";
+import type { StrategyPlannerFilter, StrategyPlannerTableRow } from "./types";
+import type { PaginationFilter } from "@/types/api";
+
+// Extended response interface matching the actual API
+interface StrategyPlannerApiResponse {
+  data: StrategyPlannerTableRow[];
+  total: number;
+  limit: number;
+  offset: number;
+}
 
 export default function StrategyPlannerPage() {
   const router = useRouter();
+  const [search, setSearch] = useState("");
+  const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([]);
+  const [filter, setFilter] = useState<StrategyPlannerFilter>({
+    page: 1,
+    limit: 5,
+    search: ""
+  });
+
+  const { data, isLoading } = useGetStrategyPlanners(filter);
+  const deleteMutation = useDeleteStrategyPlanner();
+
+  // Cast data to match the actual API response format
+  const apiData = data as unknown as StrategyPlannerApiResponse | undefined;
+  const rows = useMemo(() => apiData?.data ?? [], [apiData]);
+
+  const paginationFilter: PaginationFilter = useMemo(
+    () => ({
+      page: filter.page ?? 1,
+      perPage: filter.limit ?? 5,
+      search: filter.search
+    }),
+    [filter]
+  );
+
+  const paginationDto = useMemo(
+    () => ({
+      total: apiData?.total ?? 0,
+      next: null,
+      prev: null,
+      current_page: filter.page ?? 1,
+      per_page: filter.limit ?? 5,
+      total_pages: Math.ceil((apiData?.total ?? 0) / (filter.limit ?? 5))
+    }),
+    [apiData?.total, filter]
+  );
+
+  const handleSearch = (value: string) => {
+    setSearch(value);
+    setFilter((prev) => ({
+      ...prev,
+      search: value,
+      page: 1
+    }));
+  };
+
+  const handleDelete = (id: string) => {
+    deleteMutation.mutate(id);
+  };
+
+  const columns: ColumnDef<StrategyPlannerTableRow>[] = [
+    {
+      accessorKey: "title",
+      header: "Campaign Name",
+      cell: ({ row }) => (
+        <div className="font-medium">{row.getValue("title")}</div>
+      )
+    },
+    {
+      id: "brand_name",
+      header: "Brand Name",
+      cell: () => "-"
+    },
+    {
+      id: "planner_type",
+      header: "Objective"
+    },
+    {
+      id: "total_budget",
+      header: "Total Budget",
+      cell: () => "-"
+    },
+    {
+      id: "budget_type",
+      header: "Budget Type",
+      cell: () => "-"
+    },
+    {
+      id: "actions",
+      header: "",
+      cell: ({ row }) => (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="icon" className="h-8 w-8">
+              <MoreHorizontal className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem
+              onClick={() =>
+                router.push(`/strategy-planner/${row.original.id}`)
+              }
+            >
+              Detail
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() =>
+                router.push(`/strategy-planner/${row.original.id}/edit`)
+              }
+            >
+              Edit
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              className="text-destructive"
+              onClick={() => handleDelete(row.original.id)}
+            >
+              Delete
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      )
+    }
+  ];
 
   return (
     <div className="p-6 max-w-7xl mx-auto">
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
-        <div>
-          <h1 className="text-2xl font-semibold text-gray-900">
-            Strategy Planner
-          </h1>
-          <p className="text-sm text-gray-500 mt-1">
-            Manage your strategy plans and create new strategies
-          </p>
+        <h1 className="text-2xl font-semibold">Strategy Planner</h1>
+        <div className="flex items-center gap-2">
+          {selectedRowKeys.length > 0 && (
+            <Button
+              variant="destructive"
+              size="sm"
+              onClick={() => {
+                selectedRowKeys.forEach((id) => handleDelete(String(id)));
+              }}
+            >
+              <Trash2 className="w-4 h-4 mr-2" />
+              Delete ({selectedRowKeys.length})
+            </Button>
+          )}
+          <Button
+            onClick={() => router.push("/strategy-planner/create")}
+            className="bg-gray-900 hover:bg-gray-800 text-white"
+          >
+            <Plus className="w-4 h-4 mr-2" />
+            Add New
+          </Button>
         </div>
-        <Button
-          onClick={() => router.push("/strategy-planner/create")}
-          className="bg-gray-900 hover:bg-gray-800 text-white"
-        >
-          <Plus className="w-4 h-4 mr-2" />
-          Create New
-        </Button>
       </div>
 
       {/* Filters */}
       <div className="flex items-center gap-4 mb-6">
-        <div className="relative flex-1 max-w-md">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+        <select
+          className="h-10 px-3 rounded-md border bg-background text-sm"
+          value={filter.limit}
+          onChange={(e) =>
+            setFilter((prev) => ({
+              ...prev,
+              limit: Number(e.target.value),
+              page: 1
+            }))
+          }
+        >
+          <option value={5}>5 Rows</option>
+          <option value={10}>10 Rows</option>
+          <option value={25}>25 Rows</option>
+          <option value={50}>50 Rows</option>
+        </select>
+
+        <div className="relative flex-1 max-w-sm">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <Input
-            placeholder="Search stratefy planners..."
+            placeholder="Search"
             className="pl-10 h-10"
+            value={search}
+            onChange={(e) => handleSearch(e.target.value)}
           />
         </div>
-        <Button variant="outline" className="h-10">
-          <Filter className="w-4 h-4 mr-2" />
-          Filter
-        </Button>
       </div>
 
-      {/* Empty State */}
-      <div className="bg-white border border-gray-200 rounded-xl p-12 text-center">
-        <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-          <FileText className="w-8 h-8 text-gray-400" />
-        </div>
-        <h3 className="text-lg font-medium text-gray-900 mb-2">
-          No stratefy planners yet
-        </h3>
-        <p className="text-sm text-gray-500 mb-6 max-w-sm mx-auto">
-          Get started by creating your first stratefy planner. This will help
-          you organize your marketing campaigns.
-        </p>
-        <Button
-          onClick={() => router.push("/strategy-planner/create")}
-          className="bg-gray-900 hover:bg-gray-800 text-white"
-        >
-          <Plus className="w-4 h-4 mr-2" />
-          Create stratefy planner
-        </Button>
-      </div>
+      {/* Data Table */}
+      <DataTable
+        data={rows}
+        columns={columns}
+        isLoading={isLoading}
+        enableSorting
+        rowSelection={{
+          selectedRowKeys,
+          onChange: (keys) => setSelectedRowKeys(keys)
+        }}
+        pagination={{
+          paginationDto,
+          paginationFilter,
+          setPaginationFilter: (newFilter) =>
+            setFilter((prev) => ({
+              ...prev,
+              page: newFilter.page,
+              limit: newFilter.perPage,
+              search: newFilter.search
+            }))
+        }}
+      />
     </div>
   );
 }

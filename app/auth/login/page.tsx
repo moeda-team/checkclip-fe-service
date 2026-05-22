@@ -9,7 +9,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import { getGoogleOAuthUrl, getYahooOAuthUrl } from "@/lib/oauth";
+import {
+  getGoogleOAuthUrl,
+  getYahooOAuthUrl,
+  getGoogleAccountChooserUrl
+} from "@/lib/oauth";
 
 function LoginPageInner() {
   const router = useRouter();
@@ -66,7 +70,11 @@ function LoginPageInner() {
   };
 
   const handleGoogleLogin = () => {
-    window.location.href = getGoogleOAuthUrl();
+    window.location.href = getGoogleOAuthUrl(true);
+  };
+
+  const handleGoogleLoginDifferentAccount = () => {
+    window.location.href = getGoogleAccountChooserUrl();
   };
 
   const handleYahooLogin = () => {
@@ -274,6 +282,13 @@ function LoginPageInner() {
                 </svg>
                 Sign In with Google
               </Button>
+              <button
+                type="button"
+                onClick={handleGoogleLoginDifferentAccount}
+                className="w-full text-xs text-gray-500 hover:text-primary-600 text-center"
+              >
+                Use a different Google account
+              </button>
 
               <Button
                 type="button"

@@ -35,7 +35,7 @@ export function PageHeader({
   };
 
   return (
-    <div className="flex items-center justify-between py-4 border-b border-gray-200">
+    <div className="flex items-center justify-between py-4">
       <div className="flex items-center gap-3">
         {showBackButton && (
           <Button
@@ -45,7 +45,6 @@ export function PageHeader({
             onClick={handleBack}
           >
             <ChevronLeft className="w-4 h-4 mr-1" />
-            {backButtonLabel}
           </Button>
         )}
         <div>

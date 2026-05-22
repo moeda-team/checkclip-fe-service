@@ -10,7 +10,7 @@ import { env } from "@/lib/env";
 
 const GOOGLE_AUTH_URL = "https://accounts.google.com/o/oauth2/v2/auth";
 
-export function getGoogleOAuthUrl(): string {
+export function getGoogleOAuthUrl(forceSelectAccount = false): string {
   if (!env.googleClientId) {
     throw new Error("NEXT_PUBLIC_GOOGLE_CLIENT_ID is not set");
   }
@@ -26,10 +26,16 @@ export function getGoogleOAuthUrl(): string {
       "https://www.googleapis.com/auth/adwords",
     ].join(" "),
     access_type: "online",
-    prompt: "consent",
+    prompt: forceSelectAccount ? "select_account consent" : "consent",
   });
 
   return `${GOOGLE_AUTH_URL}?${params.toString()}`;
+}
+
+export function getGoogleAccountChooserUrl(): string {
+  // Opens Google's account chooser first, then returns to our login
+  const returnUrl = encodeURIComponent(getGoogleOAuthUrl(true));
+  return `https://accounts.google.com/AccountChooser?continue=${returnUrl}`;
 }
 
 // ─── Yahoo OAuth ──────────────────────────────────────────────────────────────
