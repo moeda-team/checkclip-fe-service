@@ -392,6 +392,86 @@ function drawSparkle(
 
 type ServiceCard = { title: string; desc: string; icon: string };
 
+function ServiceCardItem({
+  card,
+  index,
+  dealt,
+  iconNode,
+}: {
+  card: ServiceCard;
+  index: number;
+  dealt: boolean;
+  iconNode: React.ReactNode;
+}) {
+  const circleRef = useRef<HTMLDivElement>(null);
+
+  const handleMouseEnter = () => {
+    const el = circleRef.current;
+    if (!el) return;
+    // Reset to bottom first (in case it was flying up)
+    el.style.transition = "none";
+    el.style.transform = "translateY(100%)";
+    el.style.opacity = "0";
+    // Force reflow
+    void el.offsetHeight;
+    // Slide up into view
+    el.style.transition = "transform 0.45s cubic-bezier(0.22,1,0.36,1), opacity 0.3s ease";
+    el.style.transform = "translateY(0%)";
+    el.style.opacity = "1";
+  };
+
+  const handleMouseLeave = () => {
+    const el = circleRef.current;
+    if (!el) return;
+    // Fly upward (negative Y = above card)
+    el.style.transition = "transform 0.4s cubic-bezier(0.4,0,0.2,1), opacity 0.35s ease";
+    el.style.transform = "translateY(-140%)";
+    el.style.opacity = "0";
+  };
+
+  return (
+    <div
+      className="group relative rounded-2xl p-6 flex flex-col gap-5 h-full cursor-default hover:-translate-y-1 hover:shadow-xl hover:shadow-blue-900/20 overflow-hidden"
+      style={{
+        backgroundColor: "#3B5BDB",
+        transform: dealt ? "translateX(0px) rotate(0deg)" : `translateX(-120px) rotate(0deg)`,
+        opacity: dealt ? 1 : 0,
+        transition: dealt
+          ? `transform 0.55s cubic-bezier(0.22,1,0.36,1) ${index * 120}ms, opacity 0.4s ease ${index * 120}ms, box-shadow 0.3s ease, translate 0.3s ease`
+          : "none",
+      }}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
+      {/* Hover circle — bottom-left, controlled via JS ref */}
+      <div
+        ref={circleRef}
+        className="absolute -bottom-24 -left-24 w-70 h-70 rounded-full bg-white/10 pointer-events-none"
+        style={{ transform: "translateY(100%)", opacity: 0 }}
+      />
+
+      {/* Icon */}
+      <div className="relative z-10 w-11 h-11 rounded-xl bg-white/15 flex items-center justify-center shrink-0">
+        {iconNode}
+      </div>
+
+      {/* Content */}
+      <div className="relative z-10 flex flex-col gap-2 flex-1">
+        <h3 className="text-lg font-bold text-white">{card.title}</h3>
+        <p className="text-sm text-blue-100 leading-relaxed flex-1">{card.desc}</p>
+      </div>
+
+      {/* Learn more */}
+      <button className="relative z-10 flex items-center gap-1.5 text-sm font-semibold text-white/80 hover:text-white transition-colors mt-2 self-start">
+        Learn more
+        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <path d="M5 12h14M12 5l7 7-7 7" />
+        </svg>
+      </button>
+    </div>
+  );
+}
+
 function ServiceCards({ cards }: { cards: readonly ServiceCard[] }) {
   const ref = useRef<HTMLDivElement>(null);
   const [dealt, setDealt] = useState(false);
@@ -414,27 +494,51 @@ function ServiceCards({ cards }: { cards: readonly ServiceCard[] }) {
 
   const iconMap: Record<string, React.ReactNode> = {
     crm: (
-      <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+      <svg
+        className="w-5 h-5 text-white"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+      >
         <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
         <circle cx="9" cy="7" r="4" />
         <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
       </svg>
     ),
     marketing: (
-      <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+      <svg
+        className="w-5 h-5 text-white"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+      >
         <circle cx="12" cy="12" r="3" />
         <path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83" />
       </svg>
     ),
     finance: (
-      <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+      <svg
+        className="w-5 h-5 text-white"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+      >
         <rect x="2" y="3" width="20" height="14" rx="2" />
         <path d="M8 21h8M12 17v4" />
         <path d="M7 8h.01M12 8h.01M17 8h.01M7 12h10" />
       </svg>
     ),
     inventory: (
-      <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+      <svg
+        className="w-5 h-5 text-white"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+      >
         <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
         <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
         <line x1="12" y1="22.08" x2="12" y2="12" />
@@ -443,42 +547,18 @@ function ServiceCards({ cards }: { cards: readonly ServiceCard[] }) {
   };
 
   return (
-    <div ref={ref} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+    <div
+      ref={ref}
+      className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5"
+    >
       {cards.map((card, i) => (
-        <div
+        <ServiceCardItem
           key={i}
-          className="group relative rounded-2xl p-6 flex flex-col gap-5 h-full cursor-default hover:-translate-y-1 hover:shadow-xl hover:shadow-blue-900/20"
-          style={{
-            backgroundColor: "#3B5BDB",
-            // start: stacked at left, rotated, hidden
-            transform: dealt
-              ? "translateX(0px) rotate(0deg)"
-              : `translateX(-120px) rotate(0deg)`,
-            opacity: dealt ? 1 : 0,
-            transition: dealt
-              ? `transform 0.55s cubic-bezier(0.22,1,0.36,1) ${i * 120}ms, opacity 0.4s ease ${i * 120}ms, box-shadow 0.3s ease, translate 0.3s ease`
-              : "none",
-          }}
-        >
-          {/* Icon */}
-          <div className="w-11 h-11 rounded-xl bg-white/15 flex items-center justify-center shrink-0">
-            {iconMap[card.icon]}
-          </div>
-
-          {/* Content */}
-          <div className="flex flex-col gap-2 flex-1">
-            <h3 className="text-lg font-bold text-white">{card.title}</h3>
-            <p className="text-sm text-blue-100 leading-relaxed flex-1">{card.desc}</p>
-          </div>
-
-          {/* Learn more */}
-          <button className="flex items-center gap-1.5 text-sm font-semibold text-white/80 hover:text-white transition-colors mt-2 self-start">
-            Learn more
-            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M5 12h14M12 5l7 7-7 7" />
-            </svg>
-          </button>
-        </div>
+          card={card}
+          index={i}
+          dealt={dealt}
+          iconNode={iconMap[card.icon]}
+        />
       ))}
     </div>
   );
@@ -698,7 +778,13 @@ export default function LandingPage() {
                   svg
                   style={{ width: "1.3em", height: "1.3em" }}
                 />
-                <svg className="w-3 h-3 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                <svg
+                  className="w-3 h-3 text-gray-400"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                >
                   <path d="M6 9l6 6 6-6" />
                 </svg>
               </button>
@@ -712,7 +798,10 @@ export default function LandingPage() {
                   ].map((item) => (
                     <button
                       key={item.code}
-                      onClick={() => { setLang(item.code); setLangOpen(false); }}
+                      onClick={() => {
+                        setLang(item.code);
+                        setLangOpen(false);
+                      }}
                       className={`w-full flex items-center gap-3 px-4 py-3 text-sm hover:bg-gray-50 transition-colors ${lang === item.code ? "text-gray-900 font-semibold" : "text-gray-700"}`}
                     >
                       <ReactCountryFlag
@@ -990,7 +1079,13 @@ export default function LandingPage() {
               </h2>
               <button className="self-start md:self-auto flex items-center gap-2 border border-blue-600 text-blue-600 hover:bg-blue-50 text-sm font-semibold px-5 py-2.5 rounded-full transition-colors shrink-0">
                 {tx.services.viewAll}
-                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <svg
+                  className="w-4 h-4"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
                   <path d="M5 12h14M12 5l7 7-7 7" />
                 </svg>
               </button>
