@@ -6,7 +6,6 @@
 import { useCallback } from "react";
 import { CreateCampaign } from "@/components/campaign/CreateCampaign";
 import { PageHeader } from "@/components/layout/PageHeader";
-import { useCampaignBrief } from "@/app/(app)/campaign-brief/hooks/useCampaignBrief";
 import type {
   AdsType,
   CampaignFormData,
@@ -14,35 +13,35 @@ import type {
 } from "@/types/campaign";
 
 export default function CampaignBriefCreatePage() {
-  const { submit } = useCampaignBrief();
+  // const { submit } = useCampaignBrief();
 
-  const campaignTypeMap: Record<CampaignObjectiveKey, string> = {
-    awareness: "Reach · Video",
-    traffic: "Search · Display",
-    sales: "Performance Max",
-    leads: "Performance Max",
-    app_install: "App · App Installs",
-  };
+  // const campaignTypeMap: Record<CampaignObjectiveKey, string> = {
+  //   awareness: "Reach · Video",
+  //   traffic: "Search · Display",
+  //   sales: "Performance Max",
+  //   leads: "Performance Max",
+  //   app_install: "App · App Installs",
+  // };
 
-  const handleOnSubmit = useCallback(
-    async (data: {
-      campaignName: string;
-      selectedAds: AdsType;
-      selectedObjective: CampaignObjectiveKey;
-      selectedSubtype: string;
-      selectedConversionGoals: string[];
-      formData: CampaignFormData;
-    }) => {
-      await submit({
-        title: data.campaignName,
-        type_ads: data.selectedAds,
-        objective_type: data.selectedObjective,
-        sub_type: data.selectedSubtype,
-        form: data.formData,
-      });
-    },
-    [submit],
-  );
+  // const handleOnSubmit = useCallback(
+  //   async (data: {
+  //     campaignName: string;
+  //     selectedAds: AdsType;
+  //     selectedObjective: CampaignObjectiveKey;
+  //     selectedSubtype: string;
+  //     selectedConversionGoals: string[];
+  //     formData: CampaignFormData;
+  //   }) => {
+  //     await submit({
+  //       title: data.campaignName,
+  //       type_ads: data.selectedAds,
+  //       objective_type: data.selectedObjective,
+  //       sub_type: data.selectedSubtype,
+  //       form: data.formData,
+  //     });
+  //   },
+  //   [submit],
+  // );
 
   return (
     <div className="flex flex-col min-h-[calc(100vh-56px)]">
@@ -53,7 +52,7 @@ export default function CampaignBriefCreatePage() {
           onError={(err: Error) =>
             console.error("Campaign creation failed:", err)
           }
-          onSubmit={handleOnSubmit}
+          // onSubmit={handleOnSubmit}
         />
       </div>
     </div>
