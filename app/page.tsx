@@ -2,14 +2,15 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { Mail, Building2, Phone, MapPin, Sparkles } from "lucide-react";
+import { Mail, Building2, Phone, MapPin } from "lucide-react";
 import {
   FaFacebook,
   FaInstagram,
   FaLinkedin,
   FaXTwitter,
-  FaYoutube
+  FaYoutube,
 } from "react-icons/fa6";
+import ReactCountryFlag from "react-country-flag";
 // ─── Marquee items ────────────────────────────────────────────────────────────
 
 const marqueeItems = [
@@ -138,6 +139,33 @@ const t = {
       sub: "Talk to an engineer. We'll share a case study from your vertical before the first call.",
       btn: "Request Brief",
       placeholder: "Enter your email here",
+    },
+    services: {
+      h2a: "We Provide Exclusive Service",
+      h2b: "For Your Business",
+      viewAll: "View All Service",
+      cards: [
+        {
+          title: "CRM Agent",
+          desc: "Dynamic segmentation from real-time customer behavior. Churn prediction and LTV analysis. Identify high-value customers at risk.",
+          icon: "crm",
+        },
+        {
+          title: "Marketing Agent",
+          desc: "Campaign performance analysis across LINE, Yahoo, Google & Meta. Channel comparison and budget optimization in real-time.",
+          icon: "marketing",
+        },
+        {
+          title: "Finance Agent",
+          desc: "Campaign-to-revenue attribution. Prove marketing impact on bottom line. Cost-per-acquisition analysis by channel and segment.",
+          icon: "finance",
+        },
+        {
+          title: "Inventory Agent",
+          desc: "Slow-moving product detection. Promotion opportunity identification. Align marketing campaigns with inventory position.",
+          icon: "inventory",
+        },
+      ],
     },
     footer: {
       tagline:
@@ -272,6 +300,33 @@ const t = {
       btn: "ブリーフを依頼",
       placeholder: "メールアドレスを入力",
     },
+    services: {
+      h2a: "独自のサービスを提供します",
+      h2b: "あなたのビジネスのために",
+      viewAll: "すべてのサービスを見る",
+      cards: [
+        {
+          title: "CRMエージェント",
+          desc: "リアルタイムの顧客行動からの動的セグメンテーション。チャーン予測とLTV分析。リスクのある高価値顧客を特定します。",
+          icon: "crm",
+        },
+        {
+          title: "マーケティングエージェント",
+          desc: "LINE、Yahoo、Google、Metaにわたるキャンペーンパフォーマンス分析。チャネル比較とリアルタイムの予算最適化。",
+          icon: "marketing",
+        },
+        {
+          title: "ファイナンスエージェント",
+          desc: "キャンペーンから収益への帰属。マーケティングの収益への影響を証明。チャネルとセグメント別のCPA分析。",
+          icon: "finance",
+        },
+        {
+          title: "在庫エージェント",
+          desc: "動きの遅い製品の検出。プロモーション機会の特定。マーケティングキャンペーンを在庫ポジションに合わせます。",
+          icon: "inventory",
+        },
+      ],
+    },
     footer: {
       tagline:
         "AltimediaのAIマーケティングオペレーティングシステム（日本向け）。元CMOと運用リーダーが構築。東京とベルリンに本社。",
@@ -299,7 +354,7 @@ function drawSparkle(
   x: number,
   y: number,
   size: number,
-  color: string
+  color: string,
 ) {
   ctx.save();
 
@@ -333,6 +388,102 @@ function drawSparkle(
 
   ctx.restore();
 }
+// ─── Service Cards (poker deal animation) ────────────────────────────────────
+
+type ServiceCard = { title: string; desc: string; icon: string };
+
+function ServiceCards({ cards }: { cards: readonly ServiceCard[] }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [dealt, setDealt] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setDealt(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.15 },
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  const iconMap: Record<string, React.ReactNode> = {
+    crm: (
+      <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+        <circle cx="9" cy="7" r="4" />
+        <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
+      </svg>
+    ),
+    marketing: (
+      <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+        <circle cx="12" cy="12" r="3" />
+        <path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83" />
+      </svg>
+    ),
+    finance: (
+      <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+        <rect x="2" y="3" width="20" height="14" rx="2" />
+        <path d="M8 21h8M12 17v4" />
+        <path d="M7 8h.01M12 8h.01M17 8h.01M7 12h10" />
+      </svg>
+    ),
+    inventory: (
+      <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+        <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
+        <line x1="12" y1="22.08" x2="12" y2="12" />
+      </svg>
+    ),
+  };
+
+  return (
+    <div ref={ref} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+      {cards.map((card, i) => (
+        <div
+          key={i}
+          className="group relative rounded-2xl p-6 flex flex-col gap-5 h-full cursor-default hover:-translate-y-1 hover:shadow-xl hover:shadow-blue-900/20"
+          style={{
+            backgroundColor: "#3B5BDB",
+            // start: stacked at left, rotated, hidden
+            transform: dealt
+              ? "translateX(0px) rotate(0deg)"
+              : `translateX(-120px) rotate(0deg)`,
+            opacity: dealt ? 1 : 0,
+            transition: dealt
+              ? `transform 0.55s cubic-bezier(0.22,1,0.36,1) ${i * 120}ms, opacity 0.4s ease ${i * 120}ms, box-shadow 0.3s ease, translate 0.3s ease`
+              : "none",
+          }}
+        >
+          {/* Icon */}
+          <div className="w-11 h-11 rounded-xl bg-white/15 flex items-center justify-center shrink-0">
+            {iconMap[card.icon]}
+          </div>
+
+          {/* Content */}
+          <div className="flex flex-col gap-2 flex-1">
+            <h3 className="text-lg font-bold text-white">{card.title}</h3>
+            <p className="text-sm text-blue-100 leading-relaxed flex-1">{card.desc}</p>
+          </div>
+
+          {/* Learn more */}
+          <button className="flex items-center gap-1.5 text-sm font-semibold text-white/80 hover:text-white transition-colors mt-2 self-start">
+            Learn more
+            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M5 12h14M12 5l7 7-7 7" />
+            </svg>
+          </button>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 // ─── Orbit animation ──────────────────────────────────────────────────────────
 
 function OrbitRings() {
@@ -357,10 +508,10 @@ function OrbitRings() {
       { r: 350 },
     ];
 
-const orbitDots = [
-  { ringIndex: 4, speed: 0.85, dotR: 7, color: "#d4d4d8" },
-  { ringIndex: 5, speed: -0.85, dotR: 9, color: "#e5e7eb" },
-];
+    const orbitDots = [
+      { ringIndex: 4, speed: 0.85, dotR: 7, color: "#d4d4d8" },
+      { ringIndex: 5, speed: -0.85, dotR: 9, color: "#e5e7eb" },
+    ];
 
     function resize() {
       canvas!.width = canvas!.offsetWidth;
@@ -386,26 +537,26 @@ const orbitDots = [
         ctx!.stroke();
       });
 
-orbitDots.forEach((dot) => {
-  const ring = rings[dot.ringIndex];
-  const angle = elapsed * dot.speed;
+      orbitDots.forEach((dot) => {
+        const ring = rings[dot.ringIndex];
+        const angle = elapsed * dot.speed;
 
-  const dx = cx + Math.cos(angle) * ring.r;
-  const dy = cy + Math.sin(angle) * ring.r;
+        const dx = cx + Math.cos(angle) * ring.r;
+        const dy = cy + Math.sin(angle) * ring.r;
 
-  // glow
-  const grad = ctx!.createRadialGradient(dx, dy, 0, dx, dy, 20);
-  grad.addColorStop(0, dot.color + "44");
-  grad.addColorStop(1, dot.color + "00");
+        // glow
+        const grad = ctx!.createRadialGradient(dx, dy, 0, dx, dy, 20);
+        grad.addColorStop(0, dot.color + "44");
+        grad.addColorStop(1, dot.color + "00");
 
-  ctx!.beginPath();
-  ctx!.arc(dx, dy, 20, 0, Math.PI * 2);
-  ctx!.fillStyle = grad;
-  ctx!.fill();
+        ctx!.beginPath();
+        ctx!.arc(dx, dy, 20, 0, Math.PI * 2);
+        ctx!.fillStyle = grad;
+        ctx!.fill();
 
-  // sparkle
-  drawSparkle(ctx!, dx, dy, dot.dotR, dot.color);
-});
+        // sparkle
+        drawSparkle(ctx!, dx, dy, dot.dotR, dot.color);
+      });
 
       animRef.current = requestAnimationFrame(draw);
     }
@@ -466,6 +617,8 @@ function FadeInSection({
 export default function LandingPage() {
   const [scrolled, setScrolled] = useState(false);
   const [lang, setLang] = useState<Lang>("en");
+  const [langOpen, setLangOpen] = useState(false);
+  const langRef = useRef<HTMLDivElement>(null);
   const tx = t[lang];
 
   useEffect(() => {
@@ -474,18 +627,32 @@ export default function LandingPage() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (langRef.current && !langRef.current.contains(e.target as Node)) {
+        setLangOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
   return (
     <div className="min-h-screen bg-[#eef2f9] flex flex-col">
       {/* ── Sticky Navbar ──────────────────────────────────────────────── */}
       <header
-        className={`sticky top-0 z-50 flex justify-center px-4 transition-all duration-200 ${scrolled ? "py-2 bg-[#eef2f9]/90 backdrop-blur-md shadow-sm" : "py-5 bg-transparent"}`}
+        className={`sticky top-0 z-50 flex justify-center px-4 transition-all duration-200 ${scrolled ? "py-2 bg-[#eef2f9]/90 backdrop-blur-md shadow-sm" : "py-4 bg-transparent"}`}
       >
-        <nav className="bg-white/90 backdrop-blur-md rounded-full px-6 py-2.5 flex items-center justify-between gap-6 shadow-sm border border-gray-200/60 w-full max-w-3xl">
-          <span className="text-lg font-black tracking-tight text-gray-900">
-            <img src="/logo.svg"/>
+        <nav className="bg-white/95 backdrop-blur-md rounded-full px-6 py-2.5 flex items-center justify-between gap-8 shadow-sm border border-gray-200/60 w-full max-w-5xl">
+          {/* Logo */}
+          <span className="shrink-0">
+            <img src="/logo.svg" className="h-7 w-auto" />
           </span>
-          <div className="hidden md:flex items-center gap-6 text-sm text-gray-600">
-            <a href="#" className="font-semibold text-gray-900">
+
+          {/* Nav links */}
+          <div className="hidden md:flex items-center gap-7 text-sm text-gray-500">
+            <a href="#" className="font-bold text-gray-900">
               {tx.nav.home}
             </a>
             <a href="#" className="hover:text-gray-900 transition-colors">
@@ -501,28 +668,64 @@ export default function LandingPage() {
               {tx.nav.pricing}
             </a>
           </div>
-          <div className="flex items-center gap-2">
-            {/* Language toggle */}
-            <div className="flex items-center bg-gray-100 rounded-full p-0.5 text-xs font-semibold">
-              <button
-                onClick={() => setLang("en")}
-                className={`px-3 py-1 rounded-full transition-all ${lang === "en" ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-700"}`}
-              >
-                EN
-              </button>
-              <button
-                onClick={() => setLang("ja")}
-                className={`px-3 py-1 rounded-full transition-all ${lang === "ja" ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-700"}`}
-              >
-                日本語
-              </button>
-            </div>
+
+          {/* Right actions */}
+          <div className="flex items-center gap-2 shrink-0">
+            {/* Login button — filled blue */}
+            <Link
+              href="/auth/login"
+              className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-5 py-1.5 rounded-full transition-colors"
+            >
+              Login
+            </Link>
+
+            {/* Let's Talk — outline blue */}
             <Link
               href="/auth/login"
               className="border border-blue-600 text-blue-600 hover:bg-blue-50 text-sm font-semibold px-5 py-1.5 rounded-full transition-colors"
             >
               {tx.nav.cta}
             </Link>
+
+            {/* Language toggle — flag dropdown */}
+            <div className="relative" ref={langRef}>
+              <button
+                onClick={() => setLangOpen((v) => !v)}
+                className="flex items-center gap-1.5 text-sm text-gray-600 hover:text-gray-900 transition-colors px-2 py-1.5 rounded-full hover:bg-gray-100"
+              >
+                <ReactCountryFlag
+                  countryCode={lang === "en" ? "GB" : "JP"}
+                  svg
+                  style={{ width: "1.3em", height: "1.3em" }}
+                />
+                <svg className="w-3 h-3 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                  <path d="M6 9l6 6 6-6" />
+                </svg>
+              </button>
+
+              {/* Dropdown */}
+              {langOpen && (
+                <div className="absolute right-0 top-full mt-2 w-44 bg-white rounded-2xl shadow-xl border border-gray-100 py-2 z-50">
+                  {[
+                    { code: "en" as Lang, country: "GB", label: "English" },
+                    { code: "ja" as Lang, country: "JP", label: "Japan" },
+                  ].map((item) => (
+                    <button
+                      key={item.code}
+                      onClick={() => { setLang(item.code); setLangOpen(false); }}
+                      className={`w-full flex items-center gap-3 px-4 py-3 text-sm hover:bg-gray-50 transition-colors ${lang === item.code ? "text-gray-900 font-semibold" : "text-gray-700"}`}
+                    >
+                      <ReactCountryFlag
+                        countryCode={item.country}
+                        svg
+                        style={{ width: "1.5em", height: "1.5em" }}
+                      />
+                      {item.label}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         </nav>
       </header>
@@ -579,7 +782,7 @@ export default function LandingPage() {
       </div>
 
       {/* ── Plan Smarter Section ───────────────────────────────────────── */}
-      <section className="relative bg-white py-20 px-4">
+      <section className="relative bg-white py-20 px-4 overflow-hidden">
         <img
           src="/img-plan-smarter-execute-better-background.svg"
           alt=""
@@ -592,11 +795,18 @@ export default function LandingPage() {
       pointer-events-none
       select-none
     "
+          style={{
+            maskImage:
+              "linear-gradient(to bottom, black 0%, black 50%, transparent 100%)",
+            WebkitMaskImage:
+              "linear-gradient(to bottom, black 0%, black 50%, transparent 100%)",
+          }}
         />
+
         <div className="max-w-5xl mx-auto">
           {/* Heading */}
           <FadeInSection className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-black text-gray-900 leading-tight mb-4">
+            <h2 className="text-4xl md:text-5xl font-normal text-gray-900 leading-tight mb-4">
               {tx.planSmarter.h2a}{" "}
               <span className="text-blue-600">{tx.planSmarter.h2b}</span>
             </h2>
@@ -666,11 +876,35 @@ export default function LandingPage() {
 
           {/* App screenshot mockup */}
           <FadeInSection>
-            <img
-              src="/img-plan-smarter-execute-better.svg"
-              alt="Plan Smarter Executer"
-              className="w-full h-full object-cover"
-            />
+            <div className="relative">
+              <img
+                src="/img-plan-smarter-execute-better.svg"
+                alt="Plan Smarter Executer"
+                className="w-full h-full object-cover"
+                style={{
+                  maskImage:
+                    "linear-gradient(to bottom, black 0%, black 55%, transparent 100%)",
+                  WebkitMaskImage:
+                    "linear-gradient(to bottom, black 0%, black 55%, transparent 100%)",
+                }}
+              />
+
+              {/* Decorative icon — left bottom, grouped with screenshot */}
+              <img
+                src="/img-plan-smarter-execute-better-icon-left.svg"
+                alt=""
+                aria-hidden
+                className="absolute bottom-[30%] -left-10 w-[8%] min-w-[60px] pointer-events-none select-none -rotate-12"
+              />
+
+              {/* Decorative icon — right top, grouped with screenshot */}
+              <img
+                src="/img-plan-smarter-execute-better-icon-right.svg"
+                alt=""
+                aria-hidden
+                className="absolute top-[14%] -right-8 w-[8%] min-w-[60px] pointer-events-none select-none rotate-12"
+              />
+            </div>
           </FadeInSection>
         </div>
       </section>
@@ -678,11 +912,11 @@ export default function LandingPage() {
       {/* ── Built with Japanese Precision Section ──────────────────────── */}
       <section className="relative bg-white py-24 px-4 overflow-hidden">
         {/* Background */}
-<img
-  src="/img-built-with-japanese-background.svg"
-  alt=""
-  aria-hidden
-  className="
+        <img
+          src="/img-built-with-japanese-background.svg"
+          alt=""
+          aria-hidden
+          className="
     absolute
     top-1/2 left-1/2
     -translate-x-1/2 -translate-y-1/2
@@ -691,7 +925,7 @@ export default function LandingPage() {
     pointer-events-none
     select-none
   "
-/>
+        />
 
         <div className="relative max-w-7xl mx-auto">
           <FadeInSection>
@@ -708,9 +942,9 @@ export default function LandingPage() {
               <div className="flex flex-col gap-8 pt-28 md:pt-40">
                 {/* DESCRIPTION */}
                 {/* <div className="max-w-md"> */}
-                  <p className="font-normal text-gray-500 leading-relaxed">
-                    {tx.japanese.sub}
-                  </p>
+                <p className="font-normal text-gray-500 leading-relaxed">
+                  {tx.japanese.sub}
+                </p>
                 {/* </div> */}
 
                 {/* LEFT IMAGE */}
@@ -744,12 +978,35 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* ── Exclusive Services Section ─────────────────────────────────── */}
+      <section className="bg-white py-20 px-4">
+        <div className="max-w-6xl mx-auto">
+          <FadeInSection>
+            <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12">
+              <h2 className="text-4xl md:text-5xl font-normal text-gray-900 leading-tight">
+                {tx.services.h2a}
+                <br />
+                <span className="text-blue-600">{tx.services.h2b}</span>
+              </h2>
+              <button className="self-start md:self-auto flex items-center gap-2 border border-blue-600 text-blue-600 hover:bg-blue-50 text-sm font-semibold px-5 py-2.5 rounded-full transition-colors shrink-0">
+                {tx.services.viewAll}
+                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
+              </button>
+            </div>
+          </FadeInSection>
+
+          <ServiceCards cards={tx.services.cards} />
+        </div>
+      </section>
+
       {/* ── Evidence Over Vibes Section ────────────────────────────────── */}
       <section className="bg-white py-20 px-4">
         <div className="max-w-5xl mx-auto space-y-12">
           {/* Stats block */}
           <FadeInSection>
-            <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-2">
+            <h2 className="text-3xl md:text-4xl font-normal text-gray-900 mb-2">
               {tx.evidence.h2}
             </h2>
             <p className="text-base text-gray-500 mb-8">{tx.evidence.sub}</p>
@@ -768,7 +1025,7 @@ export default function LandingPage() {
           {/* Opinions card */}
           <FadeInSection>
             <div className="bg-[#f0f4ff] rounded-2xl p-8 md:p-10">
-              <h3 className="text-2xl md:text-3xl font-black text-gray-900 mb-2">
+              <h3 className="text-2xl md:text-3xl font-normal text-gray-900 mb-2">
                 {tx.evidence.opinionsH}
               </h3>
               <p className="text-sm text-gray-500 mb-8 leading-relaxed">
@@ -810,7 +1067,7 @@ export default function LandingPage() {
         />
         <div className="relative z-10 max-w-5xl mx-auto">
           <FadeInSection className="mb-10">
-            <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-3">
+            <h2 className="text-3xl md:text-4xl font-normal text-gray-900 mb-3">
               {tx.shipped.h2}.
             </h2>
             <p className="text-base text-gray-500">{tx.shipped.sub}</p>
@@ -914,11 +1171,14 @@ export default function LandingPage() {
                     <div
                       className="absolute inset-0 pointer-events-none transition-opacity duration-300 opacity-0 group-hover:opacity-100"
                       style={{
-                        backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.35) 1.5px, transparent 1.5px)",
+                        backgroundImage:
+                          "radial-gradient(circle, rgba(255,255,255,0.35) 1.5px, transparent 1.5px)",
                         backgroundSize: "18px 18px",
                         backgroundPosition: "right top",
-                        maskImage: "linear-gradient(to left, rgba(0,0,0,1) 30%, rgba(0,0,0,0) 75%)",
-                        WebkitMaskImage: "linear-gradient(to left, rgba(0,0,0,1) 30%, rgba(0,0,0,0) 75%)",
+                        maskImage:
+                          "linear-gradient(to left, rgba(0,0,0,1) 30%, rgba(0,0,0,0) 75%)",
+                        WebkitMaskImage:
+                          "linear-gradient(to left, rgba(0,0,0,1) 30%, rgba(0,0,0,0) 75%)",
                       }}
                     />
 
@@ -1133,7 +1393,7 @@ export default function LandingPage() {
           {/* Brand */}
           <div className="mb-8 pb-8 border-b border-gray-100">
             <div className="text-4xl font-black text-blue-600 mb-3 tracking-tight">
-              <img src="/logo.svg"/>
+              <img src="/logo.svg" />
             </div>
             <p className="text-sm text-gray-500 max-w-2xl leading-relaxed">
               {tx.footer.tagline}
@@ -1250,7 +1510,7 @@ export default function LandingPage() {
                 { icon: FaXTwitter, href: "#" },
                 { icon: FaInstagram, href: "#" },
                 { icon: FaLinkedin, href: "#" },
-                { icon: FaYoutube, href: "#" }
+                { icon: FaYoutube, href: "#" },
               ].map(({ icon: Icon, href }, i) => (
                 <a
                   key={i}

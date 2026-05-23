@@ -140,6 +140,9 @@ importers:
       react:
         specifier: 19.2.6
         version: 19.2.6
+      react-country-flag:
+        specifier: ^3.1.0
+        version: 3.1.0(react@19.2.6)
       react-day-picker:
         specifier: ^10.0.1
         version: 10.0.1(@types/react@19.2.14)(react@19.2.6)
@@ -2803,6 +2806,12 @@ packages:
 
   queue-microtask@1.2.3:
     resolution: {integrity: sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==}
+
+  react-country-flag@3.1.0:
+    resolution: {integrity: sha512-JWQFw1efdv9sTC+TGQvTKXQg1NKbDU2mBiAiRWcKM9F1sK+/zjhP2yGmm8YDddWyZdXVkR8Md47rPMJmo4YO5g==}
+    engines: {node: '>=12'}
+    peerDependencies:
+      react: '>=16'
 
   react-day-picker@10.0.1:
     resolution: {integrity: sha512-eNh6BlwcYInWaJtRv18mXQ06Ys/H6rdTZAnTaSdOYJuTpwP1JMCHNd1FDRadA+gbeinq+psdULN5Xnowy9mV8w==}
@@ -5971,6 +5980,10 @@ snapshots:
   punycode@2.3.1: {}
 
   queue-microtask@1.2.3: {}
+
+  react-country-flag@3.1.0(react@19.2.6):
+    dependencies:
+      react: 19.2.6
 
   react-day-picker@10.0.1(@types/react@19.2.14)(react@19.2.6):
     dependencies:
