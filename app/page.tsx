@@ -415,7 +415,8 @@ function ServiceCardItem({
     // Force reflow
     void el.offsetHeight;
     // Slide up into view
-    el.style.transition = "transform 0.45s cubic-bezier(0.22,1,0.36,1), opacity 0.3s ease";
+    el.style.transition =
+      "transform 0.45s cubic-bezier(0.22,1,0.36,1), opacity 0.3s ease";
     el.style.transform = "translateY(0%)";
     el.style.opacity = "1";
   };
@@ -424,7 +425,8 @@ function ServiceCardItem({
     const el = circleRef.current;
     if (!el) return;
     // Fly upward (negative Y = above card)
-    el.style.transition = "transform 0.4s cubic-bezier(0.4,0,0.2,1), opacity 0.35s ease";
+    el.style.transition =
+      "transform 0.4s cubic-bezier(0.4,0,0.2,1), opacity 0.35s ease";
     el.style.transform = "translateY(-140%)";
     el.style.opacity = "0";
   };
@@ -434,7 +436,9 @@ function ServiceCardItem({
       className="group relative rounded-2xl p-6 flex flex-col gap-5 h-full cursor-default hover:-translate-y-1 hover:shadow-xl hover:shadow-blue-900/20 overflow-hidden"
       style={{
         backgroundColor: "#3B5BDB",
-        transform: dealt ? "translateX(0px) rotate(0deg)" : `translateX(-120px) rotate(0deg)`,
+        transform: dealt
+          ? "translateX(0px) rotate(0deg)"
+          : `translateX(-120px) rotate(0deg)`,
         opacity: dealt ? 1 : 0,
         transition: dealt
           ? `transform 0.55s cubic-bezier(0.22,1,0.36,1) ${index * 120}ms, opacity 0.4s ease ${index * 120}ms, box-shadow 0.3s ease, translate 0.3s ease`
@@ -458,13 +462,21 @@ function ServiceCardItem({
       {/* Content */}
       <div className="relative z-10 flex flex-col gap-2 flex-1">
         <h3 className="text-lg font-bold text-white">{card.title}</h3>
-        <p className="text-sm text-blue-100 leading-relaxed flex-1">{card.desc}</p>
+        <p className="text-sm text-blue-100 leading-relaxed flex-1">
+          {card.desc}
+        </p>
       </div>
 
       {/* Learn more */}
       <button className="relative z-10 flex items-center gap-1.5 text-sm font-semibold text-white/80 hover:text-white transition-colors mt-2 self-start">
         Learn more
-        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <svg
+          className="w-4 h-4"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+        >
           <path d="M5 12h14M12 5l7 7-7 7" />
         </svg>
       </button>
@@ -762,9 +774,52 @@ export default function LandingPage() {
             {/* Let's Talk — outline blue */}
             <Link
               href="/auth/login"
-              className="border border-blue-600 text-blue-600 hover:bg-blue-50 text-sm font-semibold px-5 py-1.5 rounded-full transition-colors"
+              className="
+    relative
+    inline-flex
+    items-center
+    justify-center
+    rounded-full
+    overflow-hidden
+    p-[1px]
+    group
+  "
             >
-              {tx.nav.cta}
+              {/* Animated neon border */}
+              <span
+                className="
+      absolute
+      inset-0
+      rounded-full
+      animate-[spin_3s_linear_infinite]
+      bg-[conic-gradient(from_0deg,transparent_0deg,#60a5fa_100deg,transparent_180deg)]
+      blur-[1px]
+drop-shadow-[0_0_20px_rgba(59,130,246,1)]
+    "
+              />
+
+              {/* Inner button */}
+              <span
+                className="
+      relative
+      z-10
+      rounded-full
+      bg-white
+      px-5
+      py-1.5
+      text-sm
+      font-semibold
+      text-blue-600
+      border
+      border-blue-200
+      transition-all
+      duration-300
+      group-hover:bg-blue-50
+shadow-[0_0_20px_rgba(59,130,246,0.15)]
+    "
+              >
+                {tx.nav.cta}
+              </span>
             </Link>
 
             {/* Language toggle — flag dropdown */}
@@ -858,12 +913,13 @@ export default function LandingPage() {
 
       {/* ── Marquee ────────────────────────────────────────────────────── */}
       <div className="overflow-hidden border-t border-gray-200/60 bg-white/40 backdrop-blur-sm py-5">
-        <div className="flex animate-marquee whitespace-nowrap">
+        <div className="flex w-max animate-marquee">
           {[...marqueeItems, ...marqueeItems].map((item, i) => (
             <div key={i} className="flex items-center gap-8 px-8 shrink-0">
               <span className="text-sm font-medium tracking-[0.22em] text-gray-600 uppercase italic">
                 {item}
               </span>
+
               <span className="w-1.5 h-1.5 rounded-full bg-gray-400/80 shrink-0" />
             </div>
           ))}
