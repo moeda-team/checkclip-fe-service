@@ -282,13 +282,13 @@ function LoginPageInner() {
                 </svg>
                 Sign In with Google
               </Button>
-              <button
+              {/* <button
                 type="button"
                 onClick={handleGoogleLoginDifferentAccount}
                 className="w-full text-xs text-gray-500 hover:text-primary-600 text-center"
               >
                 Use a different Google account
-              </button>
+              </button> */}
 
               <Button
                 type="button"
