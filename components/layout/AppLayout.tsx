@@ -30,6 +30,7 @@ import {
   SidebarProvider,
   useSidebar
 } from "./dasbhoard/ResponsiveSidebarProvider";
+import { cn } from "@/lib/utils";
 import { useAutoSignOut } from "@/hooks/useAutoSignOut";
 
 // Map pathname segments to readable labels
@@ -247,7 +248,7 @@ function AppHeader() {
 }
 
 function AppLayoutContent({ children }: { children: ReactNode }) {
-  const { sidebarOpen, toggleSidebar } = useSidebar();
+  const { sidebarOpen, toggleSidebar, collapsed } = useSidebar();
   useAutoSignOut();
 
   return (
@@ -262,13 +263,22 @@ function AppLayoutContent({ children }: { children: ReactNode }) {
 
       {/* Sidebar */}
       <div
-        className={`${sidebarOpen ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0 fixed transition-transform duration-300 ease-in-out z-50`}
+        className={cn(
+          "fixed top-0 left-0 h-screen z-50 transition-transform duration-300 ease-in-out",
+          sidebarOpen ? "translate-x-0" : "-translate-x-full",
+          "lg:translate-x-0"
+        )}
       >
         <Sidebar />
       </div>
 
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col min-h-screen lg:ml-64">
+      {/* Main Content — margin follows collapsed state on desktop */}
+      <div
+        className={cn(
+          "flex-1 flex flex-col min-h-screen transition-all duration-300 ease-in-out",
+          collapsed ? "lg:ml-16" : "lg:ml-64"
+        )}
+      >
         <AppHeader />
         <main className="flex-1">
           <div className="max-w-6xl mx-auto">{children}</div>
