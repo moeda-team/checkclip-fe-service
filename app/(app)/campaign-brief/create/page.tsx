@@ -25,6 +25,26 @@ export default function CampaignBriefCreatePage() {
       formData: CampaignFormData;
     }) => {
       // Map from CreateCampaign's CampaignFormData shape → campaign-brief API shape
+const [startHour, startMinute] = data.formData.budget.startTime.split(":");
+const startDate = new Date(data.formData.budget.startDate);
+
+startDate.setHours(Number(startHour));
+startDate.setMinutes(Number(startMinute));
+startDate.setSeconds(0);
+startDate.setMilliseconds(0);
+
+let endDate: Date | null = null;
+
+if (data.formData.budget?.endDate && data.formData.budget?.endTime) {
+  const [endHour, endMinute] = data.formData.budget.endTime.split(":");
+
+  endDate = new Date(data.formData.budget.endDate);
+
+  endDate.setHours(Number(endHour));
+  endDate.setMinutes(Number(endMinute));
+  endDate.setSeconds(0);
+  endDate.setMilliseconds(0);
+}
       await submit({
         title: data.campaignName,
         type_ads: data.selectedAds,
@@ -43,13 +63,8 @@ export default function CampaignBriefCreatePage() {
                 | "monthly"
                 | "lifetime") || null,
             amount: data.formData.budget.budget,
-            startDate: data.formData.budget.startDate
-              ? new Date(data.formData.budget.startDate)
-              : new Date(),
-            endDate:
-              data.formData.budget.hasEndDate && data.formData.budget.endDate
-                ? new Date(data.formData.budget.endDate)
-                : null,
+            startDate: startDate,
+            endDate: endDate,
             hasEndDate: data.formData.budget.hasEndDate
           },
           audience: {

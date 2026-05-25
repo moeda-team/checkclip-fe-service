@@ -1,3 +1,5 @@
+import { AgeType, GenderType } from "@/types/campaign";
+
 export type CampaignObjectiveKey =
   | "awareness"
   | "traffic"
@@ -38,9 +40,9 @@ export type BudgetScheduleData = {
 
 export type AudienceData = {
   location: string;
-  age: "18-24" | null;
+  age: AgeType | null;
   language: string;
-  gender: "all" | "men" | "women";
+  gender: GenderType;
   interest: string;
 };
 

@@ -7,6 +7,10 @@ export type CampaignObjectiveKey =
 
 export type AdsType = "google" | "meta" | "line" | "yahoo";
 
+export type AgeType = "18-24" | "25-34" | "35-44" | "45-54" | "55-64" | "65+" | "all"
+
+export type GenderType = "all" | "men" | "women"
+
 export type CampaignObjectiveType = {
   key: CampaignObjectiveKey;
   label: string;
@@ -41,9 +45,9 @@ export type BudgetScheduleData = {
 
 export type AudienceData = {
   location: string;
-  age: string;
+  age: AgeType;
   language: string;
-  gender: "all" | "men" | "women";
+  gender: GenderType;
   interest: string;
 };
 
@@ -52,3 +56,4 @@ export type CampaignFormData = {
   budget: BudgetScheduleData;
   audience: AudienceData;
 };
+
