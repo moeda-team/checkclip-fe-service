@@ -45,9 +45,9 @@ export type BudgetScheduleData = {
 
 export type AudienceData = {
   location: string;
-  age: AgeType;
+  age: AgeType |"";
   language: string;
-  gender: GenderType;
+  gender: GenderType | "";
   interest: string;
 };
 
