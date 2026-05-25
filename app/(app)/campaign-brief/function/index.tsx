@@ -108,14 +108,14 @@ export function CampaignSetupContent({ brief }: { brief: CampaignBrief }) {
 }
 
 export function BudgetContent({ brief }: { brief: CampaignBrief }) {
-  const b = brief.form?.budget;
+  const b = brief.budget;
   let startDate: Date | null = null
   let endDate: Date | null = null
-  if(b?.startDate) {
-    startDate = new Date(b.startDate)
+  if(b?.start_date) {
+    startDate = new Date(b.start_date)
   }
-  if(b?.endDate) {
-    endDate = new Date(b.endDate)
+  if(b?.end_date) {
+    endDate = new Date(b.end_date)
   }
   if (!b) return <p className="text-sm text-gray-400">No budget data</p>;
   return (
@@ -123,17 +123,17 @@ export function BudgetContent({ brief }: { brief: CampaignBrief }) {
       <div><p className="text-xs font-medium text-gray-500 mb-1">Budget Type</p><p className="text-sm text-gray-900">{b.type || "—"}</p></div>
       <div><p className="text-xs font-medium text-gray-500 mb-1">Budget</p><p className="text-sm text-gray-900">{b.type ? `$ ${Number(b.amount).toLocaleString("en-US")}` : "—"}</p></div>
       <div><p className="text-xs font-medium text-gray-500 mb-1">Start Date</p><p className="text-sm text-gray-900"> {startDate ? format(startDate, 'yyyy-MM-dd') : ""}</p></div>
-      <div><p className="text-xs font-medium text-gray-500 mb-1">Start Time</p><p className="text-sm text-gray-900">{startDate instanceof Date ? format(startDate, 'MM') : ""}</p></div>
-      {b.hasEndDate && <>
+      <div><p className="text-xs font-medium text-gray-500 mb-1">Start Time</p><p className="text-sm text-gray-900">{startDate instanceof Date ? format(startDate, 'HH:mm') : ""}</p></div>
+      {b.end_date != null && <>
         <div><p className="text-xs font-medium text-gray-500 mb-1">End Date</p><p className="text-sm text-gray-900">{endDate ? format(endDate, 'yyyy-MM-dd') : ""}</p></div>
-        <div><p className="text-xs font-medium text-gray-500 mb-1">End Time</p><p className="text-sm text-gray-900">{endDate ? format(endDate, 'MM') : ""}</p></div>
+        <div><p className="text-xs font-medium text-gray-500 mb-1">End Time</p><p className="text-sm text-gray-900">{endDate ? format(endDate, 'HH:mm') : ""}</p></div>
       </>}
     </div>
   );
 }
 
 export function AudienceContent({ brief }: { brief: CampaignBrief }) {
-  const a = brief.form?.audience;
+  const a = brief.audience;
   if (!a) return <p className="text-sm text-gray-400">No audience data</p>;
   return (
     <div className="space-y-4">

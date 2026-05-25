@@ -11,8 +11,6 @@ import type {
   AdsType,
   CampaignBrief,
   CampaignBriefFilter,
-  CampaignFormData,
-  CampaignObjectiveKey,
   CreateStrategyBriefPayload
 } from "../types";
 import type {
@@ -23,14 +21,6 @@ import type {
 
 const STRATEGY_Brief_URL = `${env.apiBaseUrl}/campaign/strategy-brief/`;
 const axios = axiosConfig(env.apiBaseUrl);
-
-export interface CampaignBriefCreatePayload {
-  title: string;
-  type_ads: AdsType;
-  objective_type: CampaignObjectiveKey;
-  sub_type: string;
-  form: CampaignFormData;
-}
 
 export interface UseCampaignBriefCreateOptions {
   onSuccess?: () => void;
@@ -46,8 +36,8 @@ export function usePostStrategyBrief(options?: UseCampaignBriefCreateOptions) {
   const [errorMessage, setErrorMessage] = useState<string | undefined>();
 
   const mutation = useMutation({
-    mutationFn: async (payload: CampaignBriefCreatePayload) => {
-      const response = await axios.post("/campaign/strategy-brief/", payload);
+    mutationFn: async (payload: CreateStrategyBriefPayload) => {
+      const response = await axios.post(STRATEGY_Brief_URL, payload);
       return response.data;
     },
     onSuccess: () => {

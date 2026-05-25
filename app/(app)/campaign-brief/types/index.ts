@@ -31,7 +31,7 @@ export type BrandProductData = {
 };
 
 export type BudgetScheduleData = {
-  type: "daily" | "weekly" | "monthly" | "lifetime" | null
+  type: "daily" | "weekly" | "monthly" | "lifetime" | null;
   amount: string;
   startDate: Date;
   endDate?: Date | null;
@@ -46,7 +46,6 @@ export type AudienceData = {
   interest: string;
 };
 
-
 export type CampaignFormData = {
   brand: BrandProductData;
   budget: BudgetScheduleData;
@@ -55,7 +54,12 @@ export type CampaignFormData = {
 
 // ─── API Response Types ───────────────────────────────────────────────────────
 
-export type CampaignBriefStatus = "in_review" | "approved" | "rejected" | "draft" | "pending";
+export type CampaignBriefStatus =
+  | "in_review"
+  | "approved"
+  | "rejected"
+  | "draft"
+  | "pending";
 
 export type CampaignBriefTenant = {
   id: string;
@@ -64,7 +68,27 @@ export type CampaignBriefTenant = {
   domain: string;
 };
 
-export interface CampaignBrief  {
+export type CampaignBriefBudget = {
+  type: string;
+  amount: number;
+  start_date: Date;
+  end_date: Date;
+};
+
+export type CampaignBriefBrand = {
+  name: string;
+  description?: string;
+};
+
+export type CampaignBriefAudience = {
+  location: string;
+  age: string;
+  language: string;
+  interest: string;
+  gender: string;
+};
+
+export interface CampaignBrief {
   id: string;
   title: string;
   type_ads: AdsType;
@@ -72,10 +96,12 @@ export interface CampaignBrief  {
   sub_type: string;
   status: CampaignBriefStatus;
   tenant?: CampaignBriefTenant;
-  form: CampaignFormData;
+  brand?: CampaignBriefBrand;
+  budget?: CampaignBriefBudget;
+  audience?: CampaignBriefAudience;
   created_at?: string;
   updated_at?: string;
-};
+}
 
 export type CampaignBriefDetailResponse = {
   status: boolean;
@@ -87,15 +113,36 @@ export type CampaignBriefDetailResponse = {
   };
 };
 
-
 // ─── Request Payload Types ────────────────────────────────────────────────────
+
+export interface CreateStrategyBriefBrand {
+  name: string;
+  description?: string | null;
+}
+
+export interface CreateStrategyBriefBudget {
+  type: "daily" | "weekly" | "monthly" | "lifetime" | null;
+  amount: number;
+  start_date: string; // ISO 8601
+  end_date?: string | null; // ISO 8601
+}
+
+export interface CreateStrategyBriefAudience {
+  location?: string | null;
+  age?: AgeType | null;
+  language?: string | null;
+  interest?: string | null;
+  gender?: GenderType | null;
+}
 
 export interface CreateStrategyBriefPayload {
   title: string;
   type_ads: AdsType;
   objective_type: CampaignObjectiveKey;
   sub_type: string;
-  form: CampaignFormData;
+  brand?: CreateStrategyBriefBrand;
+  budget?: CreateStrategyBriefBudget;
+  audience?: CreateStrategyBriefAudience;
 }
 
 export interface CampaignBriefFilter {
@@ -106,5 +153,3 @@ export interface CampaignBriefFilter {
   sortOrder?: "asc" | "desc";
   status?: string;
 }
-
-

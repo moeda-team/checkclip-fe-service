@@ -67,9 +67,8 @@ export default function CampaignBriefListPage() {
     refetch:   refetchList,
   } = useGetStrategyBriefs(listFilter);
 
-  // Cast — backend returns { data, total, limit, offset }
-  const briefs = (listData as any)?.data as CampaignBrief[] | undefined ?? [];
-  const total  = (listData as any)?.total as number ?? 0;
+  const briefs = listData?.data ?? [];
+  const total  = listData?.paginate?.total ?? 0;
 
   // Auto-select first brief when list loads
   useEffect(() => {
@@ -86,7 +85,7 @@ export default function CampaignBriefListPage() {
     refetch:   refetchDetail,
   } = useGetStrategyBrief(selectedBriefId ?? "");
 
-  const selectedBrief = (detailData as any)?.data as CampaignBrief | undefined ?? null;
+  const selectedBrief = detailData?.data ?? null;
 
   // Scroll to top when brief changes
   useEffect(() => {

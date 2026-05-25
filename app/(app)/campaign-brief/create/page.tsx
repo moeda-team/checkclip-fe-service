@@ -7,9 +7,9 @@ import { useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { CreateCampaign } from "@/components/campaign/CreateCampaign";
 import { PageHeader } from "@/components/layout/PageHeader";
+import { usePostStrategyBrief } from "../hooks/useCampaignBrief";
 import type { AdsType, CampaignObjectiveKey } from "../types";
 import type { CampaignFormData } from "@/types/campaign";
-import { usePostStrategyBrief } from "../hooks/useCampaignBrief";
 
 export default function CampaignBriefCreatePage() {
   const router = useRouter();
@@ -24,56 +24,50 @@ export default function CampaignBriefCreatePage() {
       selectedConversionGoals: string[];
       formData: CampaignFormData;
     }) => {
-      // Map from CreateCampaign's CampaignFormData shape → campaign-brief API shape
-const [startHour, startMinute] = data.formData.budget.startTime.split(":");
-const startDate = new Date(data.formData.budget.startDate);
+      const { formData } = data;
 
-startDate.setHours(Number(startHour));
-startDate.setMinutes(Number(startMinute));
-startDate.setSeconds(0);
-startDate.setMilliseconds(0);
+      // Build startDate with time component
+      const [startHour = "0", startMinute = "0"] =
+        (formData.budget.startTime ?? "").split(":");
+      const startDate = new Date(formData.budget.startDate);
+      startDate.setHours(Number(startHour), Number(startMinute), 0, 0);
 
-let endDate: Date | null = null;
+      // Build endDate with time component (only if hasEndDate)
+      let endDate: string | null = null;
+      if (formData.budget.hasEndDate && formData.budget.endDate) {
+        const [endHour = "0", endMinute = "0"] =
+          (formData.budget.endTime ?? "").split(":");
+        const ed = new Date(formData.budget.endDate);
+        ed.setHours(Number(endHour), Number(endMinute), 0, 0);
+        endDate = ed.toISOString();
+      }
 
-if (data.formData.budget?.endDate && data.formData.budget?.endTime) {
-  const [endHour, endMinute] = data.formData.budget.endTime.split(":");
-
-  endDate = new Date(data.formData.budget.endDate);
-
-  endDate.setHours(Number(endHour));
-  endDate.setMinutes(Number(endMinute));
-  endDate.setSeconds(0);
-  endDate.setMilliseconds(0);
-}
       await submit({
         title: data.campaignName,
         type_ads: data.selectedAds,
         objective_type: data.selectedObjective,
         sub_type: data.selectedSubtype,
-        form: {
-          brand: {
-            name: data.formData.brand.brandName,
-            description: data.formData.brand.description ?? null
-          },
-          budget: {
-            type:
-              (data.formData.budget.budgetType as
-                | "daily"
-                | "weekly"
-                | "monthly"
-                | "lifetime") || null,
-            amount: data.formData.budget.budget,
-            startDate: startDate,
-            endDate: endDate,
-            hasEndDate: data.formData.budget.hasEndDate
-          },
-          audience: {
-            location: data.formData.audience.location,
-            age: (data.formData.audience.age as "18-24") || null,
-            language: data.formData.audience.language,
-            gender: data.formData.audience.gender,
-            interest: data.formData.audience.interest
-          }
+        brand: {
+          name: formData.brand.brandName,
+          description: formData.brand.description ?? null
+        },
+        budget: {
+          type:
+            (formData.budget.budgetType as
+              | "daily"
+              | "weekly"
+              | "monthly"
+              | "lifetime") || null,
+          amount: Number(formData.budget.budget) || 0,
+          start_date: startDate.toISOString(),
+          end_date: endDate
+        },
+        audience: {
+          location: formData.audience.location || null,
+          age: formData.audience.age || null,
+          language: formData.audience.language || null,
+          gender: formData.audience.gender || null,
+          interest: formData.audience.interest || null
         }
       });
     },
