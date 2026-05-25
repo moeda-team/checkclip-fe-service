@@ -9,7 +9,7 @@ import { CreateCampaign } from "@/components/campaign/CreateCampaign";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { usePostStrategyBrief } from "../hooks/useCampaignBrief";
 import type { AdsType, CampaignObjectiveKey } from "../types";
-import type { CampaignFormData } from "@/types/campaign";
+import type { AgeType, CampaignFormData, GenderType } from "@/types/campaign";
 
 export default function CampaignBriefCreatePage() {
   const router = useRouter();
@@ -64,9 +64,9 @@ export default function CampaignBriefCreatePage() {
         },
         audience: {
           location: formData.audience.location || null,
-          age: formData.audience.age || null,
+          age: formData.audience.age as AgeType || null,
           language: formData.audience.language || null,
-          gender: formData.audience.gender || null,
+          gender: formData.audience.gender as GenderType || null,
           interest: formData.audience.interest || null
         }
       });
