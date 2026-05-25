@@ -5,7 +5,14 @@
 
 import { useState } from "react";
 import { format } from "date-fns";
-import { Package, DollarSign, Users, CalendarIcon, MapPin } from "lucide-react";
+import {
+  Package,
+  DollarSign,
+  Users,
+  CalendarIcon,
+  MapPin,
+  Clock
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -51,9 +58,20 @@ export function CampaignDetailsStep({
   const [showLocationSuggestions, setShowLocationSuggestions] = useState(false);
   const [startDateOpen, setStartDateOpen] = useState(false);
   const [endDateOpen, setEndDateOpen] = useState(false);
+  const [interestOpen, setInterestOpen] = useState(false);
   const [locationTimeout, setLocationTimeout] = useState<ReturnType<
     typeof setTimeout
   > | null>(null);
+
+  const audienceInterestOptions = [
+    { value: "lifestyle-hobbies", label: "Lifestyle and Hobbies" },
+    { value: "clothes", label: "Clothes" },
+    { value: "sportswear", label: "Sportswear" },
+    { value: "fashion", label: "Fashion" },
+    { value: "shoes", label: "Shoes" },
+    { value: "eyewear-accessories", label: "Eyewear Accessories" },
+    { value: "pants-trousers", label: "Pants & Trousers" }
+  ];
 
   const fetchPlacePredictions = async (value: string) => {
     try {
@@ -117,7 +135,7 @@ export function CampaignDetailsStep({
 
   const updateAudience = (
     field: keyof typeof formData.audience,
-    value: string
+    value: string | string[]
   ) => {
     onFormChange({
       ...formData,
@@ -154,6 +172,7 @@ export function CampaignDetailsStep({
             </div>
 
             <div className="space-y-4">
+              {/* Brand Name */}
               <div>
                 <Label className="text-sm font-medium text-gray-700">
                   Brand Name / Brand Type{" "}
@@ -167,15 +186,177 @@ export function CampaignDetailsStep({
                 />
               </div>
 
+              {/* Industry Vertical & Competition Level */}
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label className="text-sm font-medium text-gray-700">
+                    Industry Vertical <span className="text-red-500">*</span>
+                  </Label>
+                  <Select
+                    value={formData.brand.industryVertical}
+                    onValueChange={(value) =>
+                      updateBrand("industryVertical", value)
+                    }
+                  >
+                    <SelectTrigger className="mt-1.5 h-10 border-gray-200 text-sm">
+                      <SelectValue placeholder="Select Industry" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="animals-pets">
+                        Animals & Pets
+                      </SelectItem>
+                      <SelectItem value="apparel-fashion-jewelry">
+                        Apparel/Fashion & Jewelry
+                      </SelectItem>
+                      <SelectItem value="arts-entertainment">
+                        Arts & Entertainment
+                      </SelectItem>
+                      <SelectItem value="attorneys-legal">
+                        Attorneys & Legal Services
+                      </SelectItem>
+                      <SelectItem value="automotive-sale">
+                        Automotive (For Sale)
+                      </SelectItem>
+                      <SelectItem value="automotive-repair">
+                        Automotive (Repair, Service & Parts)
+                      </SelectItem>
+                      <SelectItem value="beauty-personal-care">
+                        Beauty & Personal Care
+                      </SelectItem>
+                      <SelectItem value="business-services">
+                        Business Services
+                      </SelectItem>
+                      <SelectItem value="career-employment">
+                        Career & Employment
+                      </SelectItem>
+                      <SelectItem value="dentists-dental">
+                        Dentists & Dental Services
+                      </SelectItem>
+                      <SelectItem value="education-instruction">
+                        Education & Instruction
+                      </SelectItem>
+                      <SelectItem value="finance-insurance">
+                        Finance & Insurance
+                      </SelectItem>
+                      <SelectItem value="furniture">Furniture</SelectItem>
+                      <SelectItem value="health-fitness">
+                        Health & Fitness
+                      </SelectItem>
+                      <SelectItem value="home-improvement">
+                        Home & Home Improvement
+                      </SelectItem>
+                      <SelectItem value="industrial-commercial">
+                        Industrial & Commercial
+                      </SelectItem>
+                      <SelectItem value="personal-services">
+                        Personal Services
+                      </SelectItem>
+                      <SelectItem value="physicians-surgeons">
+                        Physicians & Surgeons
+                      </SelectItem>
+                      <SelectItem value="real-estate">Real Estate</SelectItem>
+                      <SelectItem value="restaurants-food">
+                        Restaurants & Food
+                      </SelectItem>
+                      <SelectItem value="shopping-collectibles">
+                        Shopping, Collectibles & Gifts
+                      </SelectItem>
+                      <SelectItem value="sports-recreation">
+                        Sports & Recreation
+                      </SelectItem>
+                      <SelectItem value="travel">Travel</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div>
+                  <Label className="text-sm font-medium text-gray-700">
+                    Competition Level
+                  </Label>
+                  <Select
+                    value={formData.brand.competitionLevel}
+                    onValueChange={(value) =>
+                      updateBrand("competitionLevel", value)
+                    }
+                  >
+                    <SelectTrigger className="mt-1.5 h-10 border-gray-200 text-sm">
+                      <SelectValue placeholder="Select Level" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="low">Low</SelectItem>
+                      <SelectItem value="medium">Medium</SelectItem>
+                      <SelectItem value="high">High</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              {/* Product Average Price, Rating, Total Reviews */}
+              <div className="grid grid-cols-3 gap-4">
+                <div>
+                  <Label className="text-sm font-medium text-gray-700">
+                    Product Average Price
+                  </Label>
+                  <div className="relative mt-1.5">
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm font-medium">
+                      $
+                    </span>
+                    <Input
+                      type="number"
+                      placeholder="0.00"
+                      value={formData.brand.productAveragePrice}
+                      onChange={(e) =>
+                        updateBrand("productAveragePrice", e.target.value)
+                      }
+                      className="h-10 border-gray-200 text-sm pl-7 pr-3"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <Label className="text-sm font-medium text-gray-700">
+                    Product Average Rating
+                  </Label>
+                  <Input
+                    type="number"
+                    step="0.1"
+                    min="0"
+                    max="5"
+                    placeholder="0.0"
+                    value={formData.brand.productAverageRating}
+                    onChange={(e) =>
+                      updateBrand("productAverageRating", e.target.value)
+                    }
+                    className="mt-1.5 h-10 border-gray-200 text-sm"
+                  />
+                </div>
+
+                <div>
+                  <Label className="text-sm font-medium text-gray-700">
+                    Total Reviews
+                  </Label>
+                  <Input
+                    type="number"
+                    placeholder="0"
+                    value={formData.brand.totalReviews}
+                    onChange={(e) =>
+                      updateBrand("totalReviews", e.target.value)
+                    }
+                    className="mt-1.5 h-10 border-gray-200 text-sm"
+                  />
+                </div>
+              </div>
+
+              {/* Description */}
               <div>
                 <Label className="text-sm font-medium text-gray-700">
                   Description <span className="text-red-500">*</span>
                 </Label>
-                <Input
+                <Textarea
                   placeholder="Input description"
-                  value={formData.brand.description || ""}
+                  value={formData.brand.description}
                   onChange={(e) => updateBrand("description", e.target.value)}
-                  className="mt-1.5 h-10 border-gray-200 text-sm"
+                  className="mt-1.5 min-h-20 border-gray-200 text-sm resize-none"
                 />
               </div>
             </div>
@@ -225,10 +406,12 @@ export function CampaignDetailsStep({
                     Budget <span className="text-red-500">*</span>
                   </Label>
                   <div className="relative mt-1.5">
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm font-medium">$</span>
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm font-medium">
+                      $
+                    </span>
                     <Input
                       type="number"
-                      placeholder="0.00"
+                      placeholder="Input Budget"
                       value={formData.budget.budget}
                       onChange={(e) => updateBudget("budget", e.target.value)}
                       className="h-10 border-gray-200 text-sm pl-7 pr-3"
@@ -416,7 +599,7 @@ export function CampaignDetailsStep({
                   </Label>
                   <div className="relative mt-1.5">
                     <Input
-                      placeholder="Input Location"
+                      placeholder="Select Location"
                       value={locationQuery}
                       onChange={(e) => handleLocationSearch(e.target.value)}
                       onFocus={() =>
@@ -455,7 +638,7 @@ export function CampaignDetailsStep({
                     onValueChange={(value) => updateAudience("age", value)}
                   >
                     <SelectTrigger className="mt-1.5 h-10 border-gray-200 text-sm">
-                      <SelectValue placeholder="Input Age" />
+                      <SelectValue placeholder="Select Age" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="18-24">18-24</SelectItem>
@@ -478,7 +661,7 @@ export function CampaignDetailsStep({
                     onValueChange={(value) => updateAudience("language", value)}
                   >
                     <SelectTrigger className="mt-1.5 h-10 border-gray-200 text-sm">
-                      <SelectValue placeholder="Input Language" />
+                      <SelectValue placeholder="Select Language" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="en">English</SelectItem>
@@ -533,46 +716,123 @@ export function CampaignDetailsStep({
                 </RadioGroup>
               </div>
 
+              {/* Audience Size & Audience Interest */}
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label className="text-sm font-medium text-gray-700">
+                    Audience Size
+                  </Label>
+                  <Select
+                    value={formData.audience.audienceSize}
+                    onValueChange={(value) =>
+                      updateAudience("audienceSize", value)
+                    }
+                  >
+                    <SelectTrigger className="mt-1.5 h-10 border-gray-200 text-sm">
+                      <SelectValue placeholder="Select Audience Size" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="high">High</SelectItem>
+                      <SelectItem value="medium">Medium</SelectItem>
+                      <SelectItem value="low">Low</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div>
+                  <Label className="text-sm font-medium text-gray-700">
+                    Audience Interest <span className="text-red-500">*</span>
+                  </Label>
+                  <Popover open={interestOpen} onOpenChange={setInterestOpen}>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className="mt-1.5 w-full h-10 justify-start text-left font-normal border-gray-200 text-sm bg-white hover:bg-white"
+                      >
+                        {formData.audience.audienceInterest.length > 0
+                          ? formData.audience.audienceInterest
+                              .map(
+                                (v) =>
+                                  audienceInterestOptions.find(
+                                    (o) => o.value === v
+                                  )?.label ?? v
+                              )
+                              .join(", ")
+                          : "Select Interest"}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <div className="p-2 space-y-1">
+                        {audienceInterestOptions.map((option) => (
+                          <label
+                            key={option.value}
+                            className="flex items-center gap-2 px-2 py-1.5 rounded-md hover:bg-gray-50 cursor-pointer text-sm"
+                          >
+                            <Checkbox
+                              checked={formData.audience.audienceInterest.includes(
+                                option.value
+                              )}
+                              onCheckedChange={(checked) => {
+                                const current =
+                                  formData.audience.audienceInterest;
+                                const updated = checked
+                                  ? [...current, option.value]
+                                  : current.filter((v) => v !== option.value);
+                                updateAudience("audienceInterest", updated);
+                              }}
+                              className="border-gray-300 data-[state=checked]:bg-primary-500 data-[state=checked]:border-primary-500"
+                            />
+                            {option.label}
+                          </label>
+                        ))}
+                      </div>
+                    </PopoverContent>
+                  </Popover>
+                  <p className="text-xs text-gray-500 mt-1.5">
+                    Add any interests related to your audience
+                  </p>
+                </div>
+              </div>
+
               <div>
                 <Label className="text-sm font-medium text-gray-700">
-                  Interest and Detail Audience{" "}
-                  <span className="text-red-500">*</span>
+                  Detail Audience <span className="text-red-500">*</span>
                 </Label>
                 <Textarea
                   placeholder="Type here"
-                  value={formData.audience.interest}
-                  onChange={(e) => updateAudience("interest", e.target.value)}
+                  value={formData.audience.detailAudience}
+                  onChange={(e) =>
+                    updateAudience("detailAudience", e.target.value)
+                  }
                   className="mt-1.5 min-h-20 border-gray-200 text-sm resize-none"
                 />
                 <p className="text-xs text-gray-500 mt-1.5">
-                  Add any interests, detailed demographics, or life events
-                  related to your customers
+                  Add any detailed demographics, or life events related to your
+                  audience
                 </p>
               </div>
             </div>
           </div>
+          {/* Footer Buttons */}
+          <div className=" bg-white px-6 py-4 flex items-center justify-end gap-3">
+            <Button
+              variant="outline"
+              onClick={onBack}
+              disabled={isSubmitting}
+              className="px-8 h-10 rounded-lg text-sm font-medium border-gray-200"
+            >
+              Back
+            </Button>
+            <Button
+              onClick={onCreate}
+              disabled={isSubmitting}
+              className="bg-gray-900 hover:bg-gray-800 text-white px-8 h-10 rounded-lg text-sm font-medium"
+            >
+              Next
+            </Button>
+          </div>
         </div>
       </div>
-
-      <div className="border-t border-gray-200 bg-white px-6 py-4 flex items-center justify-end gap-3">
-        <Button
-          variant="outline"
-          onClick={onBack}
-          disabled={isSubmitting}
-          className="px-8 h-10 rounded-lg text-sm font-medium border-gray-200"
-        >
-          Back
-        </Button>
-        <Button
-          onClick={onCreate}
-          disabled={isSubmitting}
-          className="bg-gray-900 hover:bg-gray-800 text-white px-8 h-10 rounded-lg text-sm font-medium"
-        >
-          Review
-        </Button>
-      </div>
-
-      {/* Modals - only success/failed shown from review step */}
     </div>
   );
 }

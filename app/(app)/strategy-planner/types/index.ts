@@ -5,12 +5,16 @@ export type StrategyPlannerType = "awareness" | "traffic" | "sales" | "leads" | 
 
 export interface StrategyPlannerBrand {
   name: string;
-  description?: string;
+  description: string;
+  industry_vertical: string;
+  competition_level: string;
+  product_average_price: number;
+  product_average_rating: number;
 }
 
 export interface StrategyPlannerBudget {
   type: string;
-  budget: number;
+  amount: number;
   start_date: string;
   end_date: string;
 }
@@ -20,7 +24,9 @@ export interface StrategyPlannerAudience {
   age: string;
   language: string;
   gender: "all" | "women" | "men";
-  detail_audience: string;
+  interest: string;
+  size: string;
+  detail: string;
 }
 
 export interface StrategyPlannerForm {
@@ -33,7 +39,9 @@ export interface StrategyPlannerDto {
   id: string;
   title: string;
   planner_type: StrategyPlannerType;
-  form: StrategyPlannerForm;
+  brand: StrategyPlannerBrand;
+  budget: StrategyPlannerBudget;
+  audience: StrategyPlannerAudience;
   status: "draft" | "active" | "completed" | "archived";
   createdAt: string;
   updatedAt: string;
@@ -59,13 +67,18 @@ export interface StrategyPlannerTableRow {
 export interface CreateStrategyPlannerPayload {
   title: string;
   planner_type: StrategyPlannerType;
-  form: StrategyPlannerForm;
+  tenant_id: string;
+  brand: StrategyPlannerBrand;
+  budget: StrategyPlannerBudget;
+  audience: StrategyPlannerAudience;
 }
 
 export interface UpdateStrategyPlannerPayload {
   title?: string;
   planner_type?: StrategyPlannerType;
-  form?: Partial<StrategyPlannerForm>;
+  brand?: Partial<StrategyPlannerBrand>;
+  budget?: Partial<StrategyPlannerBudget>;
+  audience?: Partial<StrategyPlannerAudience>;
   status?: "draft" | "active" | "completed" | "archived";
 }
 

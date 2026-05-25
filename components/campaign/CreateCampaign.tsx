@@ -10,12 +10,21 @@ import { CampaignReviewStep } from "./CampaignReviewStep";
 import { useCampaignBrief } from "@/hooks/use-campaign-brief";
 import type {
   AdsType,
+  AgeType,
   CampaignObjectiveKey,
   CampaignFormData
 } from "@/types/campaign";
 
 const defaultFormData: CampaignFormData = {
-  brand: { brandName: "", description: "" },
+  brand: {
+    brandName: "",
+    industryVertical: "",
+    competitionLevel: "",
+    productAveragePrice: "",
+    productAverageRating: "",
+    totalReviews: "",
+    description: ""
+  },
   budget: {
     budgetType: "",
     budget: "",
@@ -28,10 +37,12 @@ const defaultFormData: CampaignFormData = {
   },
   audience: {
     location: "",
-    age: "",
+    age: "" as AgeType,
     language: "",
     gender: "all",
-    interest: ""
+    audienceSize: "",
+    audienceInterest: [],
+    detailAudience: ""
   }
 };
 
