@@ -5,7 +5,9 @@
 
 /** Standard API envelope */
 export interface ApiResponse<T, U = undefined> {
-  statusCode: string;
+  status: boolean;
+  code: number;
+  message: string;
   additional?: U;
   data: T;
 }

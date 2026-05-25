@@ -1,13 +1,19 @@
 
 "use client";
 
+import { useState } from "react";
+
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { axiosConfig } from "@/lib/axios";
 import { env } from "@/lib/env";
 import type {
+  AdsType,
   CampaignBrief,
   CampaignBriefFilter,
+  CampaignFormData,
+  CampaignObjectiveKey,
+  CreateStrategyBriefPayload
 } from "../types";
 import type {
   ApiResponse,
@@ -18,37 +24,58 @@ import type {
 const STRATEGY_Brief_URL = `${env.apiBaseUrl}/campaign/strategy-brief/`;
 const axios = axiosConfig(env.apiBaseUrl);
 
+export interface CampaignBriefCreatePayload {
+  title: string;
+  type_ads: AdsType;
+  objective_type: CampaignObjectiveKey;
+  sub_type: string;
+  form: CampaignFormData;
+}
+
+export interface UseCampaignBriefCreateOptions {
+  onSuccess?: () => void;
+  onError?: (error: Error) => void;
+}
+
+
 /*
    POST - Create Strategy Brief
 */
-// export const usePostStrategyBrief = () => {
-//   const queryClient = useQueryClient();
 
-//   return useMutation<
-//     ApiResponse<CampaignBrief>,
-//     AxiosError<ApiResponseError>,
-//     CreateStrategyBriefPayload
-//   >({
-//     mutationFn: async (payload) => {
-//       const response = await axios.post<ApiResponse<CampaignBrief>>(
-//         STRATEGY_Brief_URL,
-//         payload
-//       );
-//       return response.data;
-//     },
+export function usePostStrategyBrief(options?: UseCampaignBriefCreateOptions) {
+  const [errorMessage, setErrorMessage] = useState<string | undefined>();
 
-//     meta: {
-//       errorMessage: "Failed to create strategy Brief",
-//       successMessage: "Strategy Brief created successfully"
-//     },
+  const mutation = useMutation({
+    mutationFn: async (payload: CampaignBriefCreatePayload) => {
+      const response = await axios.post("/campaign/strategy-brief/", payload);
+      return response.data;
+    },
+    onSuccess: () => {
+      setErrorMessage(undefined);
+      options?.onSuccess?.();
+    },
+    onError: (err) => {
+      const message =
+        err instanceof Error ? err.message : "Failed to create campaign brief";
+      setErrorMessage(message);
+      options?.onError?.(err instanceof Error ? err : new Error(message));
+    },
+    meta: {
+      errorMessage: "Failed to create campaign brief",
+      successMessage: "Campaign brief created successfully"
+    }
+  });
 
-//     onSuccess: () => {
-//       queryClient.invalidateQueries({
-//         queryKey: ["getStrategyBriefs"]
-//       });
-//     }
-//   });
-// };
+  return {
+    submit: mutation.mutateAsync,
+    isSubmitting: mutation.isPending,
+    isSuccess: mutation.isSuccess,
+    isError: mutation.isError,
+    errorMessage,
+    reset: mutation.reset
+  };
+}
+
 
 /*
    GET - Find All Strategy Briefs (Table/Pagination)

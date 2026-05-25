@@ -25,40 +25,30 @@ export type SubtypeOption = {
 
 export type BrandProductData = {
   name: string;
+  description?: string | null;
 };
 
 export type BudgetScheduleData = {
-  budgetType: string;
-  budget: string;
-  startDate: Date | string;
-  endDate: Date | string;
-  endDays: string;
+  type: "daily" | "weekly" | "monthly" | "lifetime" | null
+  amount: string;
+  startDate: Date;
+  endDate?: Date | null;
   hasEndDate: boolean;
-  breakdown: {
-    category: string;
-    description: string;
-    amount: string;
-  }[]
 };
 
 export type AudienceData = {
   location: string;
-  age: string;
+  age: "18-24" | null;
   language: string;
   gender: "all" | "men" | "women";
   interest: string;
 };
 
-export type ObjectiveKpi = {
-  metric: string;
-  target: string;
-}
 
 export type CampaignFormData = {
   brand: BrandProductData;
   budget: BudgetScheduleData;
   audience: AudienceData;
-  objectiveKpi: ObjectiveKpi[]
 };
 
 // ─── API Response Types ───────────────────────────────────────────────────────
@@ -96,6 +86,16 @@ export type CampaignBriefDetailResponse = {
 };
 
 
+// ─── Request Payload Types ────────────────────────────────────────────────────
+
+export interface CreateStrategyBriefPayload {
+  title: string;
+  type_ads: AdsType;
+  objective_type: CampaignObjectiveKey;
+  sub_type: string;
+  form: CampaignFormData;
+}
+
 export interface CampaignBriefFilter {
   offset?: number;
   limit?: number;
@@ -104,3 +104,5 @@ export interface CampaignBriefFilter {
   sortOrder?: "asc" | "desc";
   status?: string;
 }
+
+
