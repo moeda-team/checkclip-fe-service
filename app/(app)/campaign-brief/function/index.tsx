@@ -120,8 +120,8 @@ export function BudgetContent({ brief }: { brief: CampaignBrief }) {
   if (!b) return <p className="text-sm text-gray-400">No budget data</p>;
   return (
     <div className="grid grid-cols-2 gap-4">
-      <div><p className="text-xs font-medium text-gray-500 mb-1">Budget Type</p><p className="text-sm text-gray-900">{b.budgetType || "—"}</p></div>
-      <div><p className="text-xs font-medium text-gray-500 mb-1">Budget</p><p className="text-sm text-gray-900">{b.budget ? `$ ${Number(b.budget).toLocaleString("en-US")}` : "—"}</p></div>
+      <div><p className="text-xs font-medium text-gray-500 mb-1">Budget Type</p><p className="text-sm text-gray-900">{b.type || "—"}</p></div>
+      <div><p className="text-xs font-medium text-gray-500 mb-1">Budget</p><p className="text-sm text-gray-900">{b.type ? `$ ${Number(b.amount).toLocaleString("en-US")}` : "—"}</p></div>
       <div><p className="text-xs font-medium text-gray-500 mb-1">Start Date</p><p className="text-sm text-gray-900"> {startDate ? format(startDate, 'yyyy-MM-dd') : ""}</p></div>
       <div><p className="text-xs font-medium text-gray-500 mb-1">Start Time</p><p className="text-sm text-gray-900">{startDate instanceof Date ? format(startDate, 'MM') : ""}</p></div>
       {b.hasEndDate && <>
