@@ -216,6 +216,40 @@ export function CampaignReviewStep({
             value={formData.brand.brandName || "-"}
           />
           <ReviewRow
+            label="Industry Vertical"
+            value={
+              formData.brand.industryVertical
+                ? formData.brand.industryVertical.charAt(0).toUpperCase() +
+                  formData.brand.industryVertical.slice(1).replace(/-/g, " ")
+                : "-"
+            }
+          />
+          <ReviewRow
+            label="Competition Level"
+            value={
+              formData.brand.competitionLevel
+                ? formData.brand.competitionLevel.charAt(0).toUpperCase() +
+                  formData.brand.competitionLevel.slice(1)
+                : "-"
+            }
+          />
+          <ReviewRow
+            label="Product Average Price"
+            value={
+              formData.brand.productAveragePrice
+                ? `$${formData.brand.productAveragePrice}`
+                : "-"
+            }
+          />
+          <ReviewRow
+            label="Product Average Rating"
+            value={formData.brand.productAverageRating || "-"}
+          />
+          <ReviewRow
+            label="Total Reviews"
+            value={formData.brand.totalReviews || "-"}
+          />
+          <ReviewRow
             label="Description"
             value={formData.brand.description || "-"}
             multiline
@@ -284,8 +318,26 @@ export function CampaignReviewStep({
             value={formData.audience.language || "-"}
           />
           <ReviewRow
-            label="Interest and Detail Audience"
-            value={formData.audience.interest || "-"}
+            label="Audience Size"
+            value={formData.audience.audienceSize || "-"}
+          />
+          <ReviewRow
+            label="Audience Interest"
+            value={
+              formData.audience.audienceInterest.length > 0
+                ? formData.audience.audienceInterest
+                    .map(
+                      (v) =>
+                        v.charAt(0).toUpperCase() +
+                        v.slice(1).replace(/-/g, " ")
+                    )
+                    .join(", ")
+                : "-"
+            }
+          />
+          <ReviewRow
+            label="Detail Audience"
+            value={formData.audience.detailAudience || "-"}
             multiline
           />
         </ReviewSection>

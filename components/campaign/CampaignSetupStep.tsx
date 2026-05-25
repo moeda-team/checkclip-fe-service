@@ -61,7 +61,7 @@ export function CampaignSetupStep({
   };
 
   return (
-    <div className="flex flex-col min-h-[calc(100vh-56px)]">
+    <div className="flex flex-col min-h-[calc(100vh-56px)] pb-2">
       <div className="flex-1 overflow-y-auto p-6 space-y-8 border rounded-xl">
         {/* Campaign Setup */}
         <section>
@@ -168,16 +168,15 @@ export function CampaignSetupStep({
             )}
           </section>
         )}
-      </div>
-
-      <div className="border-t border-gray-200 bg-white px-6 py-4 flex justify-end">
-        <Button
-          onClick={onNext}
-          disabled={!canProceed}
-          className="bg-gray-900 hover:bg-gray-800 text-white px-8 h-10 rounded-lg text-sm font-medium"
-        >
-          Next
-        </Button>
+        <div className="bg-white px-6 flex justify-end">
+          <Button
+            onClick={onNext}
+            disabled={!canProceed}
+            className="bg-gray-900 hover:bg-gray-800 text-white px-8 h-10 rounded-lg text-sm font-medium"
+          >
+            Next
+          </Button>
+        </div>
       </div>
     </div>
   );
