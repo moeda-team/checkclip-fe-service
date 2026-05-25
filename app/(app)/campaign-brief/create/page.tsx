@@ -7,13 +7,14 @@ import { useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { CreateCampaign } from "@/components/campaign/CreateCampaign";
 import { PageHeader } from "@/components/layout/PageHeader";
+import { FormSkeleton } from "@/components/ui/skeletons";
 import { usePostStrategyBrief } from "../hooks/useCampaignBrief";
 import type { AdsType, CampaignObjectiveKey } from "../types";
 import type { AgeType, CampaignFormData, GenderType } from "@/types/campaign";
 
 export default function CampaignBriefCreatePage() {
   const router = useRouter();
-  const { submit } = usePostStrategyBrief();
+  const { submit, isSubmitting } = usePostStrategyBrief();
 
   const handleSubmit = useCallback(
     async (data: {
@@ -86,12 +87,16 @@ export default function CampaignBriefCreatePage() {
     <div className="flex flex-col min-h-[calc(100vh-56px)]">
       <PageHeader title="Create New Campaign Brief" showBackButton />
       <div className="flex-1 overflow-y-auto">
-        <CreateCampaign
-          onSubmit={handleSubmit}
-          onSuccess={handleSuccess}
-          onError={handleError}
-          entityName="campaign brief"
-        />
+        {isSubmitting ? (
+          <FormSkeleton />
+        ) : (
+          <CreateCampaign
+            onSubmit={handleSubmit}
+            onSuccess={handleSuccess}
+            onError={handleError}
+            entityName="campaign brief"
+          />
+        )}
       </div>
     </div>
   );

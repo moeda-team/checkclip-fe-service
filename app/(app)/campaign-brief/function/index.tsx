@@ -32,21 +32,7 @@ export function AdsIcon({ type }: { type: string }) {
 
 // ─── Skeleton ─────────────────────────────────────────────────────────────────
 
-export  function BriefSkeleton() {
-  return (
-    <div className="space-y-1 p-2">
-      {[1,2,3,4].map((i) => (
-        <div key={i} className="flex items-start gap-2.5 px-1 py-3 animate-pulse">
-          <div className="w-8 h-8 rounded-lg bg-gray-200 shrink-0" />
-          <div className="flex-1 space-y-1.5">
-            <div className="h-3 bg-gray-200 rounded w-4/5" />
-            <div className="h-2.5 bg-gray-100 rounded w-2/5" />
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-}
+export { BriefListSkeleton as BriefSkeleton } from "@/components/ui/skeletons";
 
 // ─── Section content components ───────────────────────────────────────────────
 
