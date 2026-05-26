@@ -44,6 +44,7 @@ export type AudienceData = {
   language: string;
   gender: GenderType;
   interest: string;
+  detail: string;
 };
 
 export type CampaignFormData = {
@@ -86,6 +87,7 @@ export type CampaignBriefAudience = {
   language: string;
   interest: string;
   gender: string;
+  detail: string;
 };
 
 export interface CampaignBrief {
@@ -132,6 +134,7 @@ export interface CreateStrategyBriefAudience {
   age?: AgeType | null;
   language?: string | null;
   interest?: string | null;
+  detail?: string | null;
   gender?: GenderType | null;
 }
 

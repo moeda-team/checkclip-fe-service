@@ -12,9 +12,11 @@ type Props = {
   open: boolean;
   /** Only used when variant === "failed" */
   errorMessage?: string;
-  onClose: () => void;
+  onClose?: () => void;
   /** Only used when variant === "confirm" */
   onContinue?: () => void;
+  /** Shows loading state on the Continue button (variant === "confirm") */
+  isLoading?: boolean;
   /** Entity name for dynamic messages (e.g., "campaign", "strategy planner") */
   entityName?: string;
 };
@@ -27,19 +29,19 @@ const getConfig = (entityName: string) => ({
     icon: <Info className="w-6 h-6 text-blue-500" />,
     title: `Confirm ${entityName} Setup`,
     description:
-      "Please review your details before proceeding. Make sure all required fields are filled correctly"
+      `Please review your ${entityName.toLocaleLowerCase()} details before proceeding. Make sure all required fields are filled correctly`
   },
   success: {
     iconBg: "bg-green-100",
     icon: <Check className="w-6 h-6 text-green-500" strokeWidth={2.5} />,
     title: "Success",
-    description: `Successfully created ${entityName} setup`
+    description: `Successfully created ${entityName.toLocaleLowerCase()} setup`
   },
   failed: {
     iconBg: "bg-red-100",
     icon: <X className="w-6 h-6 text-red-500" strokeWidth={2.5} />,
     title: "Failed",
-    description: `Failed to create ${entityName} setup`
+    description: `Failed to create ${entityName.toLocaleLowerCase()} setup`
   }
 });
 
@@ -51,6 +53,7 @@ export function CampaignAlertModal({
   errorMessage,
   onClose,
   onContinue,
+  isLoading = false,
   entityName = "campaign"
 }: Props) {
   if (!open) return null;
@@ -64,7 +67,7 @@ export function CampaignAlertModal({
     /* Backdrop */
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
-      onClick={variant !== "confirm" ? onClose : undefined}
+      onClick={variant !== "confirm" && onClose ? onClose : undefined}
     >
       {/* Modal card */}
       <div
@@ -90,15 +93,17 @@ export function CampaignAlertModal({
             <Button
               variant="outline"
               onClick={onClose}
+              disabled={isLoading}
               className="flex-1 h-11 rounded-xl border-gray-200 text-sm font-semibold"
             >
               Back
             </Button>
             <Button
               onClick={onContinue}
+              disabled={isLoading}
               className="flex-1 h-11 rounded-xl bg-gray-900 hover:bg-gray-800 text-white text-sm font-semibold"
             >
-              Continue
+              {isLoading ? "Processing..." : "Continue"}
             </Button>
           </div>
         ) : (

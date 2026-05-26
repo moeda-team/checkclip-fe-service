@@ -5,12 +5,12 @@
 
 import { useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { CreateCampaign } from "@/components/campaign/CreateCampaign";
+import { CreateCampaign } from "@/components/campaign-brief/CreateCampaign";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { FormSkeleton } from "@/components/ui/skeletons";
 import { usePostStrategyBrief } from "../hooks/useCampaignBrief";
 import type { AdsType, CampaignObjectiveKey } from "../types";
-import type { AgeType, CampaignFormData, GenderType } from "@/types/campaign";
+import type { AgeType, CampaignFormData, GenderType } from "@/types/campaign-brief";
 
 export default function CampaignBriefCreatePage() {
   const router = useRouter();
@@ -68,7 +68,8 @@ export default function CampaignBriefCreatePage() {
           age: formData.audience.age as AgeType || null,
           language: formData.audience.language || null,
           gender: formData.audience.gender as GenderType || null,
-          interest: formData.audience.interest || null
+          interest: formData.audience.interest?.join(",") || null,
+          detail: formData.audience.detail || null
         }
       });
     },
@@ -94,7 +95,7 @@ export default function CampaignBriefCreatePage() {
             onSubmit={handleSubmit}
             onSuccess={handleSuccess}
             onError={handleError}
-            entityName="campaign brief"
+            entityName="Campaign"
           />
         )}
       </div>
