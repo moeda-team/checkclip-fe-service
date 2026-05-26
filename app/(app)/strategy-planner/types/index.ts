@@ -23,7 +23,7 @@ export interface StrategyPlannerAudience {
   location: string;
   age: string;
   language: string;
-  gender: "all" | "women" | "men";
+  gender: "all" | "male" | "female";
   interest: string;
   size: string;
   detail: string;

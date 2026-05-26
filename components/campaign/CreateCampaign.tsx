@@ -1,5 +1,5 @@
 // components/campaign/CreateCampaign.tsx
-// Reusable 3-step campaign creation wizard (Setup → Details → Review).
+// Strategy planner creation wizard (Setup → Details → Review).
 
 "use client";
 
@@ -11,8 +11,9 @@ import { useCampaignBrief } from "@/hooks/use-campaign-brief";
 import type {
   AdsType,
   AgeType,
+  CampaignFormData,
   CampaignObjectiveKey,
-  CampaignFormData
+  GenderType
 } from "@/types/campaign";
 
 const defaultFormData: CampaignFormData = {
@@ -26,7 +27,7 @@ const defaultFormData: CampaignFormData = {
     description: ""
   },
   budget: {
-    budgetType: "daily",
+    budgetType: "lifetime",
     budget: "",
     startDate: "",
     startTime: "",
@@ -37,9 +38,9 @@ const defaultFormData: CampaignFormData = {
   },
   audience: {
     location: "",
-    age: "" as AgeType,
+    age: "all" as AgeType,
     language: "",
-    gender: "all",
+    gender: "all" as GenderType,
     interest: "",
     audienceSize: "",
     audienceInterest: [],
@@ -49,7 +50,7 @@ const defaultFormData: CampaignFormData = {
 
 type ModalVariant = "confirm" | "success" | "failed";
 
-interface CreateCampaignProps {
+interface CreateStrategyPlannerProps {
   onSuccess?: () => void;
   onError?: (error: Error) => void;
   hideAdsType?: boolean;
@@ -64,13 +65,13 @@ interface CreateCampaignProps {
   }) => Promise<void>;
 }
 
-export function CreateCampaign({
+export function CreateStrategyPlanner({
   onSuccess,
   onError,
   hideAdsType = false,
   entityName = "campaign",
   onSubmit
-}: CreateCampaignProps) {
+}: CreateStrategyPlannerProps) {
   const [step, setStep] = useState<1 | 2 | 3>(1);
 
   // Step 1 state
@@ -104,10 +105,10 @@ export function CreateCampaign({
       // Brand required fields
       hasValue(brand.brandName) &&
       hasValue(brand.industryVertical) &&
-      hasValue(brand.description) &&
       // Budget required fields
       hasValue(budget.budgetType) &&
       hasValue(budget.budget) &&
+      Number(budget.budget) > 0 &&
       hasValue(budget.startDate) &&
       hasValue(budget.startTime) &&
       // Audience required fields
@@ -115,8 +116,7 @@ export function CreateCampaign({
       hasValue(audience.age) &&
       hasValue(audience.language) &&
       hasValue(audience.gender) &&
-      audience.audienceInterest.length > 0 &&
-      hasValue(audience.detailAudience)
+      audience.audienceInterest.length > 0
     );
   };
 

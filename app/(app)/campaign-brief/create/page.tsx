@@ -5,14 +5,14 @@
 
 import { useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { CreateCampaign } from "@/components/campaign-brief/CreateCampaign";
+import { CreateCampaignBrief } from "@/components/campaign-brief/CreateCampaign";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { FormSkeleton } from "@/components/ui/skeletons";
 import { usePostStrategyBrief } from "../hooks/useCampaignBrief";
 import type { AdsType, CampaignObjectiveKey } from "../types";
 import type {
   AgeType,
-  BriefFormData,
+  CampaignFormData,
   GenderType
 } from "@/types/campaign-brief";
 
@@ -71,7 +71,7 @@ export default function CampaignBriefCreatePage() {
         },
         audience: {
           location: formData.audience.location || null,
-          age: (formData.audience.age as unknown as AgeType) || null,
+          age: (formData.audience.age as AgeType) || null,
           language: formData.audience.language || null,
           gender: (formData.audience.gender as GenderType) || null,
           interest: formData.audience.interest?.join(",") || null,
@@ -97,7 +97,7 @@ export default function CampaignBriefCreatePage() {
         {isSubmitting ? (
           <FormSkeleton />
         ) : (
-          <CreateCampaign
+          <CreateCampaignBrief
             onSubmit={handleSubmit}
             onSuccess={handleSuccess}
             onError={handleError}

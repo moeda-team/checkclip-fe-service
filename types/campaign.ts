@@ -9,7 +9,7 @@ export type AdsType = "google" | "meta" | "line" | "yahoo";
 
 export type AgeType = "18-24" | "25-34" | "35-44" | "45-54" | "55+" | "all"
 
-export type GenderType = "all" | "men" | "women"
+export type GenderType = "all" | "male" | "female"
 
 export type CampaignObjectiveType = {
   key: CampaignObjectiveKey;
