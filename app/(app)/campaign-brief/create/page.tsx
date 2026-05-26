@@ -12,7 +12,7 @@ import { usePostStrategyBrief } from "../hooks/useCampaignBrief";
 import type { AdsType, CampaignObjectiveKey } from "../types";
 import type {
   AgeType,
-  CampaignFormData,
+  BriefFormData,
   GenderType
 } from "@/types/campaign-brief";
 
