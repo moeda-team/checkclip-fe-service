@@ -43,6 +43,7 @@ interface CampaignDetailsStepProps {
   onBack: () => void;
   onCreate: () => void;
   isSubmitting: boolean;
+  canCreate?: boolean;
 }
 
 export function CampaignDetailsStep({
@@ -51,7 +52,8 @@ export function CampaignDetailsStep({
   onFormChange,
   onBack,
   onCreate,
-  isSubmitting
+  isSubmitting,
+  canCreate = false
 }: CampaignDetailsStepProps) {
   const [locationQuery, setLocationQuery] = useState("");
   const [locationSuggestions, setLocationSuggestions] = useState<string[]>([]);
@@ -816,8 +818,8 @@ export function CampaignDetailsStep({
             </Button>
             <Button
               onClick={onCreate}
-              disabled={isSubmitting}
-              className="bg-gray-900 hover:bg-gray-800 text-white px-8 h-10 rounded-lg text-sm font-medium"
+              disabled={isSubmitting || !canCreate}
+              className="bg-gray-900 hover:bg-gray-800 text-white px-8 h-10 rounded-lg text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Next
             </Button>
