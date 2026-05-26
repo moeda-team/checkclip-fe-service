@@ -202,69 +202,60 @@ export function CampaignDetailsStep({
                       <SelectValue placeholder="Select Industry" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="animals-pets">
+                      <SelectItem value="animals_pets">
                         Animals & Pets
                       </SelectItem>
-                      <SelectItem value="apparel-fashion-jewelry">
+                      <SelectItem value="fashion_retail">
                         Apparel/Fashion & Jewelry
                       </SelectItem>
-                      <SelectItem value="arts-entertainment">
+                      <SelectItem value="entertainment_media">
                         Arts & Entertainment
                       </SelectItem>
-                      <SelectItem value="attorneys-legal">
+                      <SelectItem value="legal_services">
                         Attorneys & Legal Services
                       </SelectItem>
-                      <SelectItem value="automotive-sale">
-                        Automotive (For Sale)
-                      </SelectItem>
-                      <SelectItem value="automotive-repair">
-                        Automotive (Repair, Service & Parts)
-                      </SelectItem>
-                      <SelectItem value="beauty-personal-care">
+                      <SelectItem value="automotive">Automotive</SelectItem>
+                      <SelectItem value="beauty_personal_care">
                         Beauty & Personal Care
                       </SelectItem>
-                      <SelectItem value="business-services">
+                      <SelectItem value="b2b_services">
                         Business Services
                       </SelectItem>
-                      <SelectItem value="career-employment">
+                      <SelectItem value="employment_recruiting">
                         Career & Employment
                       </SelectItem>
-                      <SelectItem value="dentists-dental">
-                        Dentists & Dental Services
-                      </SelectItem>
-                      <SelectItem value="education-instruction">
+                      <SelectItem value="education">
                         Education & Instruction
                       </SelectItem>
-                      <SelectItem value="finance-insurance">
+                      <SelectItem value="finance_fintech">
                         Finance & Insurance
                       </SelectItem>
-                      <SelectItem value="furniture">Furniture</SelectItem>
-                      <SelectItem value="health-fitness">
-                        Health & Fitness
+                      <SelectItem value="food_beverage">
+                        Food & Beverage
                       </SelectItem>
-                      <SelectItem value="home-improvement">
-                        Home & Home Improvement
+                      <SelectItem value="health_wellness">
+                        Health & Wellness
                       </SelectItem>
-                      <SelectItem value="industrial-commercial">
-                        Industrial & Commercial
+                      <SelectItem value="home_living">Home & Living</SelectItem>
+                      <SelectItem value="industrial_manufacturing">
+                        Industrial & Manufacturing
                       </SelectItem>
-                      <SelectItem value="personal-services">
+                      <SelectItem value="personal_services">
                         Personal Services
                       </SelectItem>
-                      <SelectItem value="physicians-surgeons">
-                        Physicians & Surgeons
-                      </SelectItem>
-                      <SelectItem value="real-estate">Real Estate</SelectItem>
-                      <SelectItem value="restaurants-food">
-                        Restaurants & Food
-                      </SelectItem>
-                      <SelectItem value="shopping-collectibles">
+                      <SelectItem value="real_estate">Real Estate</SelectItem>
+                      <SelectItem value="shopping_gifts">
                         Shopping, Collectibles & Gifts
                       </SelectItem>
-                      <SelectItem value="sports-recreation">
+                      <SelectItem value="sports_recreation">
                         Sports & Recreation
                       </SelectItem>
-                      <SelectItem value="travel">Travel</SelectItem>
+                      <SelectItem value="tech_electronics">
+                        Tech & Electronics
+                      </SelectItem>
+                      <SelectItem value="travel_hospitality">
+                        Travel & Hospitality
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
