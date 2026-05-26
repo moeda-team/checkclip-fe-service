@@ -64,6 +64,7 @@ export function CampaignDetailsStep({
   const [locationTimeout, setLocationTimeout] = useState<ReturnType<
     typeof setTimeout
   > | null>(null);
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   const audienceInterestOptions = [
     { value: "lifestyle-hobbies", label: "Lifestyle and Hobbies" },
@@ -152,6 +153,59 @@ export function CampaignDetailsStep({
     ? new Date(formData.budget.endDate)
     : undefined;
 
+  const validate = (): boolean => {
+    const newErrors: Record<string, string> = {};
+    const { brand, budget, audience } = formData;
+
+    // Brand
+    if (!brand.brandName.trim()) newErrors.brandName = "Brand name is required";
+    if (!brand.industryVertical)
+      newErrors.industryVertical = "Industry vertical is required";
+    if (brand.productAveragePrice && Number(brand.productAveragePrice) < 0)
+      newErrors.productAveragePrice = "Must be 0 or greater";
+    if (brand.productAverageRating) {
+      const r = Number(brand.productAverageRating);
+      if (r < 1 || r > 5)
+        newErrors.productAverageRating = "Must be between 1 and 5";
+    }
+    if (brand.totalReviews) {
+      const t = Number(brand.totalReviews);
+      if (t < 0 || !Number.isInteger(t))
+        newErrors.totalReviews = "Must be a whole number ≥ 0";
+    }
+
+    // Budget
+    if (!budget.budgetType) newErrors.budgetType = "Budget type is required";
+    if (!budget.budget || Number(budget.budget) <= 0)
+      newErrors.budget = "Budget must be greater than 0";
+    if (!budget.startDate) newErrors.startDate = "Start date is required";
+    if (!budget.startTime) newErrors.startTime = "Start time is required";
+    if (budget.hasEndDate) {
+      if (budget.endDays) {
+        const d = Number(budget.endDays);
+        if (d < 1 || d > 365 || !Number.isInteger(d))
+          newErrors.endDays = "Must be a whole number between 1 and 365";
+      }
+    }
+
+    // Audience
+    if (!audience.location.trim()) newErrors.location = "Location is required";
+    if (!audience.age) newErrors.age = "Age is required";
+    if (!audience.language) newErrors.language = "Language is required";
+    if (!audience.gender) newErrors.gender = "Gender is required";
+    if (!audience.audienceInterest || audience.audienceInterest.length === 0)
+      newErrors.audienceInterest = "At least one interest is required";
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleCreate = () => {
+    if (validate()) {
+      onCreate();
+    }
+  };
+
   return (
     <div className="flex flex-col min-h-[calc(100vh-56px)]">
       <div className="flex-1 overflow-y-auto p-6 max-w-3xl mx-auto w-full">
@@ -183,9 +237,18 @@ export function CampaignDetailsStep({
                 <Input
                   placeholder="Input brand name / brand type"
                   value={formData.brand.brandName}
-                  onChange={(e) => updateBrand("brandName", e.target.value)}
-                  className="mt-1.5 h-10 border-gray-200 text-sm"
+                  onChange={(e) => {
+                    updateBrand("brandName", e.target.value);
+                    if (errors.brandName)
+                      setErrors((p) => ({ ...p, brandName: "" }));
+                  }}
+                  className={`mt-1.5 h-10 text-sm ${errors.brandName ? "border-red-400 focus-visible:ring-red-400" : "border-gray-200"}`}
                 />
+                {errors.brandName && (
+                  <p className="text-xs text-red-500 mt-1">
+                    {errors.brandName}
+                  </p>
+                )}
               </div>
 
               {/* Industry Vertical & Competition Level */}
@@ -196,11 +259,15 @@ export function CampaignDetailsStep({
                   </Label>
                   <Select
                     value={formData.brand.industryVertical}
-                    onValueChange={(value) =>
-                      updateBrand("industryVertical", value)
-                    }
+                    onValueChange={(value) => {
+                      updateBrand("industryVertical", value);
+                      if (errors.industryVertical)
+                        setErrors((p) => ({ ...p, industryVertical: "" }));
+                    }}
                   >
-                    <SelectTrigger className="mt-1.5 h-10 border-gray-200 text-sm">
+                    <SelectTrigger
+                      className={`mt-1.5 h-10 text-sm ${errors.industryVertical ? "border-red-400" : "border-gray-200"}`}
+                    >
                       <SelectValue placeholder="Select Industry" />
                     </SelectTrigger>
                     <SelectContent>
@@ -260,6 +327,11 @@ export function CampaignDetailsStep({
                       </SelectItem>
                     </SelectContent>
                   </Select>
+                  {errors.industryVertical && (
+                    <p className="text-xs text-red-500 mt-1">
+                      {errors.industryVertical}
+                    </p>
+                  )}
                 </div>
 
                 <div>
@@ -296,14 +368,22 @@ export function CampaignDetailsStep({
                     </span>
                     <Input
                       type="number"
+                      min="0"
                       placeholder="0.00"
                       value={formData.brand.productAveragePrice}
-                      onChange={(e) =>
-                        updateBrand("productAveragePrice", e.target.value)
-                      }
-                      className="h-10 border-gray-200 text-sm pl-7 pr-3"
+                      onChange={(e) => {
+                        updateBrand("productAveragePrice", e.target.value);
+                        if (errors.productAveragePrice)
+                          setErrors((p) => ({ ...p, productAveragePrice: "" }));
+                      }}
+                      className={`h-10 text-sm pl-7 pr-3 ${errors.productAveragePrice ? "border-red-400 focus-visible:ring-red-400" : "border-gray-200"}`}
                     />
                   </div>
+                  {errors.productAveragePrice && (
+                    <p className="text-xs text-red-500 mt-1">
+                      {errors.productAveragePrice}
+                    </p>
+                  )}
                 </div>
 
                 <div>
@@ -313,15 +393,22 @@ export function CampaignDetailsStep({
                   <Input
                     type="number"
                     step="0.1"
-                    min="0"
+                    min="1"
                     max="5"
-                    placeholder="0.0"
+                    placeholder="1.0 - 5.0"
                     value={formData.brand.productAverageRating}
-                    onChange={(e) =>
-                      updateBrand("productAverageRating", e.target.value)
-                    }
-                    className="mt-1.5 h-10 border-gray-200 text-sm"
+                    onChange={(e) => {
+                      updateBrand("productAverageRating", e.target.value);
+                      if (errors.productAverageRating)
+                        setErrors((p) => ({ ...p, productAverageRating: "" }));
+                    }}
+                    className={`mt-1.5 h-10 text-sm ${errors.productAverageRating ? "border-red-400 focus-visible:ring-red-400" : "border-gray-200"}`}
                   />
+                  {errors.productAverageRating && (
+                    <p className="text-xs text-red-500 mt-1">
+                      {errors.productAverageRating}
+                    </p>
+                  )}
                 </div>
 
                 <div>
@@ -330,13 +417,22 @@ export function CampaignDetailsStep({
                   </Label>
                   <Input
                     type="number"
+                    min="0"
+                    step="1"
                     placeholder="0"
                     value={formData.brand.totalReviews}
-                    onChange={(e) =>
-                      updateBrand("totalReviews", e.target.value)
-                    }
-                    className="mt-1.5 h-10 border-gray-200 text-sm"
+                    onChange={(e) => {
+                      updateBrand("totalReviews", e.target.value);
+                      if (errors.totalReviews)
+                        setErrors((p) => ({ ...p, totalReviews: "" }));
+                    }}
+                    className={`mt-1.5 h-10 text-sm ${errors.totalReviews ? "border-red-400 focus-visible:ring-red-400" : "border-gray-200"}`}
                   />
+                  {errors.totalReviews && (
+                    <p className="text-xs text-red-500 mt-1">
+                      {errors.totalReviews}
+                    </p>
+                  )}
                 </div>
               </div>
 
@@ -382,9 +478,15 @@ export function CampaignDetailsStep({
                   </Label>
                   <Select
                     value={formData.budget.budgetType}
-                    onValueChange={(value) => updateBudget("budgetType", value)}
+                    onValueChange={(value) => {
+                      updateBudget("budgetType", value);
+                      if (errors.budgetType)
+                        setErrors((p) => ({ ...p, budgetType: "" }));
+                    }}
                   >
-                    <SelectTrigger className="mt-1.5 h-10 border-gray-200 text-sm">
+                    <SelectTrigger
+                      className={`mt-1.5 h-10 text-sm ${errors.budgetType ? "border-red-400" : "border-gray-200"}`}
+                    >
                       <SelectValue placeholder="Select budget type" />
                     </SelectTrigger>
                     <SelectContent>
@@ -392,6 +494,11 @@ export function CampaignDetailsStep({
                       <SelectItem value="lifetime">Lifetime</SelectItem>
                     </SelectContent>
                   </Select>
+                  {errors.budgetType && (
+                    <p className="text-xs text-red-500 mt-1">
+                      {errors.budgetType}
+                    </p>
+                  )}
                 </div>
 
                 <div>
@@ -404,12 +511,20 @@ export function CampaignDetailsStep({
                     </span>
                     <Input
                       type="number"
+                      min="1"
                       placeholder="Input Budget"
                       value={formData.budget.budget}
-                      onChange={(e) => updateBudget("budget", e.target.value)}
-                      className="h-10 border-gray-200 text-sm pl-7 pr-3"
+                      onChange={(e) => {
+                        updateBudget("budget", e.target.value);
+                        if (errors.budget)
+                          setErrors((p) => ({ ...p, budget: "" }));
+                      }}
+                      className={`h-10 text-sm pl-7 pr-3 ${errors.budget ? "border-red-400 focus-visible:ring-red-400" : "border-gray-200"}`}
                     />
                   </div>
+                  {errors.budget && (
+                    <p className="text-xs text-red-500 mt-1">{errors.budget}</p>
+                  )}
                 </div>
               </div>
 
@@ -424,8 +539,11 @@ export function CampaignDetailsStep({
                       <Button
                         variant="outline"
                         className={cn(
-                          "mt-1.5 w-full h-10 justify-start text-left font-normal border-gray-200 text-sm bg-white hover:bg-white",
-                          !parsedStartDate && "text-gray-400"
+                          "mt-1.5 w-full h-10 justify-start text-left font-normal text-sm bg-white hover:bg-white",
+                          !parsedStartDate && "text-gray-400",
+                          errors.startDate
+                            ? "border-red-400"
+                            : "border-gray-200"
                         )}
                       >
                         <CalendarIcon className="mr-2 h-4 w-4 text-gray-400" />
@@ -445,14 +563,19 @@ export function CampaignDetailsStep({
                               format(date, "yyyy-MM-dd")
                             );
                             setStartDateOpen(false);
+                            if (errors.startDate)
+                              setErrors((p) => ({ ...p, startDate: "" }));
                           }
                         }}
                       />
                     </PopoverContent>
                   </Popover>
+                  {errors.startDate && (
+                    <p className="text-xs text-red-500 mt-1">
+                      {errors.startDate}
+                    </p>
+                  )}
                 </div>
-
-                {/* Time */}
                 <div>
                   <Label className="text-sm font-medium text-gray-700">
                     Time <span className="text-red-500">*</span>
@@ -460,7 +583,11 @@ export function CampaignDetailsStep({
                   <div className="mt-1.5">
                     <TimePicker
                       value={formData.budget.startTime}
-                      onChange={(time) => updateBudget("startTime", time)}
+                      onChange={(time) => {
+                        updateBudget("startTime", time);
+                        if (errors.startTime)
+                          setErrors((p) => ({ ...p, startTime: "" }));
+                      }}
                       date={parsedStartDate}
                       placeholder="Choose Time"
                     />
@@ -620,6 +747,11 @@ export function CampaignDetailsStep({
                         </div>
                       )}
                   </div>
+                  {errors.location && (
+                    <p className="text-xs text-red-500 mt-1">
+                      {errors.location}
+                    </p>
+                  )}
                 </div>
 
                 <div>
@@ -628,9 +760,14 @@ export function CampaignDetailsStep({
                   </Label>
                   <Select
                     value={formData.audience.age}
-                    onValueChange={(value) => updateAudience("age", value)}
+                    onValueChange={(value) => {
+                      updateAudience("age", value);
+                      if (errors.age) setErrors((p) => ({ ...p, age: "" }));
+                    }}
                   >
-                    <SelectTrigger className="mt-1.5 h-10 border-gray-200 text-sm">
+                    <SelectTrigger
+                      className={`mt-1.5 h-10 text-sm ${errors.age ? "border-red-400" : "border-gray-200"}`}
+                    >
                       <SelectValue placeholder="Select Age" />
                     </SelectTrigger>
                     <SelectContent>
@@ -638,11 +775,13 @@ export function CampaignDetailsStep({
                       <SelectItem value="25-34">25-34</SelectItem>
                       <SelectItem value="35-44">35-44</SelectItem>
                       <SelectItem value="45-54">45-54</SelectItem>
-                      <SelectItem value="55-64">55-64</SelectItem>
-                      <SelectItem value="65+">65+</SelectItem>
+                      <SelectItem value="55+">55+</SelectItem>
                       <SelectItem value="all">All ages</SelectItem>
                     </SelectContent>
                   </Select>
+                  {errors.age && (
+                    <p className="text-xs text-red-500 mt-1">{errors.age}</p>
+                  )}
                 </div>
 
                 <div>
@@ -651,9 +790,15 @@ export function CampaignDetailsStep({
                   </Label>
                   <Select
                     value={formData.audience.language}
-                    onValueChange={(value) => updateAudience("language", value)}
+                    onValueChange={(value) => {
+                      updateAudience("language", value);
+                      if (errors.language)
+                        setErrors((p) => ({ ...p, language: "" }));
+                    }}
                   >
-                    <SelectTrigger className="mt-1.5 h-10 border-gray-200 text-sm">
+                    <SelectTrigger
+                      className={`mt-1.5 h-10 text-sm ${errors.language ? "border-red-400" : "border-gray-200"}`}
+                    >
                       <SelectValue placeholder="Select Language" />
                     </SelectTrigger>
                     <SelectContent>
@@ -667,6 +812,11 @@ export function CampaignDetailsStep({
                       <SelectItem value="ko">Korean</SelectItem>
                     </SelectContent>
                   </Select>
+                  {errors.language && (
+                    <p className="text-xs text-red-500 mt-1">
+                      {errors.language}
+                    </p>
+                  )}
                 </div>
               </div>
 
@@ -689,21 +839,21 @@ export function CampaignDetailsStep({
                     </Label>
                   </div>
                   <div className="flex items-center gap-2">
-                    <RadioGroupItem value="men" id="gender-men" />
+                    <RadioGroupItem value="male" id="gender-male" />
                     <Label
-                      htmlFor="gender-men"
+                      htmlFor="gender-male"
                       className="text-sm text-gray-700 cursor-pointer"
                     >
-                      Men
+                      Male
                     </Label>
                   </div>
                   <div className="flex items-center gap-2">
-                    <RadioGroupItem value="women" id="gender-women" />
+                    <RadioGroupItem value="female" id="gender-female" />
                     <Label
-                      htmlFor="gender-women"
+                      htmlFor="gender-female"
                       className="text-sm text-gray-700 cursor-pointer"
                     >
-                      Women
+                      Female
                     </Label>
                   </div>
                 </RadioGroup>
@@ -725,9 +875,9 @@ export function CampaignDetailsStep({
                       <SelectValue placeholder="Select Audience Size" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="high">High</SelectItem>
+                      <SelectItem value="small">Small</SelectItem>
                       <SelectItem value="medium">Medium</SelectItem>
-                      <SelectItem value="low">Low</SelectItem>
+                      <SelectItem value="large">Large</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -740,7 +890,7 @@ export function CampaignDetailsStep({
                     <PopoverTrigger asChild>
                       <Button
                         variant="outline"
-                        className="mt-1.5 w-full h-10 justify-start text-left font-normal border-gray-200 text-sm bg-white hover:bg-white"
+                        className={`mt-1.5 w-full h-10 justify-start text-left font-normal text-sm bg-white hover:bg-white ${errors.audienceInterest ? "border-red-400" : "border-gray-200"}`}
                       >
                         {formData.audience.audienceInterest.length > 0
                           ? formData.audience.audienceInterest
@@ -772,6 +922,11 @@ export function CampaignDetailsStep({
                                   ? [...current, option.value]
                                   : current.filter((v) => v !== option.value);
                                 updateAudience("audienceInterest", updated);
+                                if (errors.audienceInterest)
+                                  setErrors((p) => ({
+                                    ...p,
+                                    audienceInterest: ""
+                                  }));
                               }}
                               className="border-gray-300 data-[state=checked]:bg-primary-500 data-[state=checked]:border-primary-500"
                             />
@@ -781,9 +936,15 @@ export function CampaignDetailsStep({
                       </div>
                     </PopoverContent>
                   </Popover>
-                  <p className="text-xs text-gray-500 mt-1.5">
-                    Add any interests related to your audience
-                  </p>
+                  {errors.audienceInterest ? (
+                    <p className="text-xs text-red-500 mt-1">
+                      {errors.audienceInterest}
+                    </p>
+                  ) : (
+                    <p className="text-xs text-gray-500 mt-1.5">
+                      Add any interests related to your audience
+                    </p>
+                  )}
                 </div>
               </div>
 
@@ -817,7 +978,7 @@ export function CampaignDetailsStep({
               Back
             </Button>
             <Button
-              onClick={onCreate}
+              onClick={handleCreate}
               disabled={isSubmitting || !canCreate}
               className="bg-gray-900 hover:bg-gray-800 text-white px-8 h-10 rounded-lg text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
             >

@@ -1,5 +1,5 @@
-// components/campaign/CreateCampaign.tsx
-// Reusable 2-step campaign creation wizard (Setup → Details).
+// components/campaign-brief/CreateCampaign.tsx
+// Campaign brief creation wizard (Setup → Details).
 
 "use client";
 
@@ -41,7 +41,7 @@ const defaultFormData: BriefFormData = {
 
 type ModalVariant = "confirm" | "success" | "failed";
 
-interface CreateCampaignProps {
+interface CreateCampaignBriefProps {
   onSuccess?: () => void;
   onError?: (error: Error) => void;
   hideAdsType?: boolean;
@@ -56,13 +56,13 @@ interface CreateCampaignProps {
   }) => Promise<void>;
 }
 
-export function CreateCampaign({
+export function CreateCampaignBrief({
   onSuccess,
   onError,
   hideAdsType = false,
   entityName = "Campaign",
   onSubmit
-}: CreateCampaignProps) {
+}: CreateCampaignBriefProps) {
   const [step, setStep] = useState<1 | 2 | 3>(1);
 
   // Step 1 state

@@ -5,7 +5,7 @@
 
 import { usePostStrategyPlanner } from "@/app/(app)/strategy-planner/hooks/useStrategyPlanner";
 import type { CreateStrategyPlannerPayload } from "@/app/(app)/strategy-planner/types";
-import { CreateCampaign } from "@/components/campaign/CreateCampaign";
+import { CreateStrategyPlanner } from "@/components/campaign/CreateCampaign";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { StrategyPlannerGenerating } from "./StrategyPlannerGenerating";
 import type {
@@ -34,10 +34,10 @@ const buildStrategyPlannerPayload = (data: {
     | "app_detail",
   tenant_id: "",
   brand: {
-    name: data.formData.brand.brandName,
+    name: data.formData.brand.brandName ?? "",
     description: data.formData.brand.description ?? "",
-    industry_vertical: data.formData.brand.industryVertical,
-    competition_level: data.formData.brand.competitionLevel,
+    industry_vertical: data.formData.brand.industryVertical ?? "",
+    competition_level: data.formData.brand.competitionLevel ?? "",
     product_average_price: Number(data.formData.brand.productAveragePrice) || 0,
     product_average_rating:
       Number(data.formData.brand.productAverageRating) || 0
@@ -62,7 +62,7 @@ const buildStrategyPlannerPayload = (data: {
     location: data.formData.audience.location,
     age: data.formData.audience.age || "all",
     language: data.formData.audience.language,
-    gender: data.formData.audience.gender as "all" | "women" | "men",
+    gender: data.formData.audience.gender as "all" | "male" | "female",
     interest: data.formData.audience.audienceInterest.join(","),
     size: data.formData.audience.audienceSize,
     detail: data.formData.audience.detailAudience
@@ -107,7 +107,7 @@ export default function StrategyPlannerCreatePage() {
     <div className="flex flex-col min-h-[calc(100vh-56px)]">
       <PageHeader title="Create New Strategy Planner" showBackButton />
       <div className="flex-1 overflow-y-auto">
-        <CreateCampaign
+        <CreateStrategyPlanner
           onSuccess={() => console.log("Strategy planner created successfully")}
           onError={(err: Error) =>
             console.error("Strategy planner creation failed:", err)
