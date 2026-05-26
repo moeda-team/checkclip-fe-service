@@ -7,7 +7,7 @@ export type CampaignObjectiveKey =
 
 export type AdsType = "google" | "meta" | "line" | "yahoo";
 
-export type AgeType = "18-24" | "25-34" | "35-44" | "45-54" | "55-64" | "65+" | "all"
+export type AgeType = "18-24" | "25-34" | "35-44" | "45-54" | "55+" | "all"
 
 export type GenderType = "all" | "men" | "women"
 
@@ -30,6 +30,11 @@ export type SubtypeOption = {
 export type BrandProductData = {
   brandName: string;
   description?: string;
+  industryVertical: string;
+  competitionLevel: string;
+  productAveragePrice: string;
+  productAverageRating: string;
+  totalReviews: string;
 };
 
 export type BudgetScheduleData = {
@@ -49,6 +54,9 @@ export type AudienceData = {
   language: string;
   gender: GenderType | string;
   interest: string;
+  audienceInterest: string[];
+  audienceSize: string;
+  detailAudience: string;
 };
 
 export type CampaignFormData = {

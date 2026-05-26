@@ -19,15 +19,7 @@ type Props = {
   onChange: (data: AudienceData) => void;
 };
 
-const ageOptions = [
-  "18-24",
-  "25-34",
-  "35-44",
-  "45-54",
-  "55-64",
-  "65+",
-  "All ages"
-];
+const ageOptions = ["18-24", "25-34", "35-44", "45-54", "55+", "All ages"];
 
 const languageOptions = [
   "English",

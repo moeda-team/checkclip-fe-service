@@ -4,15 +4,16 @@ import { useRouter } from "next/navigation";
 import { BarChart3, Zap } from "lucide-react";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useState } from "react";
+import { use, useState } from "react";
 import { ScenarioComparison } from "../components/ScenarioComparison";
 import { CampaignStrategies } from "../components/CampaignStrategies";
 
 export default function StrategyPlannerDetailPage({
   params
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
+  const { id } = use(params);
   const router = useRouter();
   const [activeTab, setActiveTab] = useState("scenario");
 
@@ -45,9 +46,9 @@ export default function StrategyPlannerDetailPage({
       </Tabs>
 
       {activeTab === "scenario" ? (
-        <ScenarioComparison />
+        <ScenarioComparison id={id} />
       ) : (
-        <CampaignStrategies />
+        <CampaignStrategies id={id} />
       )}
     </div>
   );
