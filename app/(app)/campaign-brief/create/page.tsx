@@ -10,7 +10,11 @@ import { PageHeader } from "@/components/layout/PageHeader";
 import { FormSkeleton } from "@/components/ui/skeletons";
 import { usePostStrategyBrief } from "../hooks/useCampaignBrief";
 import type { AdsType, CampaignObjectiveKey } from "../types";
-import type { AgeType, CampaignFormData, GenderType } from "@/types/campaign-brief";
+import type {
+  AgeType,
+  BriefFormData,
+  GenderType
+} from "@/types/campaign-brief";
 
 export default function CampaignBriefCreatePage() {
   const router = useRouter();
@@ -23,21 +27,23 @@ export default function CampaignBriefCreatePage() {
       selectedObjective: CampaignObjectiveKey;
       selectedSubtype: string;
       selectedConversionGoals: string[];
-      formData: CampaignFormData;
+      formData: BriefFormData;
     }) => {
       const { formData } = data;
 
       // Build startDate with time component
-      const [startHour = "0", startMinute = "0"] =
-        (formData.budget.startTime ?? "").split(":");
+      const [startHour = "0", startMinute = "0"] = (
+        formData.budget.startTime ?? ""
+      ).split(":");
       const startDate = new Date(formData.budget.startDate);
       startDate.setHours(Number(startHour), Number(startMinute), 0, 0);
 
       // Build endDate with time component (only if hasEndDate)
       let endDate: string | null = null;
       if (formData.budget.hasEndDate && formData.budget.endDate) {
-        const [endHour = "0", endMinute = "0"] =
-          (formData.budget.endTime ?? "").split(":");
+        const [endHour = "0", endMinute = "0"] = (
+          formData.budget.endTime ?? ""
+        ).split(":");
         const ed = new Date(formData.budget.endDate);
         ed.setHours(Number(endHour), Number(endMinute), 0, 0);
         endDate = ed.toISOString();
@@ -65,9 +71,9 @@ export default function CampaignBriefCreatePage() {
         },
         audience: {
           location: formData.audience.location || null,
-          age: formData.audience.age as AgeType || null,
+          age: (formData.audience.age as unknown as AgeType) || null,
           language: formData.audience.language || null,
-          gender: formData.audience.gender as GenderType || null,
+          gender: (formData.audience.gender as GenderType) || null,
           interest: formData.audience.interest?.join(",") || null,
           detail: formData.audience.detail || null
         }

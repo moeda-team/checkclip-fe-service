@@ -1,0 +1,54 @@
+$ next build
+▲ Next.js 16.2.6 (Turbopack)
+- Environments: .env.local
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 5.1s
+  Running TypeScript ...
+  Finished TypeScript in 7.3s ...
+  Collecting page data using 19 workers ...
+  Generating static pages using 19 workers (0/17) ...
+The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(undefined) or use aspect(undefined) to control the
+       height and width.
+The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(undefined) or use aspect(undefined) to control the
+       height and width.
+The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(undefined) or use aspect(undefined) to control the
+       height and width.
+  Generating static pages using 19 workers (4/17) 
+  Generating static pages using 19 workers (8/17) 
+  Generating static pages using 19 workers (12/17) 
+✓ Generating static pages using 19 workers (17/17) in 562ms
+  Finalizing page optimization ...
+
+Route (app)
+┌ ○ /
+├ ○ /_not-found
+├ ƒ /api/auth/[...nextauth]
+├ ƒ /api/places
+├ ○ /auth/forgot-password
+├ ○ /auth/google/callback
+├ ○ /auth/login
+├ ƒ /auth/redirect
+├ ○ /auth/register
+├ ○ /auth/yahoo/callback
+├ ○ /campaign-brief
+├ ○ /campaign-brief/create
+├ ○ /dashboard
+├ ○ /error/404
+├ ○ /strategy-planner
+├ ƒ /strategy-planner/[id]
+├ ƒ /strategy-planner/[id]/detail
+└ ○ /strategy-planner/create
+
+
+ƒ Proxy (Middleware)
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+

@@ -1,4 +1,4 @@
-import { AgeType, GenderType } from "@/types/campaign";
+import { AgeType, GenderType } from "@/types/campaign-brief";
 
 export type CampaignObjectiveKey =
   | "awareness"

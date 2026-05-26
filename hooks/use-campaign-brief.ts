@@ -11,7 +11,7 @@ import type {
   AdsType,
   CampaignObjectiveKey,
   CampaignFormData
-} from "@/types/campaign-brief";
+} from "@/types/campaign";
 
 const axios = axiosConfig(env.apiBaseUrl);
 

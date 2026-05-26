@@ -11,10 +11,10 @@ import type {
   AdsType,
   AgeType,
   CampaignObjectiveKey,
-  CampaignFormData
+  BriefFormData
 } from "@/types/campaign-brief";
 
-const defaultFormData: CampaignFormData = {
+const defaultFormData: BriefFormData = {
   brand: {
     brandName: "",
     description: ""
@@ -52,7 +52,7 @@ interface CreateCampaignProps {
     selectedObjective: CampaignObjectiveKey;
     selectedSubtype: string;
     selectedConversionGoals: string[];
-    formData: CampaignFormData;
+    formData: BriefFormData;
   }) => Promise<void>;
 }
 
@@ -76,7 +76,7 @@ export function CreateCampaign({
   >([]);
 
   // Step 2 state
-  const [formData, setFormData] = useState<CampaignFormData>(defaultFormData);
+  const [formData, setFormData] = useState<BriefFormData>(defaultFormData);
 
   // Modal state
   const [modalOpen, setModalOpen] = useState(false);

@@ -34,12 +34,15 @@ import {
   SelectValue
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
-import type { CampaignObjectiveKey, CampaignFormData } from "@/types/campaign-brief";
+import type {
+  CampaignObjectiveKey,
+  BriefFormData
+} from "@/types/campaign-brief";
 
 interface CampaignDetailsStepProps {
   selectedObjective: CampaignObjectiveKey;
-  formData: CampaignFormData;
-  onFormChange: (data: CampaignFormData) => void;
+  formData: BriefFormData;
+  onFormChange: (data: BriefFormData) => void;
   onBack: () => void;
   onCreate: () => void;
   isSubmitting: boolean;
@@ -83,21 +86,17 @@ export function CampaignDetailsStep({
     if (!formData.budget.startTime)
       newErrors.startTime = "Start time is required";
     if (formData.budget.hasEndDate) {
-      if (!formData.budget.endDate)
-        newErrors.endDate = "End date is required";
-      if (!formData.budget.endTime)
-        newErrors.endTime = "End time is required";
+      if (!formData.budget.endDate) newErrors.endDate = "End date is required";
+      if (!formData.budget.endTime) newErrors.endTime = "End time is required";
     }
 
     // Audience
     if (!formData.audience.location.trim())
       newErrors.location = "Location is required";
-    if (!formData.audience.age)
-      newErrors.age = "Age is required";
+    if (!formData.audience.age) newErrors.age = "Age is required";
     if (!formData.audience.language)
       newErrors.language = "Language is required";
-    if (!formData.audience.gender)
-      newErrors.gender = "Gender is required";
+    if (!formData.audience.gender) newErrors.gender = "Gender is required";
     if (!formData.audience.interest || formData.audience.interest.length === 0)
       newErrors.interest = "At least one interest is required";
 
@@ -196,17 +195,17 @@ export function CampaignDetailsStep({
     ? new Date(formData.budget.endDate)
     : undefined;
 
-const formatNumber = (value: string) => {
-  const numericValue = value.replace(/\D/g, "");
+  const formatNumber = (value: string) => {
+    const numericValue = value.replace(/\D/g, "");
 
-  return new Intl.NumberFormat("en-US").format(Number(numericValue));
-};
+    return new Intl.NumberFormat("en-US").format(Number(numericValue));
+  };
 
-const handleBudgetChange = (value: string) => {
-  const rawValue = value.replace(/\D/g, "");
+  const handleBudgetChange = (value: string) => {
+    const rawValue = value.replace(/\D/g, "");
 
-  updateBudget("budget", rawValue);
-};
+    updateBudget("budget", rawValue);
+  };
 
   return (
     <div className="flex flex-col min-h-[calc(100vh-56px)]">
@@ -241,12 +240,15 @@ const handleBudgetChange = (value: string) => {
                   value={formData.brand.brandName}
                   onChange={(e) => {
                     updateBrand("brandName", e.target.value);
-                    if (errors.brandName) setErrors((p) => ({ ...p, brandName: "" }));
+                    if (errors.brandName)
+                      setErrors((p) => ({ ...p, brandName: "" }));
                   }}
                   className={`mt-1.5 h-10 text-sm ${errors.brandName ? "border-red-400 focus-visible:ring-red-400" : "border-gray-200"}`}
                 />
                 {errors.brandName && (
-                  <p className="text-xs text-red-500 mt-1">{errors.brandName}</p>
+                  <p className="text-xs text-red-500 mt-1">
+                    {errors.brandName}
+                  </p>
                 )}
               </div>
 
@@ -294,10 +296,13 @@ const handleBudgetChange = (value: string) => {
                     value={formData.budget.budgetType}
                     onValueChange={(value) => {
                       updateBudget("budgetType", value);
-                      if (errors.budgetType) setErrors((p) => ({ ...p, budgetType: "" }));
+                      if (errors.budgetType)
+                        setErrors((p) => ({ ...p, budgetType: "" }));
                     }}
                   >
-                    <SelectTrigger className={`mt-1.5 h-10 text-sm ${errors.budgetType ? "border-red-400" : "border-gray-200"}`}>
+                    <SelectTrigger
+                      className={`mt-1.5 h-10 text-sm ${errors.budgetType ? "border-red-400" : "border-gray-200"}`}
+                    >
                       <SelectValue placeholder="Select budget type" />
                     </SelectTrigger>
                     <SelectContent>
@@ -306,7 +311,9 @@ const handleBudgetChange = (value: string) => {
                     </SelectContent>
                   </Select>
                   {errors.budgetType && (
-                    <p className="text-xs text-red-500 mt-1">{errors.budgetType}</p>
+                    <p className="text-xs text-red-500 mt-1">
+                      {errors.budgetType}
+                    </p>
                   )}
                 </div>
 
@@ -321,10 +328,13 @@ const handleBudgetChange = (value: string) => {
                     <Input
                       type="text"
                       placeholder="Input Budget"
-                      value={formatNumber(formData.budget.budget?.toString() || "")}
+                      value={formatNumber(
+                        formData.budget.budget?.toString() || ""
+                      )}
                       onChange={(e) => {
                         handleBudgetChange(e.target.value);
-                        if (errors.budget) setErrors((p) => ({ ...p, budget: "" }));
+                        if (errors.budget)
+                          setErrors((p) => ({ ...p, budget: "" }));
                       }}
                       className={`h-10 text-sm pl-7 pr-3 ${errors.budget ? "border-red-400 focus-visible:ring-red-400" : "border-gray-200"}`}
                     />
@@ -348,7 +358,9 @@ const handleBudgetChange = (value: string) => {
                         className={cn(
                           "mt-1.5 w-full h-10 justify-start text-left font-normal text-sm bg-white hover:bg-white",
                           !parsedStartDate && "text-gray-400",
-                          errors.startDate ? "border-red-400" : "border-gray-200"
+                          errors.startDate
+                            ? "border-red-400"
+                            : "border-gray-200"
                         )}
                       >
                         <CalendarIcon className="mr-2 h-4 w-4 text-gray-400" />
@@ -363,16 +375,22 @@ const handleBudgetChange = (value: string) => {
                         selected={parsedStartDate}
                         onSelect={(date) => {
                           if (date) {
-                            updateBudget("startDate", format(date, "yyyy-MM-dd"));
+                            updateBudget(
+                              "startDate",
+                              format(date, "yyyy-MM-dd")
+                            );
                             setStartDateOpen(false);
-                            if (errors.startDate) setErrors((p) => ({ ...p, startDate: "" }));
+                            if (errors.startDate)
+                              setErrors((p) => ({ ...p, startDate: "" }));
                           }
                         }}
                       />
                     </PopoverContent>
                   </Popover>
                   {errors.startDate && (
-                    <p className="text-xs text-red-500 mt-1">{errors.startDate}</p>
+                    <p className="text-xs text-red-500 mt-1">
+                      {errors.startDate}
+                    </p>
                   )}
                 </div>
 
@@ -386,14 +404,17 @@ const handleBudgetChange = (value: string) => {
                       value={formData.budget.startTime}
                       onChange={(time) => {
                         updateBudget("startTime", time);
-                        if (errors.startTime) setErrors((p) => ({ ...p, startTime: "" }));
+                        if (errors.startTime)
+                          setErrors((p) => ({ ...p, startTime: "" }));
                       }}
                       date={parsedStartDate}
                       placeholder="Choose Time"
                     />
                   </div>
                   {errors.startTime && (
-                    <p className="text-xs text-red-500 mt-1">{errors.startTime}</p>
+                    <p className="text-xs text-red-500 mt-1">
+                      {errors.startTime}
+                    </p>
                   )}
                 </div>
               </div>
@@ -450,7 +471,9 @@ const handleBudgetChange = (value: string) => {
                           className={cn(
                             "mt-1.5 w-full h-10 justify-start text-left font-normal text-sm bg-white hover:bg-white",
                             !parsedEndDate && "text-gray-400",
-                            errors.endDate ? "border-red-400" : "border-gray-200"
+                            errors.endDate
+                              ? "border-red-400"
+                              : "border-gray-200"
                           )}
                         >
                           <CalendarIcon className="mr-2 h-4 w-4 text-gray-400" />
@@ -465,16 +488,22 @@ const handleBudgetChange = (value: string) => {
                           selected={parsedEndDate}
                           onSelect={(date) => {
                             if (date) {
-                              updateBudget("endDate", format(date, "yyyy-MM-dd"));
+                              updateBudget(
+                                "endDate",
+                                format(date, "yyyy-MM-dd")
+                              );
                               setEndDateOpen(false);
-                              if (errors.endDate) setErrors((p) => ({ ...p, endDate: "" }));
+                              if (errors.endDate)
+                                setErrors((p) => ({ ...p, endDate: "" }));
                             }
                           }}
                         />
                       </PopoverContent>
                     </Popover>
                     {errors.endDate && (
-                      <p className="text-xs text-red-500 mt-1">{errors.endDate}</p>
+                      <p className="text-xs text-red-500 mt-1">
+                        {errors.endDate}
+                      </p>
                     )}
                   </div>
 
@@ -488,14 +517,17 @@ const handleBudgetChange = (value: string) => {
                         value={formData.budget.endTime}
                         onChange={(time) => {
                           updateBudget("endTime", time);
-                          if (errors.endTime) setErrors((p) => ({ ...p, endTime: "" }));
+                          if (errors.endTime)
+                            setErrors((p) => ({ ...p, endTime: "" }));
                         }}
                         date={parsedEndDate}
                         placeholder="Choose Time"
                       />
                     </div>
                     {errors.endTime && (
-                      <p className="text-xs text-red-500 mt-1">{errors.endTime}</p>
+                      <p className="text-xs text-red-500 mt-1">
+                        {errors.endTime}
+                      </p>
                     )}
                   </div>
                 </div>
@@ -534,7 +566,8 @@ const handleBudgetChange = (value: string) => {
                       value={locationQuery}
                       onChange={(e) => {
                         handleLocationSearch(e.target.value);
-                        if (errors.location) setErrors((p) => ({ ...p, location: "" }));
+                        if (errors.location)
+                          setErrors((p) => ({ ...p, location: "" }));
                       }}
                       onFocus={() =>
                         locationQuery.length > 1 &&
@@ -543,23 +576,26 @@ const handleBudgetChange = (value: string) => {
                       className={`h-10 text-sm pr-10 ${errors.location ? "border-red-400 focus-visible:ring-red-400" : "border-gray-200"}`}
                     />
                     <MapPin className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 pointer-events-none" />
-                    {showLocationSuggestions && locationSuggestions.length > 0 && (
-                      <div className="absolute z-10 mt-1 left-0 right-0 bg-white border border-gray-200 rounded-md shadow-lg max-h-48 overflow-y-auto">
-                        {locationSuggestions.map((loc, i) => (
-                          <button
-                            key={i}
-                            type="button"
-                            onClick={() => selectLocation(loc)}
-                            className="w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50"
-                          >
-                            {loc}
-                          </button>
-                        ))}
-                      </div>
-                    )}
+                    {showLocationSuggestions &&
+                      locationSuggestions.length > 0 && (
+                        <div className="absolute z-10 mt-1 left-0 right-0 bg-white border border-gray-200 rounded-md shadow-lg max-h-48 overflow-y-auto">
+                          {locationSuggestions.map((loc, i) => (
+                            <button
+                              key={i}
+                              type="button"
+                              onClick={() => selectLocation(loc)}
+                              className="w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                            >
+                              {loc}
+                            </button>
+                          ))}
+                        </div>
+                      )}
                   </div>
                   {errors.location && (
-                    <p className="text-xs text-red-500 mt-1">{errors.location}</p>
+                    <p className="text-xs text-red-500 mt-1">
+                      {errors.location}
+                    </p>
                   )}
                 </div>
 
@@ -574,7 +610,9 @@ const handleBudgetChange = (value: string) => {
                       if (errors.age) setErrors((p) => ({ ...p, age: "" }));
                     }}
                   >
-                    <SelectTrigger className={`mt-1.5 h-10 text-sm ${errors.age ? "border-red-400" : "border-gray-200"}`}>
+                    <SelectTrigger
+                      className={`mt-1.5 h-10 text-sm ${errors.age ? "border-red-400" : "border-gray-200"}`}
+                    >
                       <SelectValue placeholder="Select Age" />
                     </SelectTrigger>
                     <SelectContent>
@@ -600,10 +638,13 @@ const handleBudgetChange = (value: string) => {
                     value={formData.audience.language}
                     onValueChange={(value) => {
                       updateAudience("language", value);
-                      if (errors.language) setErrors((p) => ({ ...p, language: "" }));
+                      if (errors.language)
+                        setErrors((p) => ({ ...p, language: "" }));
                     }}
                   >
-                    <SelectTrigger className={`mt-1.5 h-10 text-sm ${errors.language ? "border-red-400" : "border-gray-200"}`}>
+                    <SelectTrigger
+                      className={`mt-1.5 h-10 text-sm ${errors.language ? "border-red-400" : "border-gray-200"}`}
+                    >
                       <SelectValue placeholder="Select Language" />
                     </SelectTrigger>
                     <SelectContent>
@@ -613,7 +654,9 @@ const handleBudgetChange = (value: string) => {
                     </SelectContent>
                   </Select>
                   {errors.language && (
-                    <p className="text-xs text-red-500 mt-1">{errors.language}</p>
+                    <p className="text-xs text-red-500 mt-1">
+                      {errors.language}
+                    </p>
                   )}
                 </div>
               </div>
@@ -698,7 +741,8 @@ const handleBudgetChange = (value: string) => {
                                   ? [...current, option.value]
                                   : current.filter((v) => v !== option.value);
                                 updateAudience("interest", updated);
-                                if (errors.interest) setErrors((p) => ({ ...p, interest: "" }));
+                                if (errors.interest)
+                                  setErrors((p) => ({ ...p, interest: "" }));
                               }}
                               className="border-gray-300 data-[state=checked]:bg-primary-500 data-[state=checked]:border-primary-500"
                             />
@@ -709,7 +753,9 @@ const handleBudgetChange = (value: string) => {
                     </PopoverContent>
                   </Popover>
                   {errors.interest ? (
-                    <p className="text-xs text-red-500 mt-1">{errors.interest}</p>
+                    <p className="text-xs text-red-500 mt-1">
+                      {errors.interest}
+                    </p>
                   ) : (
                     <p className="text-xs text-gray-500 mt-1.5">
                       Add any interests related to your audience
@@ -725,9 +771,7 @@ const handleBudgetChange = (value: string) => {
                 <Textarea
                   placeholder="Type here"
                   value={formData.audience.detail}
-                  onChange={(e) =>
-                    updateAudience("detail", e.target.value)
-                  }
+                  onChange={(e) => updateAudience("detail", e.target.value)}
                   className="mt-1.5 min-h-20 border-gray-200 text-sm resize-none"
                 />
                 <p className="text-xs text-gray-500 mt-1.5">
