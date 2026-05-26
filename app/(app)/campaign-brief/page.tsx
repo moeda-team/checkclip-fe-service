@@ -184,7 +184,7 @@ export default function CampaignBriefListPage() {
                 <p className="text-xs text-gray-400 mt-0.5">{debouncedSearch ? `No briefs match "${debouncedSearch}"` : "Create your first campaign brief"}</p>
               </div>
               {!debouncedSearch && (
-                <button onClick={() => router.push("/campaign/brief/create")} className="text-xs text-purple-600 font-medium hover:underline">+ Create New</button>
+                <button onClick={() => router.push("/campaign-brief/create")} className="text-xs text-purple-600 font-medium hover:underline">+ Create New</button>
               )}
             </div>
           ) : (
