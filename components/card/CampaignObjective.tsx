@@ -81,14 +81,17 @@ export function CampaignObjective({ selected, onSelect }: Props) {
           type="button"
           onClick={() => onSelect(obj.key)}
           className={cn(
-            "text-left rounded-xl border transition-all overflow-hidden flex flex-col h-full p-5",
+            "text-left rounded-xl border-2 transition-all flex flex-col h-full p-5",
             selected === obj.key
-              ? "border-primary-500 ring-1 ring-primary-200"
+              ? "border-primary-500 ring-2 ring-primary-200 shadow-md"
               : "border-gray-200 hover:border-gray-300"
           )}
         >
           {/* Icon banner — fixed height */}
-          <div className="h-28 shrink-0 bg-linear-to-br from-primary-600 to-primary-700 flex items-center justify-center rounded-xl">
+          <div
+            className="h-28 shrink-0 flex items-center justify-center rounded-xl"
+            style={{ background: "radial-gradient(circle, #7C3AED, #57388B)" }}
+          >
             {obj.icon}
           </div>
           {/* Content — grows to fill remaining space */}
