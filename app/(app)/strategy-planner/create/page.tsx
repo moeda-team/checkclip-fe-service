@@ -7,12 +7,14 @@ import { usePostStrategyPlanner } from "@/app/(app)/strategy-planner/hooks/useSt
 import type { CreateStrategyPlannerPayload } from "@/app/(app)/strategy-planner/types";
 import { CreateCampaign } from "@/components/campaign/CreateCampaign";
 import { PageHeader } from "@/components/layout/PageHeader";
+import { StrategyPlannerGenerating } from "./StrategyPlannerGenerating";
 import type {
   AdsType,
   CampaignFormData,
   CampaignObjectiveKey
 } from "@/types/campaign";
 import { useCallback } from "react";
+import { useRouter } from "next/navigation";
 
 // Transform campaign form data to strategy planner payload
 const buildStrategyPlannerPayload = (data: {
@@ -33,7 +35,7 @@ const buildStrategyPlannerPayload = (data: {
   tenant_id: "",
   brand: {
     name: data.formData.brand.brandName,
-    description: data.formData.brand.description,
+    description: data.formData.brand.description ?? "",
     industry_vertical: data.formData.brand.industryVertical,
     competition_level: data.formData.brand.competitionLevel,
     product_average_price: Number(data.formData.brand.productAveragePrice) || 0,
@@ -68,7 +70,8 @@ const buildStrategyPlannerPayload = (data: {
 });
 
 export default function StrategyPlannerCreatePage() {
-  const { mutateAsync } = usePostStrategyPlanner();
+  const router = useRouter();
+  const { mutateAsync, isPending } = usePostStrategyPlanner();
 
   const handleOnSubmit = useCallback(
     async (data: {
@@ -80,10 +83,25 @@ export default function StrategyPlannerCreatePage() {
       formData: CampaignFormData;
     }) => {
       const payload = buildStrategyPlannerPayload(data);
-      await mutateAsync(payload);
+      const response = await mutateAsync(payload);
+
+      // Redirect to detail page after successful creation
+      if (response.data?.id) {
+        router.push(`/strategy-planner/${response.data.id}/detail`);
+      }
     },
-    [mutateAsync]
+    [mutateAsync, router]
   );
+
+  // Show generating screen while strategy planner is being created
+  if (isPending) {
+    return (
+      <div className="flex flex-col min-h-[calc(100vh-56px)]">
+        <PageHeader title="Create New Strategy Planner" showBackButton />
+        <StrategyPlannerGenerating />
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col min-h-[calc(100vh-56px)]">

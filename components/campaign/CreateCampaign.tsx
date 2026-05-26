@@ -26,7 +26,7 @@ const defaultFormData: CampaignFormData = {
     description: ""
   },
   budget: {
-    budgetType: "",
+    budgetType: "daily",
     budget: "",
     startDate: "",
     startTime: "",
@@ -40,6 +40,7 @@ const defaultFormData: CampaignFormData = {
     age: "" as AgeType,
     language: "",
     gender: "all",
+    interest: "",
     audienceSize: "",
     audienceInterest: [],
     detailAudience: ""
@@ -92,6 +93,32 @@ export function CreateCampaign({
   const [errorMessage, setErrorMessage] = useState<string | undefined>();
 
   const canProceed = !!selectedObjective && campaignName.trim().length > 0;
+
+  // Validate that all required fields are filled (only end_date, product_average_price, product_average_rating are optional)
+  const canCreate = (): boolean => {
+    const { brand, budget, audience } = formData;
+    const hasValue = (val: string | undefined): boolean =>
+      val !== undefined && val.trim().length > 0;
+
+    return (
+      // Brand required fields
+      hasValue(brand.brandName) &&
+      hasValue(brand.industryVertical) &&
+      hasValue(brand.description) &&
+      // Budget required fields
+      hasValue(budget.budgetType) &&
+      hasValue(budget.budget) &&
+      hasValue(budget.startDate) &&
+      hasValue(budget.startTime) &&
+      // Audience required fields
+      hasValue(audience.location) &&
+      hasValue(audience.age) &&
+      hasValue(audience.language) &&
+      hasValue(audience.gender) &&
+      audience.audienceInterest.length > 0 &&
+      hasValue(audience.detailAudience)
+    );
+  };
 
   const reset = () => {
     setErrorMessage(undefined);
@@ -223,6 +250,7 @@ export function CreateCampaign({
         onBack={handleBack}
         onCreate={handleCreateClick}
         isSubmitting={isSubmitting}
+        canCreate={canCreate()}
       />
     );
   }
