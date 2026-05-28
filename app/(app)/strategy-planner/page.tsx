@@ -90,21 +90,31 @@ export default function StrategyPlannerPage() {
     {
       id: "brand_name",
       header: "Brand Name",
-      cell: () => "-"
+      accessorFn: (row) => row.brand?.name ?? "-"
     },
     {
-      id: "planner_type",
+      accessorKey: "planner_type",
       header: "Objective"
     },
     {
       id: "total_budget",
       header: "Total Budget",
-      cell: () => "-"
+      accessorFn: (row) =>
+        row.budget?.amount
+          ? new Intl.NumberFormat("en-US", {
+              style: "currency",
+              currency: "USD",
+              minimumFractionDigits: 0
+            }).format(row.budget.amount)
+          : "-"
     },
     {
       id: "budget_type",
       header: "Budget Type",
-      cell: () => "-"
+      accessorFn: (row) =>
+        row.budget?.type
+          ? row.budget.type.charAt(0).toUpperCase() + row.budget.type.slice(1)
+          : "-"
     },
     {
       id: "actions",
