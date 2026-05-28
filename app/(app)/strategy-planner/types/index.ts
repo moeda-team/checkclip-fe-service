@@ -4,6 +4,7 @@
 export type StrategyPlannerType = "awareness" | "traffic" | "sales" | "leads" | "app_detail";
 
 export interface StrategyPlannerBrand {
+  planner_id?: string;
   name: string;
   description: string;
   industry_vertical: string;
@@ -13,6 +14,7 @@ export interface StrategyPlannerBrand {
 }
 
 export interface StrategyPlannerBudget {
+  planner_id?: string;
   type: string;
   amount: number;
   start_date: string;
@@ -20,6 +22,7 @@ export interface StrategyPlannerBudget {
 }
 
 export interface StrategyPlannerAudience {
+  planner_id?: string;
   location: string;
   age: string;
   language: string;
@@ -42,11 +45,60 @@ export interface StrategyPlannerDto {
   brand: StrategyPlannerBrand;
   budget: StrategyPlannerBudget;
   audience: StrategyPlannerAudience;
-  status: "draft" | "active" | "completed" | "archived";
-  createdAt: string;
-  updatedAt: string;
+  status?: "draft" | "active" | "completed" | "archived";
+  createdAt?: string;
+  updatedAt?: string;
   createdBy?: string;
+  tenant?: {
+    id: string;
+    code: string;
+    name: string;
+    domain: string;
+  };
   tenant_id?: string;
+  result_ai?: StrategyPlannerResultAI[];
+}
+
+export interface StrategyPlannerResultAI {
+  platform: string;
+  result: {
+    model_source: string;
+    matched_interest: string;
+    base_case: StrategyPlannerScenarioData;
+    aggressive: StrategyPlannerScenarioData;
+    conservative: StrategyPlannerScenarioData;
+  };
+}
+
+export interface StrategyPlannerScenarioData {
+  notes: string;
+  confidence: string;
+  predicted_cpm_usd: number;
+  predicted_ctr_pct: number;
+  predicted_cpc_usd?: number | null;
+  predicted_cpi_usd?: number | null;
+  predicted_cpl_usd?: number | null;
+  predicted_cvr_pct?: number | null;
+  predicted_install_rate_pct?: number | null;
+  predicted_engagement_rate_pct?: number | null;
+  platform_fit_score: number;
+  roi: {
+    roas?: number | null;
+    roi_pct?: number | null;
+    estimated_conversions?: number | null;
+    estimated_revenue_usd?: number | null;
+  };
+  budget_simulation: {
+    budget_usd: number;
+    est_impressions: number;
+    est_clicks: number;
+    est_leads?: number | null;
+    est_installs?: number | null;
+    est_sessions?: number | null;
+    est_video_views?: number | null;
+    est_landing_page_views?: number | null;
+    effective_cpc_usd?: number | null;
+  };
 }
 
 export interface StrategyPlannerTableRow {
