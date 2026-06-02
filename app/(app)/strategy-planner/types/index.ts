@@ -57,6 +57,7 @@ export interface StrategyPlannerDto {
   };
   tenant_id?: string;
   result_ai?: StrategyPlannerResultAI[];
+  brief_histories?: BriefHistory[];
 }
 
 export interface StrategyPlannerResultAI {
@@ -156,4 +157,12 @@ export interface StrategyPlannerFilter {
   sortBy?: string;
   sortOrder?: "asc" | "desc";
   status?: string;
+}
+
+export interface BriefHistory {
+  brief_id: string;
+  platform: string;
+  scenario: string;
+  created_at: string;
+  created_by: string;
 }

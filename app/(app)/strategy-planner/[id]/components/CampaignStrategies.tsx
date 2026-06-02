@@ -19,7 +19,8 @@ import {
   Target,
   TrendingUp,
   Zap,
-  FileText
+  FileText,
+  Check
 } from "lucide-react";
 import { FcGoogle } from "react-icons/fc";
 import { SiLine, SiMeta } from "react-icons/si";
@@ -46,10 +47,33 @@ interface CampaignStrategy {
     impressions: string;
     cpm: string;
   };
+  isAccepted: boolean;
+  briefId?: string;
 }
 
 interface CampaignStrategiesProps {
   id: string;
+}
+
+// Check if a strategy has been accepted based on brief_histories
+function isStrategyAccepted(
+  briefHistories: any[] | undefined,
+  platform: string,
+  scenario: string
+): { isAccepted: boolean; briefId?: string } {
+  if (!briefHistories || !Array.isArray(briefHistories)) {
+    return { isAccepted: false };
+  }
+
+  const match = briefHistories.find(
+    (h) => h.platform === platform && h.scenario === scenario
+  );
+
+  if (match) {
+    return { isAccepted: true, briefId: match.brief_id };
+  }
+
+  return { isAccepted: false };
 }
 
 // Transform API result_ai into campaign strategies (3 cards per platform)
@@ -61,6 +85,7 @@ function transformApiData(data: any): CampaignStrategy[] {
   const strategies: CampaignStrategy[] = [];
   // Get the campaign name from the strategy planner data
   const campaignName = data.title || "Campaign Strategy";
+  const briefHistories = data.brief_histories || [];
 
   data.result_ai.forEach((item: any, platformIndex: number) => {
     const platform = item.platform || "google";
@@ -106,6 +131,13 @@ function transformApiData(data: any): CampaignStrategy[] {
           ? ((budgetUsdValue / estImpressions) * 1000).toFixed(2)
           : "N/A";
 
+      // Check if this strategy has been accepted
+      const { isAccepted, briefId } = isStrategyAccepted(
+        briefHistories,
+        platform,
+        key
+      );
+
       strategies.push({
         id: `${platform}-${key}-${platformIndex}`,
         title: `${campaignName} — ${label}`,
@@ -121,7 +153,9 @@ function transformApiData(data: any): CampaignStrategy[] {
           impressions:
             estImpressions > 0 ? estImpressions.toLocaleString() : "N/A",
           cpm: cpm !== "N/A" ? `$${cpm}` : "N/A"
-        }
+        },
+        isAccepted,
+        briefId
       });
     });
   });
@@ -225,6 +259,7 @@ function CampaignStrategyCard({
   onAccept: () => void;
   isAccepting: boolean;
 }) {
+  const router = useRouter();
   const scenarioColors: Record<
     string,
     { bg: string; text: string; lightBg: string }
@@ -235,8 +270,27 @@ function CampaignStrategyCard({
   };
   const color = scenarioColors[strategy.scenario];
 
+  const handleCampaignBriefClick = () => {
+    if (strategy.briefId) {
+      router.push(`/campaign-brief?selectedId=${strategy.briefId}`);
+    } else {
+      router.push("/campaign-brief");
+    }
+  };
+
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-5">
+    <div
+      className={`bg-white rounded-xl border p-5 relative ${
+        strategy.isAccepted ? "border-green-500 border-2" : "border-gray-200"
+      }`}
+    >
+      {/* Accepted Checkmark Badge */}
+      {strategy.isAccepted && (
+        <div className="absolute -top-2 -right-2 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
+          <Check className="w-4 h-4 text-white" />
+        </div>
+      )}
+
       {/* Header: Icon + Title + Scenario Badge */}
       <div className="flex items-start gap-3 mb-4">
         <div
@@ -337,14 +391,31 @@ function CampaignStrategyCard({
         </div>
       </div>
 
-      {/* Accept Button */}
-      <Button
-        className="w-full bg-green-600 hover:bg-green-700 text-white h-11 text-sm font-medium rounded-lg"
-        onClick={onAccept}
-        disabled={isAccepting}
-      >
-        {isAccepting ? "Generating..." : "Accept"}
-      </Button>
+      {/* Buttons */}
+      {strategy.isAccepted ? (
+        <div className="flex gap-3">
+          <Button
+            className="flex-1 bg-gray-900 hover:bg-gray-800 text-white h-11 text-sm font-medium rounded-lg"
+            onClick={handleCampaignBriefClick}
+          >
+            Campaign Brief
+          </Button>
+          <Button
+            className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 h-11 text-sm font-medium rounded-lg cursor-default"
+            disabled
+          >
+            Accepted
+          </Button>
+        </div>
+      ) : (
+        <Button
+          className="w-full bg-green-600 hover:bg-green-700 text-white h-11 text-sm font-medium rounded-lg"
+          onClick={onAccept}
+          disabled={isAccepting}
+        >
+          {isAccepting ? "Generating..." : "Accept"}
+        </Button>
+      )}
     </div>
   );
 }
