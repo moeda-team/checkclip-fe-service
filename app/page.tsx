@@ -781,7 +781,7 @@ export default function LandingPage() {
     justify-center
     rounded-full
     overflow-hidden
-    p-[1px]
+    p-px
     group
   "
             >
@@ -1115,7 +1115,7 @@ shadow-[0_0_20px_rgba(59,130,246,0.15)]
                   />
 
                   {/* Overlay gradient */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+                  <div className="absolute inset-0 bg-linear-to-t from-black/20 to-transparent" />
                 </div>
               </div>
             </div>
@@ -1366,7 +1366,7 @@ shadow-[0_0_20px_rgba(59,130,246,0.15)]
             <h2 className="text-3xl md:text-4xl font-normal text-gray-900 mb-3">
               {tx.planCampaigns.h2}
             </h2>
-            <p className="text-3xl text-base text-gray-500  leading-relaxed">
+            <p className="text-3xl text-gray-500  leading-relaxed">
               {tx.planCampaigns.sub}
             </p>
           </FadeInSection>
@@ -1385,7 +1385,7 @@ shadow-[0_0_20px_rgba(59,130,246,0.15)]
                   }}
                 />
                 {/* Fade-out gradient at bottom so grid doesn't clash with content */}
-                <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-white to-transparent pointer-events-none" />
+                <div className="absolute inset-x-0 bottom-0 h-24 bg-linear-to-t from-white to-transparent pointer-events-none" />
 
                 <div className="relative z-10">
                   <h3 className="text-2xl md:text-2xl font-normal text-gray-900 mb-2">
@@ -1426,7 +1426,7 @@ shadow-[0_0_20px_rgba(59,130,246,0.15)]
                   }}
                 />
                 {/* Fade-out gradient at bottom */}
-                <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-white to-transparent pointer-events-none" />
+                <div className="absolute inset-x-0 bottom-0 h-24 bg-linear-to-t from-white to-transparent pointer-events-none" />
 
                 <div className="relative z-10">
                   <h3 className="text-2xl md:text-2xl font-normal text-gray-900 mb-2">
@@ -1486,7 +1486,7 @@ shadow-[0_0_20px_rgba(59,130,246,0.15)]
             />
 
             {/* Optional dark overlay */}
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-600/40 to-blue-500/10" />
+            <div className="absolute inset-0 bg-linear-to-r from-blue-600/40 to-blue-500/10" />
 
             {/* CONTENT */}
             <div className="relative z-10 max-w-3xl">

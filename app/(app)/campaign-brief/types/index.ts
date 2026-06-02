@@ -101,9 +101,58 @@ export interface CampaignBrief {
   brand?: CampaignBriefBrand;
   budget?: CampaignBriefBudget;
   audience?: CampaignBriefAudience;
+  result_ai?: CampaignBriefResultAi;
   created_at?: string;
   updated_at?: string;
 }
+
+// ─── Result AI Types ──────────────────────────────────────────────────────────
+
+export type BudgetCategory = {
+  creative_format: string;
+  description: string;
+  quantity: number;
+  amount_usd: number;
+  percentage: number;
+};
+
+export type BudgetBreakdown = {
+  total_budget_usd: number;
+  categories: BudgetCategory[];
+};
+
+export type KeyMessage = {
+  headline: string;
+  tagline: string;
+  primary_message: string;
+  call_to_action: string;
+  tone: string;
+  key_themes: string[];
+};
+
+export type TimelinePhase = {
+  day_range: string;
+  phase_name: string;
+  goal: string;
+  action_items: string[];
+};
+
+export type TimelineAndMilestones = {
+  total_duration_days: number;
+  phases: TimelinePhase[];
+  primary_success_metric: string;
+};
+
+export type CampaignBriefResultAi = {
+  objective: string;
+  platform: string;
+  scenario: string;
+  budget_breakdown: BudgetBreakdown;
+  key_message: KeyMessage;
+  timeline_and_milestones: TimelineAndMilestones;
+  confidence: string;
+  notes: string;
+};
 
 export type CampaignBriefDetailResponse = {
   status: boolean;
