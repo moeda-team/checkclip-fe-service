@@ -219,15 +219,110 @@ export function BudgetContent({ brief }: { brief: CampaignBrief }) {
 export function AudienceContent({ brief }: { brief: CampaignBrief }) {
   const a = brief.audience;
   if (!a) return <p className="text-sm text-gray-400">No audience data</p>;
+
+  // interest disimpan sebagai comma-separated string
+  const interestTags = a.interest
+    ? a.interest.split(",").map((s) => s.trim()).filter(Boolean)
+    : [];
+
+  const genderOptions = [
+    { value: "all", label: "All" },
+    { value: "men", label: "Men" },
+    { value: "women", label: "Women" },
+  ];
+
   return (
-    <div className="space-y-4">
+    <div className="space-y-5">
+      {/* Location, Age, Language */}
       <div className="grid grid-cols-3 gap-4">
-        <div><p className="text-xs font-medium text-gray-500 mb-1">Location</p><p className="text-sm text-gray-900">{a.location || "—"}</p></div>
-        <div><p className="text-xs font-medium text-gray-500 mb-1">Age</p><p className="text-sm text-gray-900">{a.age || "—"}</p></div>
-        <div><p className="text-xs font-medium text-gray-500 mb-1">Language</p><p className="text-sm text-gray-900">{a.language || "—"}</p></div>
+        {/* Location */}
+        <div>
+          <p className="text-sm font-medium text-gray-700 mb-1.5">Location</p>
+          <div className="h-10 px-3 border border-gray-200 rounded-lg flex items-center justify-between text-sm text-gray-900">
+            <span>{a.location || <span className="text-gray-400">—</span>}</span>
+          </div>
+        </div>
+        {/* Age — select style */}
+        <div>
+          <p className="text-sm font-medium text-gray-700 mb-1.5">Age</p>
+          <div className="h-10 px-3 border border-gray-200 rounded-lg flex items-center justify-between text-sm text-gray-900">
+            <span>{a.age || <span className="text-gray-400">—</span>}</span>
+            <svg className="w-4 h-4 text-gray-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+            </svg>
+          </div>
+        </div>
+        {/* Language — select style */}
+        <div>
+          <p className="text-sm font-medium text-gray-700 mb-1.5">Language</p>
+          <div className="h-10 px-3 border border-gray-200 rounded-lg flex items-center justify-between text-sm text-gray-900">
+            <span className="capitalize">{a.language || <span className="text-gray-400">—</span>}</span>
+            <svg className="w-4 h-4 text-gray-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+            </svg>
+          </div>
+        </div>
       </div>
-      <div><p className="text-xs font-medium text-gray-500 mb-1">Gender</p><p className="text-sm text-gray-900 capitalize">{a.gender}</p></div>
-      <div><p className="text-xs font-medium text-gray-500 mb-1">Interest & Detail Audience</p><p className="text-sm text-gray-900 leading-relaxed">{a.interest || "—"}</p></div>
+
+      {/* Gender — radio button style (read-only) */}
+      <div>
+        <p className="text-sm font-medium text-gray-700 mb-2">Gender</p>
+        <div className="flex items-center gap-6">
+          {genderOptions.map((opt) => {
+            const isSelected = (a.gender || "").toLowerCase() === opt.value;
+            return (
+              <div key={opt.value} className="flex items-center gap-2">
+                <div className={cn(
+                  "w-4 h-4 rounded-full border-2 flex items-center justify-center shrink-0",
+                  isSelected ? "border-gray-900" : "border-gray-300"
+                )}>
+                  {isSelected && <div className="w-2 h-2 rounded-full bg-gray-900" />}
+                </div>
+                <span className="text-sm text-gray-700">{opt.label}</span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Audience Interest — checkbox style (read-only) */}
+      <div>
+        <p className="text-sm font-medium text-gray-700 mb-1.5">Audience Interest</p>
+        <div className="h-10 px-3 border border-gray-200 rounded-lg flex items-center justify-between text-sm">
+          {interestTags.length > 0 ? (
+            <span className="text-gray-900 truncate">{interestTags.join(", ")}</span>
+          ) : (
+            <span className="text-gray-400">—</span>
+          )}
+          <svg className="w-4 h-4 text-gray-400 shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+          </svg>
+        </div>
+        {/* {interestTags.length > 0 && (
+          // <div className="flex flex-wrap gap-1.5 mt-2">
+          //   {interestTags.map((tag, i) => (
+          //     <div key={i} className="flex items-center gap-1.5 px-2 py-1 rounded-md bg-gray-50 text-sm text-gray-700">
+          //       <div className="w-3.5 h-3.5 rounded border border-purple-500 bg-purple-500 flex items-center justify-center shrink-0">
+          //         <svg className="w-2.5 h-2.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+          //           <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+          //         </svg>
+          //       </div>
+          //       {tag}
+          //     </div>
+          //   ))}
+          // </div>
+        )} */}
+        <p className="text-xs text-gray-400 mt-1.5">Add any interests related to your audience</p>
+      </div>
+
+      {/* Detail Audience — textarea style (read-only) */}
+      <div>
+        <p className="text-sm font-medium text-gray-700 mb-1.5">Detail Audience</p>
+        <div className="w-full min-h-[80px] px-3 py-2.5 border border-gray-200 rounded-lg text-sm text-gray-900 leading-relaxed">
+          {a.detail || <span className="text-gray-400">—</span>}
+        </div>
+        <p className="text-xs text-gray-400 mt-1.5">Add any detailed demographics, or life events related to your audience</p>
+      </div>
     </div>
   );
 }
