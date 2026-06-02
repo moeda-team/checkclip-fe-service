@@ -141,6 +141,14 @@ export interface UpdateStrategyPlannerPayload {
   status?: "draft" | "active" | "completed" | "archived";
 }
 
+export type GenerateBriefScenario = "conservative" | "base_case" | "aggressive";
+
+export interface GenerateBriefPayload {
+  planner_id: string;
+  platform: string;
+  scenario: GenerateBriefScenario;
+}
+
 export interface StrategyPlannerFilter {
   page?: number;
   limit?: number;

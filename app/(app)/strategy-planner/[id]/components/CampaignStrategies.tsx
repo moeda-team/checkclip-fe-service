@@ -2,18 +2,34 @@
 
 import { Button } from "@/components/ui/button";
 import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle
+} from "@/components/ui/alert-dialog";
+import {
   Calendar,
   LocateFixed,
   Megaphone,
   Shield,
   Target,
   TrendingUp,
-  Zap
+  Zap,
+  FileText
 } from "lucide-react";
 import { FcGoogle } from "react-icons/fc";
 import { SiLine, SiMeta } from "react-icons/si";
 import { useState, useMemo } from "react";
-import { useGetStrategyPlanner } from "@/app/(app)/strategy-planner/hooks/useStrategyPlanner";
+import { useRouter } from "next/navigation";
+import {
+  useGetStrategyPlanner,
+  usePostGenerateBrief
+} from "@/app/(app)/strategy-planner/hooks/useStrategyPlanner";
+import type { GenerateBriefScenario } from "@/app/(app)/strategy-planner/types";
 
 interface CampaignStrategy {
   id: string;
@@ -200,7 +216,15 @@ function ScenarioIcon({
   return <Target className={className} />;
 }
 
-function CampaignStrategyCard({ strategy }: { strategy: CampaignStrategy }) {
+function CampaignStrategyCard({
+  strategy,
+  onAccept,
+  isAccepting
+}: {
+  strategy: CampaignStrategy;
+  onAccept: () => void;
+  isAccepting: boolean;
+}) {
   const scenarioColors: Record<
     string,
     { bg: string; text: string; lightBg: string }
@@ -314,16 +338,50 @@ function CampaignStrategyCard({ strategy }: { strategy: CampaignStrategy }) {
       </div>
 
       {/* Accept Button */}
-      <Button className="w-full bg-green-600 hover:bg-green-700 text-white h-11 text-sm font-medium rounded-lg">
-        Accept
+      <Button
+        className="w-full bg-green-600 hover:bg-green-700 text-white h-11 text-sm font-medium rounded-lg"
+        onClick={onAccept}
+        disabled={isAccepting}
+      >
+        {isAccepting ? "Generating..." : "Accept"}
       </Button>
     </div>
   );
 }
 
+const SCENARIO_TO_API: Record<
+  CampaignStrategy["scenario"],
+  GenerateBriefScenario
+> = {
+  conservative: "conservative",
+  base: "base_case",
+  aggressive: "aggressive"
+};
+
 export function CampaignStrategies({ id }: CampaignStrategiesProps) {
+  const router = useRouter();
   const { data, isLoading, error } = useGetStrategyPlanner(id);
   const [selectedScenario, setSelectedScenario] = useState<string | null>(null);
+  const [pendingStrategy, setPendingStrategy] =
+    useState<CampaignStrategy | null>(null);
+  const { mutateAsync: generateBrief, isPending: isGenerating } =
+    usePostGenerateBrief();
+
+  const handleConfirmGenerate = async () => {
+    if (!pendingStrategy) return;
+    const result = await generateBrief({
+      planner_id: id,
+      platform: pendingStrategy.platforms[0],
+      scenario: SCENARIO_TO_API[pendingStrategy.scenario]
+    });
+    setPendingStrategy(null);
+    const briefId = result?.data?.id;
+    if (briefId) {
+      router.push(`/campaign-brief?selectedId=${briefId}`);
+    } else {
+      router.push("/campaign-brief");
+    }
+  };
 
   // Transform API data to campaign strategies
   const campaignStrategies = useMemo(() => {
@@ -394,9 +452,53 @@ export function CampaignStrategies({ id }: CampaignStrategiesProps) {
       {/* Campaign Strategy Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
         {campaignStrategies.map((strategy) => (
-          <CampaignStrategyCard key={strategy.id} strategy={strategy} />
+          <CampaignStrategyCard
+            key={strategy.id}
+            strategy={strategy}
+            isAccepting={isGenerating}
+            onAccept={() => setPendingStrategy(strategy)}
+          />
         ))}
       </div>
+
+      {/* Confirmation Dialog */}
+      <AlertDialog
+        open={!!pendingStrategy}
+        onOpenChange={() => setPendingStrategy(null)}
+      >
+        <AlertDialogContent className="sm:max-w-md">
+          <AlertDialogHeader className="gap-4">
+            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
+              <FileText className="h-6 w-6 text-green-600" />
+            </div>
+            <div className="text-center">
+              <AlertDialogTitle className="text-lg font-semibold">
+                Are you sure you want to accept this strategy?
+              </AlertDialogTitle>
+              <AlertDialogDescription className="text-sm text-gray-500 mt-2">
+                Once you confirm this strategy, your campaign brief will be
+                generated automatically.
+              </AlertDialogDescription>
+            </div>
+          </AlertDialogHeader>
+          <AlertDialogFooter className="sm:justify-center gap-3">
+            <AlertDialogCancel asChild>
+              <Button variant="outline" className="w-full sm:w-auto">
+                Cancel
+              </Button>
+            </AlertDialogCancel>
+            <AlertDialogAction asChild>
+              <Button
+                className="w-full sm:w-auto bg-green-600 hover:bg-green-700 text-white"
+                onClick={handleConfirmGenerate}
+                disabled={isGenerating}
+              >
+                {isGenerating ? "Generating..." : "Accept"}
+              </Button>
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </>
   );
 }

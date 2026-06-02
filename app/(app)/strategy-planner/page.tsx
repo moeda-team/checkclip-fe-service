@@ -141,12 +141,12 @@ export default function StrategyPlannerPage() {
             >
               Edit
             </DropdownMenuItem> */}
-            {/* <DropdownMenuItem
+            <DropdownMenuItem
               className="text-destructive"
               onClick={() => handleDelete(row.original.id)}
             >
               Delete
-            </DropdownMenuItem> */}
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       )

@@ -10,7 +10,8 @@ import type {
   StrategyPlannerTableRow,
   StrategyPlannerFilter,
   CreateStrategyPlannerPayload,
-  UpdateStrategyPlannerPayload
+  UpdateStrategyPlannerPayload,
+  GenerateBriefPayload
 } from "@/app/(app)/strategy-planner/types";
 import type {
   ApiResponse,
@@ -166,6 +167,30 @@ export const useDeleteStrategyPlanner = () => {
       queryClient.invalidateQueries({
         queryKey: ["getStrategyPlanners"]
       });
+    }
+  });
+};
+
+/*
+   POST - Generate Brief from Strategy Planner
+*/
+export const usePostGenerateBrief = () => {
+  return useMutation<
+    ApiResponse<any>,
+    AxiosError<ApiResponseError>,
+    GenerateBriefPayload
+  >({
+    mutationFn: async (payload) => {
+      const response = await axios.post<ApiResponse<any>>(
+        `${STRATEGY_PLANNER_URL}brief/generate`,
+        payload
+      );
+      return response.data;
+    },
+
+    meta: {
+      errorMessage: "Failed to generate brief",
+      successMessage: "Brief generated successfully"
     }
   });
 };
