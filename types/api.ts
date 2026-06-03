@@ -20,20 +20,21 @@ export interface ApiResponseError {
 
 /** Paginated list response */
 export interface ApiResponsePagination<T, U = undefined> {
-  statusCode: string;
-  additional?: U;
+  code: string;
+  total: number;
+  message: string;
+  offset: number;
+  limit: number;
   data: T;
-  paginate: PaginationDto;
 }
 
 /** Pagination metadata returned by the backend */
 export interface PaginationDto {
+  code: string;
   total: number;
-  next: number | null;
-  prev: number | null;
-  current_page: number;
-  per_page: number;
-  total_pages: number;
+  message: string;
+  offset: number;
+  limit: number;
 }
 
 /** Standard filter params for paginated list endpoints */

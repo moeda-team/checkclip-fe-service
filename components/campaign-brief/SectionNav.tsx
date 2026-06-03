@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import {  ChevronsLeft, ChevronsRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export type SectionItem = {
@@ -38,9 +38,9 @@ export function SectionNav({
           className="w-6 h-6 rounded-md bg-purple-600 flex items-center justify-center"
         >
           {isOpen ? (
-            <ChevronLeft className="w-3.5 h-3.5 text-white" />
+            <ChevronsLeft className="w-3.5 h-3.5 text-white" />
           ) : (
-            <ChevronRight className="w-3.5 h-3.5 text-white" />
+            <ChevronsRight className="w-3.5 h-3.5 text-white" />
           )}
         </button>
       </div>
@@ -56,9 +56,9 @@ export function SectionNav({
                 type="button"
                 onClick={() => onSectionClick(sec.key)}
                 className={cn(
-                  "w-full flex items-center gap-2.5 px-4 py-2.5 text-sm transition-colors",
+                  "w-full flex items-center gap-2.5 px-4 py-2.5 text-sm transition-colors ",
                   isActive
-                    ? "text-purple-700 font-semibold bg-purple-50"
+                    ? "text-purple-700 font-semibold bg-purple-100 rounded-sm"
                     : "text-gray-600 hover:bg-gray-50"
                 )}
               >

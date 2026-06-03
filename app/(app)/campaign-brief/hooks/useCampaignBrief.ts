@@ -3,7 +3,7 @@
 
 import { useState } from "react";
 
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { axiosConfig } from "@/lib/axios";
 import { env } from "@/lib/env";
@@ -89,6 +89,40 @@ export const useGetStrategyBriefs = (filter: CampaignBriefFilter) =>
     meta: {
       errorMessage: "Failed to fetch strategy Briefs"
     }
+  });
+
+/*
+   GET - Find All Strategy Briefs (Infinite Scroll)
+*/
+export const INFINITE_PAGE_LIMIT = 15;
+
+export const useInfiniteStrategyBriefs = (search?: string) =>
+  useInfiniteQuery<
+    ApiResponsePagination<CampaignBrief[]>,
+    AxiosError<ApiResponseError>
+  >({
+    queryKey: ["getStrategyBriefsInfinite", search ?? ""],
+    initialPageParam: 0,
+    queryFn: async ({ pageParam }) => {
+      const response = await axios.get<ApiResponsePagination<CampaignBrief[]>>(
+        STRATEGY_Brief_URL,
+        {
+          params: {
+            limit: INFINITE_PAGE_LIMIT,
+            offset: pageParam as number,
+            search: search || undefined,
+          },
+        }
+      );
+      return response.data;
+    },
+    getNextPageParam: (lastPage, allPages) => {
+      const loaded = allPages.length * INFINITE_PAGE_LIMIT;
+      return loaded < lastPage.total ? loaded : undefined;
+    },
+    meta: {
+      errorMessage: "Failed to fetch strategy briefs",
+    },
   });
 
 /*

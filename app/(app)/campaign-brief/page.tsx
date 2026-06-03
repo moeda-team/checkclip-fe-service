@@ -1,49 +1,46 @@
 "use client";
 
-import { Suspense, useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { BriefList } from "@/components/campaign-brief/BriefList";
 import { BriefDetail } from "@/components/campaign-brief/BriefDetail";
 import {
-  useGetStrategyBriefs,
+  useInfiniteStrategyBriefs,
   useGetStrategyBrief,
   useApproveStrategyBrief,
 } from "./hooks/useCampaignBrief";
-import type { CampaignBriefFilter } from "./types";
-
-const PAGE_LIMIT = 10;
 
 function CampaignBriefListContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const preselectedId = searchParams.get("selectedId");
 
-  // List state
-  const [offset, setOffset] = useState(0);
+  // Search state
   const [searchInput, setSearchInput] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
 
   // Detail state
   const [selectedBriefId, setSelectedBriefId] = useState<string | null>(preselectedId);
 
-  // ── API: list ────────────────────────────────────────────────────────────
-  const listFilter: CampaignBriefFilter = {
-    limit: PAGE_LIMIT,
-    offset,
-    search: debouncedSearch || undefined,
-  };
-
+  // ── API: infinite list ───────────────────────────────────────────────────
   const {
-    data: listData,
+    data,
     isLoading: loading,
     isError: isListError,
+    isFetchingNextPage,
+    hasNextPage,
+    fetchNextPage,
     refetch: refetchList,
-  } = useGetStrategyBriefs(listFilter);
+  } = useInfiniteStrategyBriefs(debouncedSearch);
 
-  const briefs = listData?.data ?? [];
-  const total = listData?.paginate?.total ?? 0;
+  // Flatten semua halaman menjadi satu array
+  const briefs = useMemo(
+    () => data?.pages.flatMap((page) => page.data ?? []) ?? [],
+    [data]
+  );
+  const total = data?.pages[0]?.total ?? 0;
 
-  // Auto-select first brief when list loads
+  // Auto-select brief pertama saat list pertama kali load
   useEffect(() => {
     if (!selectedBriefId && briefs.length > 0) {
       setSelectedBriefId(briefs[0].id);
@@ -77,7 +74,6 @@ function CampaignBriefListContent() {
     if (debounceRef.current) clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(() => {
       setDebouncedSearch(val);
-      setOffset(0);
     }, 400);
   };
 
@@ -86,16 +82,16 @@ function CampaignBriefListContent() {
       <BriefList
         briefs={briefs}
         total={total}
-        offset={offset}
         loading={loading}
         isError={isListError}
+        isFetchingMore={isFetchingNextPage}
+        hasMore={!!hasNextPage}
         searchInput={searchInput}
         debouncedSearch={debouncedSearch}
         selectedBriefId={selectedBriefId}
         onSelectBrief={setSelectedBriefId}
         onSearchChange={handleSearchChange}
-        onPagePrev={() => setOffset((o) => Math.max(0, o - PAGE_LIMIT))}
-        onPageNext={() => setOffset((o) => o + PAGE_LIMIT)}
+        onLoadMore={fetchNextPage}
         onRetry={() => refetchList()}
       />
 
