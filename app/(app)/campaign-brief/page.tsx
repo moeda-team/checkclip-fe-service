@@ -29,7 +29,8 @@ import { AdsIcon, AllSections, BriefSkeleton } from "./function";
 import { DetailSkeleton } from "@/components/ui/skeletons";
 import {
   useGetStrategyBriefs,
-  useGetStrategyBrief
+  useGetStrategyBrief,
+  useApproveStrategyBrief
 } from "./hooks/useCampaignBrief";
 
 const PAGE_LIMIT = 10;
@@ -111,6 +112,9 @@ function CampaignBriefListContent() {
 
   const selectedBrief = detailData?.data ?? null;
 
+  const { mutate: approveBrief, isPending: isApproving } = useApproveStrategyBrief();
+  const isApproved = selectedBrief?.status === "approved";
+
   // Scroll to top when brief changes
   useEffect(() => {
     if (selectedBriefId) {
@@ -153,7 +157,7 @@ function CampaignBriefListContent() {
 
     setActiveSection(key);
     isScrollingRef.current = true;
-    container.scrollTo({ top: el.offsetTop - 16, behavior: "smooth" });
+    container.scrollTo({ top: el.offsetTop - 24, behavior: "smooth" });
     setTimeout(() => {
       isScrollingRef.current = false;
     }, 800);
@@ -355,8 +359,13 @@ function CampaignBriefListContent() {
               >
                 <MessageSquare className="w-4 h-4" /> Comment
               </Button>
-              <Button className="h-9 text-sm bg-gray-900 hover:bg-gray-800 text-white gap-1.5">
-                <Check className="w-4 h-4" /> Approve
+              <Button
+                className="h-9 text-sm bg-gray-900 hover:bg-gray-800 text-white gap-1.5 disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled={isApproved || isApproving}
+                onClick={() => selectedBriefId && approveBrief(selectedBriefId)}
+              >
+                <Check className="w-4 h-4" />
+                {isApproving ? "Approving..." : isApproved ? "Approved" : "Approve"}
               </Button>
             </div>
           </div>
@@ -418,6 +427,10 @@ function CampaignBriefListContent() {
             <div
               ref={scrollContainerRef}
               className="flex-1 overflow-y-auto p-6"
+              style={{
+                backgroundColor: "#f8f8ff",
+                backgroundSize: "24px 24px"
+              }}
             >
               <AllSections brief={selectedBrief} />
             </div>

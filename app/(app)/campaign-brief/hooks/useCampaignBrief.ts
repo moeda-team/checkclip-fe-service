@@ -183,3 +183,33 @@ export const useGetStrategyBrief = (strategyBriefId: string) =>
 //     }
 //   });
 // };
+
+/*
+   POST - Approve Strategy Brief
+*/
+export const useApproveStrategyBrief = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation<
+    ApiResponse<CampaignBrief>,
+    AxiosError<ApiResponseError>,
+    string
+  >({
+    mutationFn: async (strategyBriefId: string) => {
+      const response = await axios.post<ApiResponse<CampaignBrief>>(
+        `${STRATEGY_Brief_URL}${strategyBriefId}/approve`
+      );
+      return response.data;
+    },
+    meta: {
+      errorMessage: "Failed to approve strategy brief",
+      successMessage: "Strategy brief approved successfully"
+    },
+    onSuccess: (_, strategyBriefId) => {
+      queryClient.invalidateQueries({ queryKey: ["getStrategyBriefs"] });
+      queryClient.invalidateQueries({
+        queryKey: ["getStrategyBrief", strategyBriefId]
+      });
+    }
+  });
+};

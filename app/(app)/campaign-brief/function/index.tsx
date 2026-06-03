@@ -40,7 +40,7 @@ export  function SectionWrapper({ id, label, icon: Icon, children }: {
   id: string; label: string; icon: React.ElementType; children: React.ReactNode;
 }) {
   return (
-    <div id={id} className="scroll-mt-4 space-y-4">
+    <div id={id} className="scroll-mt-6 border border-violet-200 rounded-2xl p-6 space-y-4 bg-white">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center">
@@ -349,31 +349,25 @@ export function KeyMessageContent({ brief }: { brief: CampaignBrief }) {
 
 export function AllSections({ brief }: { brief: CampaignBrief }) {
   return (
-    <div className="space-y-10">
+    <div className="space-y-4">
       <SectionWrapper id="campaign_setup" label="Campaign Setup" icon={Settings2}>
         <CampaignSetupContent brief={brief} />
       </SectionWrapper>
-      <div className="border-t border-gray-100" />
       <SectionWrapper id="budget_breakdown" label="Budget Breakdown" icon={DollarSign}>
         <BudgetContent brief={brief} />
       </SectionWrapper>
-      <div className="border-t border-gray-100" />
       <SectionWrapper id="audience" label="Audience" icon={Users}>
         <AudienceContent brief={brief} />
       </SectionWrapper>
-      <div className="border-t border-gray-100" />
       <SectionWrapper id="ads_type" label="Ads Type" icon={Megaphone}>
         <PlaceholderContent label="Ads Type" />
       </SectionWrapper>
-      <div className="border-t border-gray-100" />
       <SectionWrapper id="placement" label="Placement" icon={FileText}>
         <PlaceholderContent label="Placement" />
       </SectionWrapper>
-      <div className="border-t border-gray-100" />
       <SectionWrapper id="key_message" label="Key Message" icon={MessageSquare}>
         <KeyMessageContent brief={brief} />
       </SectionWrapper>
-      <div className="border-t border-gray-100" />
       <SectionWrapper id="timeline_milestone" label="Timeline & Milestone" icon={FileText}>
         <PlaceholderContent label="Timeline & Milestone" />
       </SectionWrapper>
