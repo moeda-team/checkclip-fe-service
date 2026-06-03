@@ -9,6 +9,7 @@ import { axiosConfig } from "@/lib/axios";
 import { env } from "@/lib/env";
 import type {
   AdsType,
+  ApprovedStrategyBriefsResponse,
   CampaignBrief,
   CampaignBriefFilter,
   CreateStrategyBriefPayload
@@ -87,6 +88,27 @@ export const useGetStrategyBriefs = (filter: CampaignBriefFilter) =>
 
     meta: {
       errorMessage: "Failed to fetch strategy Briefs"
+    }
+  });
+
+/*
+   GET - Find All Approved Strategy Briefs
+*/
+export const useGetApprovedStrategyBriefs = (filter?: CampaignBriefFilter) =>
+  useQuery<ApprovedStrategyBriefsResponse, AxiosError<ApiResponseError>>({
+    queryKey: ["getApprovedStrategyBriefs", filter ?? {}],
+
+    queryFn: async () => {
+      const response = await axios.get<ApprovedStrategyBriefsResponse>(
+        `${STRATEGY_Brief_URL}approved`,
+        { params: filter }
+      );
+
+      return response.data;
+    },
+
+    meta: {
+      errorMessage: "Failed to fetch approved strategy briefs"
     }
   });
 

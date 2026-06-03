@@ -205,3 +205,15 @@ export interface CampaignBriefFilter {
   sortOrder?: "asc" | "desc";
   status?: string;
 }
+
+/** Response shape for GET /campaign/strategy-brief/approved.
+ *  Uses top-level total/limit/offset rather than the `paginate` envelope. */
+export interface ApprovedStrategyBriefsResponse {
+  status: boolean;
+  code: number;
+  message: string;
+  data: CampaignBrief[];
+  total: number;
+  limit: number;
+  offset: number;
+}
