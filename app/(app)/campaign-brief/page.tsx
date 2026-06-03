@@ -115,6 +115,13 @@ function CampaignBriefListContent() {
   const { mutate: approveBrief, isPending: isApproving } = useApproveStrategyBrief();
   const isApproved = selectedBrief?.status === "approved";
 
+  const handleApprove = () => {
+    if (!selectedBriefId) return;
+    approveBrief(selectedBriefId, {
+      onSuccess: () => router.push("/campaigns")
+    });
+  };
+
   // Scroll to top when brief changes
   useEffect(() => {
     if (selectedBriefId) {
@@ -362,7 +369,7 @@ function CampaignBriefListContent() {
               <Button
                 className="h-9 text-sm bg-gray-900 hover:bg-gray-800 text-white gap-1.5 disabled:opacity-50 disabled:cursor-not-allowed"
                 disabled={isApproved || isApproving}
-                onClick={() => selectedBriefId && approveBrief(selectedBriefId)}
+                onClick={() => handleApprove()}
               >
                 <Check className="w-4 h-4" />
                 {isApproving ? "Approving..." : isApproved ? "Approved" : "Approve"}
