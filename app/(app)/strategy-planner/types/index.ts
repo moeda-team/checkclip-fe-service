@@ -106,20 +106,14 @@ export interface StrategyPlannerTableRow {
   id: string;
   title: string;
   planner_type: StrategyPlannerType;
-  status: string;
-  createdAt: string;
-  updatedAt: string;
-  tenant?: {
-    id?: string;
-    code?: string;
+  tenant: {
     name: string;
-    domain?: string;
   };
-  budget?: {
+  budget: {
     type: string;
     amount: number;
   };
-  brand?: {
+  brand: {
     name: string;
   };
 }

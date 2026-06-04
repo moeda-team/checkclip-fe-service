@@ -18,15 +18,7 @@ import {
   useDeleteStrategyPlanner
 } from "./hooks/useStrategyPlanner";
 import type { StrategyPlannerFilter, StrategyPlannerTableRow } from "./types";
-import type { PaginationFilter } from "@/types/api";
-
-// Extended response interface matching the actual API
-interface StrategyPlannerApiResponse {
-  data: StrategyPlannerTableRow[];
-  total: number;
-  limit: number;
-  offset: number;
-}
+import type { ApiResponsePagination, PaginationFilter } from "@/types/api";
 
 export default function StrategyPlannerPage() {
   const router = useRouter();
@@ -41,8 +33,9 @@ export default function StrategyPlannerPage() {
   const { data, isLoading } = useGetStrategyPlanners(filter);
   const deleteMutation = useDeleteStrategyPlanner();
 
-  // Cast data to match the actual API response format
-  const apiData = data as unknown as StrategyPlannerApiResponse | undefined;
+  const apiData = data as
+    | ApiResponsePagination<StrategyPlannerTableRow[]>
+    | undefined;
   const rows = useMemo(() => apiData?.data ?? [], [apiData]);
 
   const paginationFilter: PaginationFilter = useMemo(
@@ -57,8 +50,6 @@ export default function StrategyPlannerPage() {
   const paginationDto = useMemo(
     () => ({
       total: apiData?.total ?? 0,
-      next: null,
-      prev: null,
       current_page: filter.page ?? 1,
       per_page: filter.limit ?? 5,
       total_pages: Math.ceil((apiData?.total ?? 0) / (filter.limit ?? 5))
