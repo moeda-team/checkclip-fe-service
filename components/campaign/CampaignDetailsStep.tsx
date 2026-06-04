@@ -398,7 +398,10 @@ export function CampaignDetailsStep({
                     placeholder="1.0 - 5.0"
                     value={formData.brand.productAverageRating}
                     onChange={(e) => {
-                      updateBrand("productAverageRating", e.target.value);
+                      let value = e.target.value;
+                      const num = parseFloat(value);
+                      if (!isNaN(num) && num > 5) value = "5";
+                      updateBrand("productAverageRating", value);
                       if (errors.productAverageRating)
                         setErrors((p) => ({ ...p, productAverageRating: "" }));
                     }}
