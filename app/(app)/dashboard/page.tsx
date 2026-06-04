@@ -11,7 +11,7 @@ import {
   Phone,
   Mail,
   FileText,
-  Calendar,
+  Calendar
 } from "lucide-react";
 import {
   CartesianGrid,
@@ -26,7 +26,7 @@ import {
   Tooltip,
   XAxis,
   YAxis,
-  Legend,
+  Legend
 } from "recharts";
 
 // ─── Dummy Data ───────────────────────────────────────────────────────────────
@@ -37,7 +37,7 @@ const revenueData = [
   { month: "Dec", revenue: 3600, target: 3200 },
   { month: "Jan", revenue: 2800, target: 3200 },
   { month: "Feb", revenue: 3200, target: 3400 },
-  { month: "Mar", revenue: 4000, target: 3500 },
+  { month: "Mar", revenue: 4000, target: 3500 }
 ];
 
 const pipelineData = [
@@ -45,7 +45,7 @@ const pipelineData = [
   { stage: "Qualificat.", value: 1200 },
   { stage: "Proposal", value: 3500 },
   { stage: "Closed Won", value: 2600 },
-  { stage: "Closed Lost", value: 400 },
+  { stage: "Closed Lost", value: 400 }
 ];
 
 const leadSourceData = [
@@ -54,7 +54,7 @@ const leadSourceData = [
   { name: "Social Media", value: 156, percent: 18, color: "#F59E0B" },
   { name: "Direct", value: 132, percent: 15, color: "#EC4899" },
   { name: "Referral", value: 89, percent: 10, color: "#06B6D4" },
-  { name: "Email", value: 52, percent: 6, color: "#EF4444" },
+  { name: "Email", value: 52, percent: 6, color: "#EF4444" }
 ];
 
 const recentActivities = [
@@ -63,29 +63,30 @@ const recentActivities = [
     color: "bg-purple-100 text-purple-600",
     title: "Product demo with Aero Dynamics - DX Platform requirements review",
     person: "Suzuki Hana",
-    time: "14:00",
+    time: "14:00"
   },
   {
     icon: Mail,
     color: "bg-blue-100 text-blue-600",
-    title: "Sent proposal document to Crystal Networks for Network Upgrade project",
+    title:
+      "Sent proposal document to Crystal Networks for Network Upgrade project",
     person: "Watanabe Riko",
-    time: "11:30",
+    time: "11:30"
   },
   {
     icon: Phone,
     color: "bg-green-100 text-green-600",
     title: "Follow-up call regarding Q2 contract renewal terms",
     person: "Ito Daichi",
-    time: "10:15",
+    time: "10:15"
   },
   {
     icon: Users,
     color: "bg-orange-100 text-orange-600",
     title: "Updated contact preferences - prefers communication via email only",
     person: "Takahashi Mei",
-    time: "09:45",
-  },
+    time: "09:45"
+  }
 ];
 
 const dealsClosingSoon = [
@@ -95,7 +96,7 @@ const dealsClosingSoon = [
     value: "¥18,000,000",
     progress: 90,
     stage: "Negotiation",
-    due: "2026-03-25",
+    due: "2026-03-25"
   },
   {
     name: "Crystal Network Upgrade",
@@ -103,7 +104,7 @@ const dealsClosingSoon = [
     value: "¥8,200,000",
     progress: 85,
     stage: "Negotiation",
-    due: "2026-03-30",
+    due: "2026-03-30"
   },
   {
     name: "Aero DX Platform",
@@ -111,7 +112,7 @@ const dealsClosingSoon = [
     value: "¥12,500,000",
     progress: 75,
     stage: "Proposal",
-    due: "2026-04-15",
+    due: "2026-04-15"
   },
   {
     name: "Jupiter Hosting Deal",
@@ -119,7 +120,7 @@ const dealsClosingSoon = [
     value: "¥7,200,000",
     progress: 55,
     stage: "Proposal",
-    due: "2026-04-20",
+    due: "2026-04-20"
   },
   {
     name: "Delta Cloud Migration",
@@ -127,8 +128,8 @@ const dealsClosingSoon = [
     value: "¥15,000,000",
     progress: 60,
     stage: "Proposal",
-    due: "2026-04-30",
-  },
+    due: "2026-04-30"
+  }
 ];
 
 const teamPerformance = [
@@ -139,7 +140,7 @@ const teamPerformance = [
     revenue: "¥32,200,000",
     deals: 4,
     progress: 80,
-    color: "bg-purple-500",
+    color: "bg-purple-500"
   },
   {
     initials: "SM",
@@ -148,7 +149,7 @@ const teamPerformance = [
     revenue: "¥26,000,000",
     deals: 3,
     progress: 65,
-    color: "bg-blue-500",
+    color: "bg-blue-500"
   },
   {
     initials: "KR",
@@ -157,8 +158,8 @@ const teamPerformance = [
     revenue: "¥32,000,000",
     deals: 3,
     progress: 79,
-    color: "bg-green-500",
-  },
+    color: "bg-green-500"
+  }
 ];
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
@@ -171,7 +172,7 @@ function StatCard({
   changePositive,
   icon: Icon,
   iconBg,
-  iconColor,
+  iconColor
 }: {
   title: string;
   value: string;
@@ -186,7 +187,9 @@ function StatCard({
     <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-5">
       <div className="flex items-start justify-between">
         <p className="text-sm text-gray-500 font-medium">{title}</p>
-        <div className={`w-9 h-9 rounded-lg flex items-center justify-center ${iconBg}`}>
+        <div
+          className={`w-9 h-9 rounded-lg flex items-center justify-center ${iconBg}`}
+        >
           <Icon className={`w-4 h-4 ${iconColor}`} />
         </div>
       </div>
@@ -215,7 +218,6 @@ function StatCard({
 export default function DashboardPage() {
   return (
     <div className="p-6 space-y-6 bg-gray-50 min-h-full">
-
       {/* ── Stat Cards ── */}
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
         <StatCard
@@ -262,27 +264,59 @@ export default function DashboardPage() {
 
       {/* ── Charts Row ── */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-
         {/* Revenue vs Target */}
         <div className="lg:col-span-1 bg-white rounded-xl border border-gray-200 shadow-sm p-5">
           <div className="flex items-start justify-between mb-1">
             <div>
-              <h3 className="text-sm font-semibold text-gray-900">Revenue vs Target</h3>
+              <h3 className="text-sm font-semibold text-gray-900">
+                Revenue vs Target
+              </h3>
               <p className="text-xs text-gray-400">Past 6 months (10k JPY)</p>
             </div>
             <ArrowUpRight className="w-4 h-4 text-gray-400" />
           </div>
           <div className="h-52 mt-3">
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={revenueData} margin={{ top: 4, right: 4, left: -20, bottom: 0 }}>
+              <LineChart
+                data={revenueData}
+                margin={{ top: 4, right: 4, left: -20, bottom: 0 }}
+              >
                 <CartesianGrid strokeDasharray="3 3" stroke="#F3F4F6" />
-                <XAxis dataKey="month" tick={{ fontSize: 11, fill: "#9CA3AF" }} axisLine={false} tickLine={false} />
-                <YAxis tick={{ fontSize: 11, fill: "#9CA3AF" }} axisLine={false} tickLine={false} />
-                <Tooltip
-                  contentStyle={{ fontSize: 12, borderRadius: 8, border: "1px solid #E5E7EB" }}
+                <XAxis
+                  dataKey="month"
+                  tick={{ fontSize: 11, fill: "#9CA3AF" }}
+                  axisLine={false}
+                  tickLine={false}
                 />
-                <Line type="monotone" dataKey="revenue" stroke="#7C3AED" strokeWidth={2} dot={{ r: 3, fill: "#7C3AED" }} name="Revenue" />
-                <Line type="monotone" dataKey="target" stroke="#10B981" strokeWidth={2} strokeDasharray="4 3" dot={false} name="Target" />
+                <YAxis
+                  tick={{ fontSize: 11, fill: "#9CA3AF" }}
+                  axisLine={false}
+                  tickLine={false}
+                />
+                <Tooltip
+                  contentStyle={{
+                    fontSize: 12,
+                    borderRadius: 8,
+                    border: "1px solid #E5E7EB"
+                  }}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="revenue"
+                  stroke="#7C3AED"
+                  strokeWidth={2}
+                  dot={{ r: 3, fill: "#7C3AED" }}
+                  name="Revenue"
+                />
+                <Line
+                  type="monotone"
+                  dataKey="target"
+                  stroke="#10B981"
+                  strokeWidth={2}
+                  strokeDasharray="4 3"
+                  dot={false}
+                  name="Target"
+                />
                 <Legend
                   iconType="plainline"
                   iconSize={16}
@@ -301,19 +335,48 @@ export default function DashboardPage() {
         {/* Pipeline by Stage */}
         <div className="lg:col-span-1 bg-white rounded-xl border border-gray-200 shadow-sm p-5">
           <div className="mb-1">
-            <h3 className="text-sm font-semibold text-gray-900">Pipeline by Stage</h3>
-            <p className="text-xs text-gray-400">Deal count & value (10k JPY)</p>
+            <h3 className="text-sm font-semibold text-gray-900">
+              Pipeline by Stage
+            </h3>
+            <p className="text-xs text-gray-400">
+              Deal count & value (10k JPY)
+            </p>
           </div>
           <div className="h-52 mt-3">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={pipelineData} margin={{ top: 4, right: 4, left: -20, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#F3F4F6" vertical={false} />
-                <XAxis dataKey="stage" tick={{ fontSize: 10, fill: "#9CA3AF" }} axisLine={false} tickLine={false} />
-                <YAxis tick={{ fontSize: 11, fill: "#9CA3AF" }} axisLine={false} tickLine={false} />
-                <Tooltip
-                  contentStyle={{ fontSize: 12, borderRadius: 8, border: "1px solid #E5E7EB" }}
+              <BarChart
+                data={pipelineData}
+                margin={{ top: 4, right: 4, left: -20, bottom: 0 }}
+              >
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  stroke="#F3F4F6"
+                  vertical={false}
                 />
-                <Bar dataKey="value" fill="#7C3AED" radius={[4, 4, 0, 0]} name="Value" />
+                <XAxis
+                  dataKey="stage"
+                  tick={{ fontSize: 10, fill: "#9CA3AF" }}
+                  axisLine={false}
+                  tickLine={false}
+                />
+                <YAxis
+                  tick={{ fontSize: 11, fill: "#9CA3AF" }}
+                  axisLine={false}
+                  tickLine={false}
+                />
+                <Tooltip
+                  contentStyle={{
+                    fontSize: 12,
+                    borderRadius: 8,
+                    border: "1px solid #E5E7EB"
+                  }}
+                />
+                <Bar
+                  dataKey="value"
+                  fill="#7C3AED"
+                  radius={[4, 4, 0, 0]}
+                  name="Value"
+                />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -322,7 +385,9 @@ export default function DashboardPage() {
         {/* Lead Sources */}
         <div className="lg:col-span-1 bg-white rounded-xl border border-gray-200 shadow-sm p-5">
           <div className="mb-3">
-            <h3 className="text-sm font-semibold text-gray-900">Lead Sources</h3>
+            <h3 className="text-sm font-semibold text-gray-900">
+              Lead Sources
+            </h3>
             <p className="text-xs text-gray-400">Distribution by channel</p>
           </div>
           <div className="flex items-center gap-4">
@@ -343,7 +408,11 @@ export default function DashboardPage() {
                     ))}
                   </Pie>
                   <Tooltip
-                    contentStyle={{ fontSize: 11, borderRadius: 8, border: "1px solid #E5E7EB" }}
+                    contentStyle={{
+                      fontSize: 11,
+                      borderRadius: 8,
+                      border: "1px solid #E5E7EB"
+                    }}
                     formatter={(value, name) => [`${value}`, name]}
                   />
                 </PieChart>
@@ -351,13 +420,21 @@ export default function DashboardPage() {
             </div>
             <div className="flex-1 space-y-1.5">
               {leadSourceData.map((src) => (
-                <div key={src.name} className="flex items-center justify-between text-xs">
+                <div
+                  key={src.name}
+                  className="flex items-center justify-between text-xs"
+                >
                   <div className="flex items-center gap-1.5 min-w-0">
-                    <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: src.color }} />
+                    <span
+                      className="w-2 h-2 rounded-full shrink-0"
+                      style={{ backgroundColor: src.color }}
+                    />
                     <span className="text-gray-600 truncate">{src.name}</span>
                   </div>
                   <div className="flex items-center gap-2 shrink-0 ml-2">
-                    <span className="text-gray-900 font-medium">{src.value}</span>
+                    <span className="text-gray-900 font-medium">
+                      {src.value}
+                    </span>
                     <span className="text-gray-400">{src.percent}%</span>
                   </div>
                 </div>
@@ -369,25 +446,34 @@ export default function DashboardPage() {
 
       {/* ── Bottom Row ── */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-
         {/* Recent Activity */}
         <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-5">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-sm font-semibold text-gray-900">Recent Activity</h3>
-            <button className="text-xs text-purple-600 font-medium hover:underline">View All</button>
+            <h3 className="text-sm font-semibold text-gray-900">
+              Recent Activity
+            </h3>
+            <button className="text-xs text-purple-600 font-medium hover:underline">
+              View All
+            </button>
           </div>
           <div className="space-y-4 overflow-y-auto max-h-72 pr-1">
             {recentActivities.map((act, i) => {
               const Icon = act.icon;
               return (
                 <div key={i} className="flex items-start gap-3">
-                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${act.color}`}>
+                  <div
+                    className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${act.color}`}
+                  >
                     <Icon className="w-4 h-4" />
                   </div>
                   <div className="min-w-0">
-                    <p className="text-xs text-gray-700 leading-snug line-clamp-2">{act.title}</p>
+                    <p className="text-xs text-gray-700 leading-snug line-clamp-2">
+                      {act.title}
+                    </p>
                     <div className="flex items-center gap-2 mt-1">
-                      <span className="text-xs text-gray-400">{act.person}</span>
+                      <span className="text-xs text-gray-400">
+                        {act.person}
+                      </span>
                       <span className="flex items-center gap-0.5 text-xs text-gray-400">
                         <Calendar className="w-3 h-3" />
                         {act.time}
@@ -403,19 +489,29 @@ export default function DashboardPage() {
         {/* Deals Closing Soon */}
         <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-5">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-sm font-semibold text-gray-900">Deals Closing Soon</h3>
-            <button className="text-xs text-purple-600 font-medium hover:underline">View Pipeline</button>
+            <h3 className="text-sm font-semibold text-gray-900">
+              Deals Closing Soon
+            </h3>
+            <button className="text-xs text-purple-600 font-medium hover:underline">
+              View Pipeline
+            </button>
           </div>
           <div className="space-y-4 overflow-y-auto max-h-72 pr-1">
             {dealsClosingSoon.map((deal, i) => (
               <div key={i} className="space-y-1">
                 <div className="flex items-start justify-between gap-2">
                   <div className="min-w-0">
-                    <p className="text-xs font-semibold text-gray-900 truncate">{deal.name}</p>
-                    <p className="text-xs text-gray-400 truncate">{deal.company}</p>
+                    <p className="text-xs font-semibold text-gray-900 truncate">
+                      {deal.name}
+                    </p>
+                    <p className="text-xs text-gray-400 truncate">
+                      {deal.company}
+                    </p>
                   </div>
                   <div className="text-right shrink-0">
-                    <p className="text-xs font-semibold text-gray-900">{deal.value}</p>
+                    <p className="text-xs font-semibold text-gray-900">
+                      {deal.value}
+                    </p>
                     <p className="text-xs text-gray-400">{deal.progress}%</p>
                   </div>
                 </div>
@@ -428,11 +524,13 @@ export default function DashboardPage() {
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className={`text-xs px-1.5 py-0.5 rounded font-medium ${
-                    deal.stage === "Negotiation"
-                      ? "bg-orange-100 text-orange-600"
-                      : "bg-blue-100 text-blue-600"
-                  }`}>
+                  <span
+                    className={`text-xs px-1.5 py-0.5 rounded font-medium ${
+                      deal.stage === "Negotiation"
+                        ? "bg-orange-100 text-orange-600"
+                        : "bg-blue-100 text-blue-600"
+                    }`}
+                  >
                     {deal.stage}
                   </span>
                   <span className="text-xs text-gray-400">Due: {deal.due}</span>
@@ -445,24 +543,36 @@ export default function DashboardPage() {
         {/* Team Performance */}
         <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-5">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-sm font-semibold text-gray-900">Team Performance</h3>
-            <button className="text-xs text-purple-600 font-medium hover:underline">Details</button>
+            <h3 className="text-sm font-semibold text-gray-900">
+              Team Performance
+            </h3>
+            <button className="text-xs text-purple-600 font-medium hover:underline">
+              Details
+            </button>
           </div>
           <div className="space-y-4">
             {teamPerformance.map((member, i) => (
               <div key={i} className="space-y-1.5">
                 <div className="flex items-center gap-3">
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0 ${member.color}`}>
+                  <div
+                    className={`w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0 ${member.color}`}
+                  >
                     {member.initials}
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between">
-                      <p className="text-xs font-semibold text-gray-900">{member.name}</p>
-                      <p className="text-xs font-semibold text-gray-900">{member.revenue}</p>
+                      <p className="text-xs font-semibold text-gray-900">
+                        {member.name}
+                      </p>
+                      <p className="text-xs font-semibold text-gray-900">
+                        {member.revenue}
+                      </p>
                     </div>
                     <div className="flex items-center justify-between">
                       <p className="text-xs text-gray-400">{member.role}</p>
-                      <p className="text-xs text-gray-400">{member.deals} deals</p>
+                      <p className="text-xs text-gray-400">
+                        {member.deals} deals
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -479,11 +589,11 @@ export default function DashboardPage() {
           {/* Summary stats */}
           <div className="mt-5 pt-4 border-t border-gray-100 grid grid-cols-3 text-center">
             <div>
-              <p className="text-lg font-bold text-gray-900">5</p>
+              <p className="text-lg font-bold text-gray-900">23</p>
               <p className="text-xs text-gray-400">Active Contacts</p>
             </div>
             <div>
-              <p className="text-lg font-bold text-gray-900">1</p>
+              <p className="text-lg font-bold text-gray-900">20</p>
               <p className="text-xs text-gray-400">Won This Month</p>
             </div>
             <div>
@@ -493,7 +603,6 @@ export default function DashboardPage() {
           </div>
         </div>
       </div>
-
     </div>
   );
 }

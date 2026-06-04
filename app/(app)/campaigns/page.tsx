@@ -29,7 +29,7 @@ export default function CampaignsPage() {
   }));
 
   return (
-    <div className="px-6 xl:px-0 py-6 space-y-6 min-h-full">
+    <div className="px-6 py-6 space-y-6 min-h-full">
       <CampaignStatsHeader briefs={briefs} />
 
       <CampaignToolbar
