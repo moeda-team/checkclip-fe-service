@@ -2,6 +2,8 @@ import { cn } from "@/lib/utils";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import type { CampaignBrief } from "@/app/(app)/campaign-brief/types";
+import { Button } from "../ui/button";
+import { Upload } from "lucide-react";
 
 const adFormats = [
   {
@@ -27,14 +29,14 @@ const adFormats = [
 export function AdsTypeContent({ brief }: { brief: CampaignBrief }) {
   const categories = brief.result_ai?.budget_breakdown?.categories ?? [];
   const checkedFormats = new Set(
-    categories.map((c) => c.creative_format.toLowerCase())
+    categories.map((c) => c.creative_format.toLowerCase()),
   );
 
   const isFormatChecked = (key: string) =>
     checkedFormats.size === 0
       ? key === "in_stream"
       : Array.from(checkedFormats).some(
-          (f) => f.includes(key.replace("_", "-")) || f.includes(key)
+          (f) => f.includes(key.replace("_", "-")) || f.includes(key),
         );
 
   return (
@@ -50,7 +52,9 @@ export function AdsTypeContent({ brief }: { brief: CampaignBrief }) {
                 <div
                   className={cn(
                     "w-4 h-4 mt-0.5 rounded border-2 flex items-center justify-center shrink-0",
-                    checked ? "border-gray-900 bg-gray-900" : "border-gray-300 bg-white"
+                    checked
+                      ? "border-gray-900 bg-gray-900"
+                      : "border-gray-300 bg-white",
                   )}
                 >
                   {checked && (
@@ -61,12 +65,18 @@ export function AdsTypeContent({ brief }: { brief: CampaignBrief }) {
                       stroke="currentColor"
                       strokeWidth={3}
                     >
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M5 13l4 4L19 7"
+                      />
                     </svg>
                   )}
                 </div>
                 <div>
-                  <p className="text-sm font-semibold text-gray-900">{fmt.label}</p>
+                  <p className="text-sm font-semibold text-gray-900">
+                    {fmt.label}
+                  </p>
                   <p className="text-sm text-gray-500 leading-relaxed mt-0.5">
                     {fmt.description}
                   </p>
@@ -86,7 +96,11 @@ export function AdsTypeContent({ brief }: { brief: CampaignBrief }) {
         {/* Dummy video card */}
         <div className="border border-gray-200 rounded-xl p-3 flex items-center gap-3 mb-4">
           <div className="w-16 h-12 rounded-lg bg-linear-to-br from-purple-500 to-blue-600 shrink-0 overflow-hidden flex items-center justify-center">
-            <svg className="w-6 h-6 text-white opacity-80" fill="currentColor" viewBox="0 0 24 24">
+            <svg
+              className="w-6 h-6 text-white opacity-80"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+            >
               <path d="M8 5v14l11-7z" />
             </svg>
           </div>
@@ -95,7 +109,11 @@ export function AdsTypeContent({ brief }: { brief: CampaignBrief }) {
               {brief.brand?.name ?? "Brand Video"}
             </p>
             <p className="text-xs text-blue-500">
-              by <span className="font-medium">{brief.tenant?.name ?? "Advertiser"}</span> · 31,360 Views
+              by{" "}
+              <span className="font-medium">
+                {brief.tenant?.name ?? "Advertiser"}
+              </span>{" "}
+              · 31,360 Views
             </p>
             <p className="text-xs text-gray-400 truncate mt-0.5">
               {brief.brand?.description ?? "Video description goes here."}
@@ -106,7 +124,10 @@ export function AdsTypeContent({ brief }: { brief: CampaignBrief }) {
         {/* Form fields */}
         <div className="space-y-4">
           <div>
-            <Label htmlFor="video-url" className="text-sm font-medium text-gray-700">
+            <Label
+              htmlFor="video-url"
+              className="text-sm font-medium text-gray-700"
+            >
               Video URL or Youtube
             </Label>
             <Input
@@ -116,7 +137,10 @@ export function AdsTypeContent({ brief }: { brief: CampaignBrief }) {
             />
           </div>
           <div>
-            <Label htmlFor="display-url" className="text-sm font-medium text-gray-700">
+            <Label
+              htmlFor="display-url"
+              className="text-sm font-medium text-gray-700"
+            >
               Display URL
             </Label>
             <Input
@@ -130,37 +154,76 @@ export function AdsTypeContent({ brief }: { brief: CampaignBrief }) {
             <span className="text-sm text-gray-700">Call to Action</span>
           </div>
           <div>
-            <Label htmlFor="long-headline" className="text-sm font-medium text-gray-700">
+            <Label
+              htmlFor="long-headline"
+              className="text-sm font-medium text-gray-700"
+            >
               Long Headline
             </Label>
             <Input
               id="long-headline"
               placeholder="Dummy Long Headline"
-              defaultValue="Dummy Long Headline"
               className="mt-1 h-10 border-gray-200 text-sm"
             />
           </div>
           <div>
-            <Label htmlFor="description" className="text-sm font-medium text-gray-700">
+            <Label
+              htmlFor="description"
+              className="text-sm font-medium text-gray-700"
+            >
               Description
             </Label>
             <Input
               id="description"
               placeholder="Dummy Description"
-              defaultValue="Dummy Description"
               className="mt-1 h-10 border-gray-200 text-sm"
             />
           </div>
           <div>
-            <Label htmlFor="business-name" className="text-sm font-medium text-gray-700">
+            <Label
+              htmlFor="business-name"
+              className="text-sm font-medium text-gray-700"
+            >
               Business Name
             </Label>
             <Input
               id="business-name"
               placeholder="Dummy Business Name"
-              defaultValue="Dummy Business Name"
               className="mt-1 h-10 border-gray-200 text-sm"
             />
+          </div>
+          <div>
+            <Label htmlFor="logo" className="text-sm font-medium text-gray-700">
+              Logo
+            </Label>
+            <div className="mt-2">
+              <Input
+                id="logo"
+                type="file"
+                accept="image/*"
+                className="hidden"
+              />
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={() => document.getElementById("logo")?.click()}
+                className="hover:bg-gray-700 hover:text-gray-200 bg-gray-200 text-gray-700"
+              >
+                <Upload className="w-4 h-4 mr-2" />
+                Upload
+              </Button>
+
+              <p className="mt-2 text-sm text-gray-700">
+                Logo should be square image
+              </p>
+              <div className="mt-4">
+                <img
+                  src="/default-image.png"
+                  alt="Logo Preview"
+                  className="w-40 h-40 rounded-xl object-cover border"
+                />
+              </div>
+            </div>
           </div>
         </div>
       </div>

@@ -63,7 +63,10 @@ function CampaignBriefListContent() {
   const handleApprove = () => {
     if (!selectedBriefId) return;
     approveBrief(selectedBriefId, {
-      onSuccess: () => router.push("/campaigns"),
+      onSuccess: () => {
+        router.push("/campaigns");
+        router.refresh()
+      },
     });
   };
 
