@@ -62,7 +62,10 @@ export const useGetCampaignsInfinite = (search: string) =>
       );
       return response.data;
     },
-    getNextPageParam: (lastPage) => lastPage.paginate.next ?? undefined,
+    getNextPageParam: (lastPage) => {
+      const nextOffset = lastPage.offset + lastPage.limit;
+      return nextOffset < lastPage.total ? nextOffset : undefined;
+    },
     initialPageParam: 1,
     meta: { errorMessage: "Failed to fetch campaigns" },
   });

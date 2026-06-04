@@ -46,7 +46,11 @@ export function DashboardContent() {
   }
 
   const items = data?.data ?? [];
-  const paginate = data?.paginate;
+  const total = data?.total ?? 0;
+  const limit = data?.limit ?? 10;
+  const offset = data?.offset ?? 0;
+  const current_page = Math.floor(offset / limit) + 1;
+  const total_pages = Math.ceil(total / limit);
 
   if (!items.length) {
     return (
@@ -66,8 +70,8 @@ export function DashboardContent() {
     <div>
       <div className="flex items-center justify-between mb-4">
         <p className="text-sm text-gray-500">
-          Showing {items.length} of {paginate?.total ?? items.length} campaigns
-          (Page {paginate?.current_page ?? 1}/{paginate?.total_pages ?? 1})
+          Showing {items.length} of {total ?? items.length} campaigns (Page{" "}
+          {current_page}/{total_pages || 1})
         </p>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
