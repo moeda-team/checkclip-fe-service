@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
+import { useState, useEffect, useRef, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
 import type { CheckedState } from "@radix-ui/react-checkbox";
@@ -12,12 +12,22 @@ import {
   Shield,
   Database,
   Zap,
-  LogIn,
+  LogIn
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogFooter,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogAction,
+  AlertDialogCancel
+} from "@/components/ui/alert-dialog";
 import { getGoogleOAuthUrl, getYahooOAuthUrl } from "@/lib/oauth";
 
 function LoginPageInner() {
@@ -28,8 +38,11 @@ function LoginPageInner() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
+  const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [showAgreementDialog, setShowAgreementDialog] = useState(false);
+  const pendingActionRef = useRef<(() => void) | null>(null);
 
   const callbackUrl = searchParams.get("callbackUrl") ?? "/auth/redirect";
 
@@ -41,8 +54,29 @@ function LoginPageInner() {
     }
   }, []);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const runWithAgreement = (action: () => void) => {
+    if (agreedToTerms) {
+      action();
+      return;
+    }
+    pendingActionRef.current = action;
+    setShowAgreementDialog(true);
+  };
+
+  const handleAgree = () => {
+    setAgreedToTerms(true);
+    setShowAgreementDialog(false);
+    const action = pendingActionRef.current;
+    pendingActionRef.current = null;
+    action?.();
+  };
+
+  const handleCancelAgreement = () => {
+    pendingActionRef.current = null;
+    setShowAgreementDialog(false);
+  };
+
+  const loginWithCredentials = async () => {
     setErrorMsg(null);
     setIsSubmitting(true);
 
@@ -50,7 +84,7 @@ function LoginPageInner() {
       email,
       password,
       redirect: false,
-      callbackUrl,
+      callbackUrl
     });
 
     setIsSubmitting(false);
@@ -61,6 +95,11 @@ function LoginPageInner() {
     }
 
     router.push(result.url ?? callbackUrl);
+  };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    runWithAgreement(loginWithCredentials);
   };
 
   const handleRememberChange = (checked: CheckedState) => {
@@ -156,7 +195,7 @@ function LoginPageInner() {
           <div className="absolute top-10 right-10 w-72 h-72 bg-purple-400/20 blur-3xl rounded-full" />
 
           {/* LOGIN CARD */}
-          <div className="relative z-5 w-full max-w-md">
+          <div className="relative z-5 w-full max-w-[510px]">
             {/* Header */}
             <div className="mb-8 text-white">
               <h1 className="text-4xl font-normal">
@@ -242,27 +281,61 @@ function LoginPageInner() {
                   </div>
                 </div>
 
-                {/* REMEMBER */}
-                <div className="flex items-center gap-2">
-                  <Checkbox
-                    id="remember"
-                    checked={rememberMe}
-                    onCheckedChange={handleRememberChange}
-                  />
+                <div>
+                  {" "}
+                  {/* REMEMBER */}
+                  <div className="flex items-center gap-2">
+                    <Checkbox
+                      id="remember"
+                      checked={rememberMe}
+                      onCheckedChange={handleRememberChange}
+                    />
 
-                  <Label
-                    htmlFor="remember"
-                    className="text-sm text-gray-600 font-normal"
-                  >
-                    Keep me signed in
-                  </Label>
+                    <Label
+                      htmlFor="remember"
+                      className="text-sm text-gray-600 font-normal"
+                    >
+                      Keep me signed in
+                    </Label>
+                  </div>
+                  {/* AGREEMENT */}
+                  <div className="flex items-start gap-2 pt-1">
+                    <Checkbox
+                      id="agree"
+                      checked={agreedToTerms}
+                      onCheckedChange={(checked) =>
+                        setAgreedToTerms(checked === true)
+                      }
+                      className="mt-0.5"
+                    />
+
+                    <Label
+                      htmlFor="agree"
+                      className="text-sm text-gray-600 font-normal block"
+                    >
+                      <span>
+                        I have read and agree to the{" "}
+                        <span
+                          role="link"
+                          tabIndex={0}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            router.push("/privacy-policy");
+                          }}
+                          className="text-purple-600 font-semibold hover:underline cursor-pointer"
+                        >
+                          Privacy Policy and Terms of Service.
+                        </span>
+                      </span>
+                    </Label>
+                  </div>
                 </div>
 
                 {/* SUBMIT */}
                 <Button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full h-12 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-semibold"
+                  className="w-full h-12 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {isSubmitting ? (
                     "Signing in..."
@@ -294,9 +367,11 @@ function LoginPageInner() {
                   type="button"
                   variant="outline"
                   className="w-full h-11 rounded-xl border-gray-200 text-sm font-medium text-gray-700 hover:text-white hover:bg-purple-500 flex items-center justify-center gap-2 transition-colors"
-                  onClick={() => {
-                    window.location.href = getGoogleOAuthUrl(true);
-                  }}
+                  onClick={() =>
+                    runWithAgreement(() => {
+                      window.location.href = getGoogleOAuthUrl(true);
+                    })
+                  }
                 >
                   Sign In with Google
                   <svg className="w-4 h-4" viewBox="0 0 24 24">
@@ -324,9 +399,11 @@ function LoginPageInner() {
                   type="button"
                   variant="outline"
                   className="w-full h-11 rounded-xl border-gray-200 text-sm font-medium text-gray-700 hover:text-white hover:bg-purple-500 flex items-center justify-center gap-2 transition-colors"
-                  onClick={() => {
-                    window.location.href = getYahooOAuthUrl();
-                  }}
+                  onClick={() =>
+                    runWithAgreement(() => {
+                      window.location.href = getYahooOAuthUrl();
+                    })
+                  }
                 >
                   Sign In with Yahoo
                   <svg className="w-4 h-4" viewBox="0 0 24 24">
@@ -376,6 +453,29 @@ function LoginPageInner() {
           </div>
         </div>
       </div>
+
+      <AlertDialog
+        open={showAgreementDialog}
+        onOpenChange={setShowAgreementDialog}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              Privacy Policy and Terms of Service
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              To continue, please confirm that you have read and agree to the
+              Privacy Policy and Terms of Service.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={handleCancelAgreement}>
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction onClick={handleAgree}>Agree</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
