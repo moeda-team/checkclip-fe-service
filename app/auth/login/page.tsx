@@ -84,13 +84,19 @@ function LoginPageInner() {
       email,
       password,
       redirect: false,
-      callbackUrl
+      callbackUrl,
     });
 
     setIsSubmitting(false);
 
     if (!result || result.error) {
-      setErrorMsg("Email atau password salah. Silakan coba lagi.");
+      // NextAuth encodes the thrown Error message into result.error
+      // Strip the "CredentialsSignin" fallback and show the actual BE message
+      const raw = result?.error ?? "";
+      const msg = raw === "CredentialsSignin" || raw === ""
+        ? "Invalid email or password."
+        : raw;
+      setErrorMsg(msg);
       return;
     }
 

@@ -12,6 +12,7 @@ import {
   Sparkles,
   PanelLeftClose,
   PanelLeftOpen,
+  Users,
 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useSidebar } from "./ResponsiveSidebarProvider";
@@ -47,6 +48,16 @@ const navigationItems: NavSection[] = [
         icon: LayoutDashboard,
       },
     ],
+  },
+  {
+    title: "CRM",
+    items: [
+      {
+        title: "Customer Data",
+        href: "/crm/customer-data",
+        icon: Users
+      }
+    ]
   },
   {
     title: "Campaigns",

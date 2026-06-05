@@ -86,53 +86,52 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials): Promise<AppUser | null> {
-        if (!credentials?.email || !credentials.password) return null;
-
-        try {
-          const loginRes = await fetch(`${env.apiBaseUrl}/auth/login`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              email: credentials.email,
-              password: credentials.password,
-            }),
-          });
-
-          if (!loginRes.ok) return null;
-
-          const loginJson: LoginApiResponse = await loginRes.json();
-          if (!loginJson.status || !loginJson.data?.access_token) return null;
-
-          const { access_token, refresh_token } = loginJson.data;
-
-          const meRes = await fetch(`${env.apiBaseUrl}/auth/me`, {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: access_token,
-            },
-          });
-
-          if (!meRes.ok) return null;
-
-          const meJson: MeApiResponse = await meRes.json();
-          if (!meJson.status || !meJson.data) return null;
-
-          const user = meJson.data;
-
-          return {
-            id: user.id,
-            name: user.full_name,
-            email: user.email,
-            role: user.role as UserRole,
-            accessToken: access_token,
-            refreshToken: refresh_token,
-            phoneNumber: user.phone_number,
-            profilePictureUrl: user.profile_picture_url,
-          };
-        } catch {
-          return null;
+        if (!credentials?.email || !credentials.password) {
+          throw new Error("Email and password are required");
         }
+
+        const loginRes = await fetch(`${env.apiBaseUrl}/auth/login`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: credentials.email,
+            password: credentials.password,
+          }),
+        });
+
+        const loginJson: LoginApiResponse = await loginRes.json();
+
+        if (!loginRes.ok || !loginJson.status) {
+          throw new Error(loginJson.message ?? "Login failed");
+        }
+
+        const { access_token, refresh_token } = loginJson.data;
+
+        const meRes = await fetch(`${env.apiBaseUrl}/auth/me`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: access_token,
+          },
+        });
+
+        if (!meRes.ok) throw new Error("Failed to fetch user profile");
+
+        const meJson: MeApiResponse = await meRes.json();
+        if (!meJson.status || !meJson.data) throw new Error("Invalid user data");
+
+        const user = meJson.data;
+
+        return {
+          id: user.id,
+          name: user.full_name,
+          email: user.email,
+          role: user.role as UserRole,
+          accessToken: access_token,
+          refreshToken: refresh_token,
+          phoneNumber: user.phone_number,
+          profilePictureUrl: user.profile_picture_url,
+        };
       },
     }),
 

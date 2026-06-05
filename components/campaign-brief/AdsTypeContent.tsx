@@ -108,9 +108,9 @@ export function AdsTypeContent({ brief }: { brief: CampaignBrief }) {
             <p className="text-sm font-semibold text-gray-900 truncate">
               {brief.brand?.name ?? "Brand Video"}
             </p>
-            <p className="text-xs text-blue-500">
+            <p className="text-xs ">
               by{" "}
-              <span className="font-medium">
+              <span className="font-medium text-blue-500">
                 {brief.tenant?.name ?? "Advertiser"}
               </span>{" "}
               · 31,360 Views

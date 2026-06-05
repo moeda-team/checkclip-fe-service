@@ -151,7 +151,7 @@ function AppHeader() {
                       href={crumb.href}
                       className="text-gray-500 hover:text-gray-900 transition-colors"
                     >
-                      {crumb.label}
+                      {crumb.label.toLowerCase() == "crm" ? "CRM" : crumb.label}
                     </Link>
                   )}
                 </span>
