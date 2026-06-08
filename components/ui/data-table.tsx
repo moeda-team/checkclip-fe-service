@@ -14,6 +14,7 @@ import {
 } from "@tanstack/react-table";
 import { PaginationDto, PaginationFilter } from "@/types/api";
 import { ArrowDown, ArrowUp, ArrowUpDown } from "lucide-react";
+import { cn } from "./utils";
 import {
   Table,
   TableBody,
@@ -56,6 +57,9 @@ interface DataTableProps<T> {
     isRowSelectable?: (row: T) => boolean;
   };
   pagination?: PaginationProps;
+  // Optional full-height element rendered flush against the right edge of the
+  // table (e.g. an "add column" panel). The table border adapts when present.
+  sidePanel?: React.ReactNode;
 }
 
 function DataTablePagination({ pagination }: { pagination: PaginationProps }) {
@@ -153,7 +157,8 @@ export function DataTable<T>({
   enableSorting = false,
   isStriped = false,
   rowSelection,
-  pagination
+  pagination,
+  sidePanel
 }: DataTableProps<T>) {
   const getRowId =
     rowSelection?.getRowKey ??
@@ -238,95 +243,105 @@ export function DataTable<T>({
 
   return (
     <div className={`space-y-4 ${className}`}>
-      <div className="overflow-auto rounded-md border">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              {rowSelection && (
-                <TableHead className="w-12">
-                  <input
-                    ref={selectAllRef}
-                    type="checkbox"
-                    disabled={selectableRows.length === 0}
-                    checked={
-                      selectableRows.length > 0 &&
-                      selectableRows.every((r) => r.getIsSelected())
-                    }
-                    onChange={(e) =>
-                      table.toggleAllRowsSelected(e.target.checked)
-                    }
-                    aria-label="Select all rows"
-                    className="h-4 w-4 rounded border border-primary disabled:cursor-not-allowed disabled:opacity-50"
-                  />
-                </TableHead>
-              )}
-
-              {table.getHeaderGroups().map((headerGroup) =>
-                headerGroup.headers.map((header) => (
-                  <TableHead
-                    key={header.id}
-                    onClick={header.column.getToggleSortingHandler()}
-                    className={
-                      header.column.getCanSort()
-                        ? "cursor-pointer select-none"
-                        : ""
-                    }
-                  >
-                    <div className="flex items-center gap-1">
-                      {flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
-                      {enableSorting && header.column.getCanSort() && (
-                        <Button variant="ghost" size="icon" className="h-6 w-6">
-                          {header.column.getIsSorted() === "asc" && (
-                            <ArrowUp className="h-3.5 w-3.5" />
-                          )}
-                          {header.column.getIsSorted() === "desc" && (
-                            <ArrowDown className="h-3.5 w-3.5" />
-                          )}
-                          {header.column.getIsSorted() === false && (
-                            <ArrowUpDown className="h-3.5 w-3.5 text-muted-foreground" />
-                          )}
-                        </Button>
-                      )}
-                    </div>
+      <div className="flex items-stretch">
+        <div
+          className={cn(
+            "flex-1 overflow-auto rounded-md border",
+            sidePanel && "rounded-r-none border-r-0"
+          )}
+        >
+          <Table>
+            <TableHeader>
+              <TableRow>
+                {rowSelection && (
+                  <TableHead className="w-12">
+                    <input
+                      ref={selectAllRef}
+                      type="checkbox"
+                      disabled={selectableRows.length === 0}
+                      checked={
+                        selectableRows.length > 0 &&
+                        selectableRows.every((r) => r.getIsSelected())
+                      }
+                      onChange={(e) =>
+                        table.toggleAllRowsSelected(e.target.checked)
+                      }
+                      aria-label="Select all rows"
+                      className="h-4 w-4 rounded border border-primary disabled:cursor-not-allowed disabled:opacity-50"
+                    />
                   </TableHead>
-                ))
-              )}
-            </TableRow>
-          </TableHeader>
+                )}
 
-          <TableBody>
-            {isLoading ? (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length + (rowSelection ? 1 : 0)}
-                  className="h-24"
-                >
-                  <div className="flex items-center justify-center gap-2">
-                    <Skeleton className="h-4 w-4 rounded-full" />
-                    <span className="text-muted-foreground text-sm">
-                      Loading...
-                    </span>
-                  </div>
-                </TableCell>
+                {table.getHeaderGroups().map((headerGroup) =>
+                  headerGroup.headers.map((header) => (
+                    <TableHead
+                      key={header.id}
+                      onClick={header.column.getToggleSortingHandler()}
+                      className={
+                        header.column.getCanSort()
+                          ? "cursor-pointer select-none"
+                          : ""
+                      }
+                    >
+                      <div className="flex items-center gap-1">
+                        {flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                        {enableSorting && header.column.getCanSort() && (
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-6 w-6"
+                          >
+                            {header.column.getIsSorted() === "asc" && (
+                              <ArrowUp className="h-3.5 w-3.5" />
+                            )}
+                            {header.column.getIsSorted() === "desc" && (
+                              <ArrowDown className="h-3.5 w-3.5" />
+                            )}
+                            {header.column.getIsSorted() === false && (
+                              <ArrowUpDown className="h-3.5 w-3.5 text-muted-foreground" />
+                            )}
+                          </Button>
+                        )}
+                      </div>
+                    </TableHead>
+                  ))
+                )}
               </TableRow>
-            ) : table.getRowModel().rows.length === 0 ? (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length + (rowSelection ? 1 : 0)}
-                  className="h-24 text-center text-muted-foreground"
-                >
-                  {emptyText}
-                </TableCell>
-              </TableRow>
-            ) : (
-              table.getRowModel().rows.map((row, index) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() ? "selected" : undefined}
-                  className={`
+            </TableHeader>
+
+            <TableBody>
+              {isLoading ? (
+                <TableRow>
+                  <TableCell
+                    colSpan={columns.length + (rowSelection ? 1 : 0)}
+                    className="h-24"
+                  >
+                    <div className="flex items-center justify-center gap-2">
+                      <Skeleton className="h-4 w-4 rounded-full" />
+                      <span className="text-muted-foreground text-sm">
+                        Loading...
+                      </span>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ) : table.getRowModel().rows.length === 0 ? (
+                <TableRow>
+                  <TableCell
+                    colSpan={columns.length + (rowSelection ? 1 : 0)}
+                    className="h-24 text-center text-muted-foreground"
+                  >
+                    {emptyText}
+                  </TableCell>
+                </TableRow>
+              ) : (
+                table.getRowModel().rows.map((row, index) => (
+                  <TableRow
+                    key={row.id}
+                    data-state={row.getIsSelected() ? "selected" : undefined}
+                    className={`
                     ${
                       isStriped
                         ? index % 2 === 0
@@ -335,33 +350,35 @@ export function DataTable<T>({
                         : ""
                     }
                   `}
-                >
-                  {rowSelection && (
-                    <TableCell>
-                      <input
-                        type="checkbox"
-                        disabled={!isSelectable(row.original)}
-                        checked={row.getIsSelected()}
-                        onChange={(e) => row.toggleSelected(e.target.checked)}
-                        aria-label="Select row"
-                        className="h-4 w-4 rounded border border-primary disabled:cursor-not-allowed disabled:opacity-50"
-                      />
-                    </TableCell>
-                  )}
+                  >
+                    {rowSelection && (
+                      <TableCell>
+                        <input
+                          type="checkbox"
+                          disabled={!isSelectable(row.original)}
+                          checked={row.getIsSelected()}
+                          onChange={(e) => row.toggleSelected(e.target.checked)}
+                          aria-label="Select row"
+                          className="h-4 w-4 rounded border border-primary disabled:cursor-not-allowed disabled:opacity-50"
+                        />
+                      </TableCell>
+                    )}
 
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell key={cell.id}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))
+              )}
+            </TableBody>
+          </Table>
+        </div>
+        {sidePanel}
       </div>
 
       <div className="flex items-center justify-between px-2">

@@ -145,10 +145,41 @@ export default function StrategyPlannerPage() {
   ];
 
   return (
-    <div className="p-6 max-w-7xl mx-auto">
+    <div className="p-6">
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-semibold">Strategy Planner</h1>
+      </div>
+
+      {/* Filters */}
+      <div className="flex items-center gap-4 mb-6 justify-between">
+        <div className="flex items-center gap-4">
+          <select
+            className="h-10 px-3 rounded-md border bg-background text-sm"
+            value={filter.limit}
+            onChange={(e) =>
+              setFilter((prev) => ({
+                ...prev,
+                limit: Number(e.target.value),
+                page: 1
+              }))
+            }
+          >
+            <option value={5}>5 Rows</option>
+            <option value={10}>10 Rows</option>
+            <option value={25}>25 Rows</option>
+            <option value={50}>50 Rows</option>
+          </select>
+          <div className="relative flex-1 max-w-sm">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <Input
+              placeholder="Search"
+              className="pl-10 h-10"
+              value={search}
+              onChange={(e) => handleSearch(e.target.value)}
+            />
+          </div>
+        </div>
         <div className="flex items-center gap-2">
           {selectedRowKeys.length > 0 && (
             <Button
@@ -169,36 +200,6 @@ export default function StrategyPlannerPage() {
             <Plus className="w-4 h-4 mr-2" />
             Add New
           </Button>
-        </div>
-      </div>
-
-      {/* Filters */}
-      <div className="flex items-center gap-4 mb-6">
-        <select
-          className="h-10 px-3 rounded-md border bg-background text-sm"
-          value={filter.limit}
-          onChange={(e) =>
-            setFilter((prev) => ({
-              ...prev,
-              limit: Number(e.target.value),
-              page: 1
-            }))
-          }
-        >
-          <option value={5}>5 Rows</option>
-          <option value={10}>10 Rows</option>
-          <option value={25}>25 Rows</option>
-          <option value={50}>50 Rows</option>
-        </select>
-
-        <div className="relative flex-1 max-w-sm">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-          <Input
-            placeholder="Search"
-            className="pl-10 h-10"
-            value={search}
-            onChange={(e) => handleSearch(e.target.value)}
-          />
         </div>
       </div>
 

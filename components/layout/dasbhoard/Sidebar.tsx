@@ -4,82 +4,14 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import {
-  LayoutDashboard,
-  FileText,
-  Megaphone,
-  ChevronRight,
-  Sparkles,
-  PanelLeftClose,
-  PanelLeftOpen,
-  Users,
-} from "lucide-react";
+import { ChevronRight, PanelLeftClose, PanelLeftOpen } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useSidebar } from "./ResponsiveSidebarProvider";
-
-// ─── Types ────────────────────────────────────────────────────────────────────
-
-type NavChild = {
-  title: string;
-  href: string;
-};
-
-type NavItem = {
-  title: string;
-  href: string;
-  icon: React.ElementType;
-  children?: NavChild[];
-};
-
-type NavSection = {
-  title: string;
-  items: NavItem[];
-};
-
-// ─── Navigation data ──────────────────────────────────────────────────────────
-
-const navigationItems: NavSection[] = [
-  {
-    title: "OVERVIEW",
-    items: [
-      {
-        title: "Dashboard",
-        href: "/dashboard",
-        icon: LayoutDashboard,
-      },
-    ],
-  },
-  {
-    title: "CRM",
-    items: [
-      {
-        title: "Customer Data",
-        href: "/crm/customer-data",
-        icon: Users
-      }
-    ]
-  },
-  {
-    title: "Campaigns",
-    items: [
-      {
-        title: "Campaign",
-        href: "/campaigns",
-        icon: Megaphone,
-      },
-      {
-        title: "Campaign Briefs",
-        href: "/campaign-brief",
-        icon: FileText,
-      },
-      {
-        title: "Strategy Planner",
-        href: "/strategy-planner",
-        icon: Sparkles,
-      },
-    ],
-  },
-];
+import {
+  navigationItems,
+  nodeContainsActive,
+  type NavNode
+} from "./navigation";
 
 // ─── Component ───────────────────────────────────────────────────────────────
 
@@ -88,21 +20,116 @@ export function Sidebar() {
   const { data: session } = useSession();
   const { collapsed, toggleCollapsed } = useSidebar();
 
-  // Track which items are expanded (by href)
+  // Track which placeholder items are expanded (keyed by a unique node path).
   const [expanded, setExpanded] = useState<Record<string, boolean>>(() => {
     const initial: Record<string, boolean> = {};
-    for (const section of navigationItems) {
-      for (const item of section.items) {
-        if (item.children?.some((c) => pathname.startsWith(c.href))) {
-          initial[item.href] = true;
+    const walk = (nodes: NavNode[], parentKey: string) => {
+      for (const node of nodes) {
+        const key = `${parentKey}/${node.title}`;
+        if (node.children?.length) {
+          // Auto-expand ancestors of the active route.
+          if (nodeContainsActive(node, pathname)) {
+            initial[key] = true;
+          }
+          walk(node.children, key);
         }
       }
+    };
+    for (const section of navigationItems) {
+      walk(section.items, section.title);
     }
     return initial;
   });
 
-  const toggleExpand = (href: string) => {
-    setExpanded((prev) => ({ ...prev, [href]: !prev[href] }));
+  const toggleExpand = (key: string) => {
+    setExpanded((prev) => ({ ...prev, [key]: !prev[key] }));
+  };
+
+  // Recursively render a navigation node and its descendants.
+  const renderNode = (node: NavNode, parentKey: string, depth: number) => {
+    const key = `${parentKey}/${node.title}`;
+    const hasChildren = !!node.children?.length;
+    const isOpen = expanded[key] ?? false;
+    const isActive = nodeContainsActive(node, pathname);
+    const Icon = node.icon;
+
+    return (
+      <li key={key}>
+        {hasChildren ? (
+          // Placeholder parent — toggles its children, never navigates.
+          <button
+            type="button"
+            onClick={() => !collapsed && toggleExpand(key)}
+            title={collapsed ? node.title : undefined}
+            className={cn(
+              "w-full flex items-center px-2 py-2 rounded-lg transition-colors",
+              depth === 0 ? "text-sm" : "text-xs",
+              collapsed ? "justify-center" : "justify-between",
+              isActive
+                ? "bg-primary-50 text-primary-700 font-semibold"
+                : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+            )}
+          >
+            <span className={cn("flex items-center", collapsed ? "" : "gap-3")}>
+              {Icon && (
+                <Icon
+                  className={cn(
+                    "w-4 h-4 shrink-0",
+                    isActive && "text-primary-600"
+                  )}
+                />
+              )}
+              {!collapsed && node.title}
+            </span>
+            {!collapsed && (
+              <ChevronRight
+                className={cn(
+                  "w-4 h-4 transition-transform duration-200 shrink-0",
+                  isActive ? "text-primary-600" : "text-gray-400",
+                  isOpen && "rotate-90"
+                )}
+              />
+            )}
+          </button>
+        ) : (
+          // Leaf item — navigates to its href.
+          <Link
+            href={node.href ?? "#"}
+            title={collapsed ? node.title : undefined}
+            className={cn(
+              "flex items-center px-2 py-2 rounded-lg transition-colors",
+              depth === 0 ? "text-sm" : "text-xs",
+              collapsed ? "justify-center" : "gap-3",
+              isActive
+                ? "bg-primary-50 text-primary-700 font-semibold"
+                : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+            )}
+          >
+            {Icon && (
+              <Icon
+                className={cn(
+                  "w-4 h-4 shrink-0",
+                  isActive && "text-primary-600"
+                )}
+              />
+            )}
+            {!collapsed && node.title}
+          </Link>
+        )}
+
+        {/* Children submenu — only when expanded and not collapsed */}
+        {hasChildren && isOpen && !collapsed && (
+          <ul
+            className={cn(
+              "mt-0.5 space-y-0.5 border-l border-gray-100 pl-3",
+              depth === 0 ? "ml-4" : "ml-3"
+            )}
+          >
+            {node.children!.map((child) => renderNode(child, key, depth + 1))}
+          </ul>
+        )}
+      </li>
+    );
   };
 
   return (
@@ -137,8 +164,12 @@ export function Sidebar() {
             </svg>
           </div>
           <div className="min-w-0">
-            <h1 className="text-sm font-bold text-gray-900 whitespace-nowrap">ATLAS</h1>
-            <p className="text-xs text-gray-500 whitespace-nowrap">Enterprise</p>
+            <h1 className="text-sm font-bold text-gray-900 whitespace-nowrap">
+              ATLAS
+            </h1>
+            <p className="text-xs text-gray-500 whitespace-nowrap">
+              Enterprise
+            </p>
           </div>
         </div>
 
@@ -189,92 +220,7 @@ export function Sidebar() {
             )}
 
             <ul className="space-y-0.5">
-              {section.items.map((item) => {
-                const hasChildren = !!item.children?.length;
-                const isOpen = expanded[item.href] ?? false;
-                const isActive =
-                  pathname === item.href ||
-                  pathname.startsWith(item.href + "/") ||
-                  item.children?.some((c) => pathname.startsWith(c.href));
-
-                return (
-                  <li key={item.href}>
-                    {hasChildren ? (
-                      // Parent with children — button
-                      <button
-                        type="button"
-                        onClick={() => !collapsed && toggleExpand(item.href)}
-                        title={collapsed ? item.title : undefined}
-                        className={cn(
-                          "w-full flex items-center px-2 py-2 rounded-lg text-sm transition-colors",
-                          collapsed ? "justify-center" : "justify-between",
-                          isActive
-                            ? "bg-primary-50 text-primary-700 font-semibold"
-                            : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
-                        )}
-                      >
-                        <span className={cn("flex items-center", collapsed ? "" : "gap-3")}>
-                          <item.icon
-                            className={cn("w-4 h-4 shrink-0", isActive && "text-primary-600")}
-                          />
-                          {!collapsed && item.title}
-                        </span>
-                        {!collapsed && (
-                          <ChevronRight
-                            className={cn(
-                              "w-4 h-4 transition-transform duration-200 shrink-0",
-                              isActive ? "text-primary-600" : "text-gray-400",
-                              isOpen && "rotate-90"
-                            )}
-                          />
-                        )}
-                      </button>
-                    ) : (
-                      // Leaf item — link
-                      <Link
-                        href={item.href}
-                        title={collapsed ? item.title : undefined}
-                        className={cn(
-                          "flex items-center px-2 py-2 rounded-lg text-sm transition-colors",
-                          collapsed ? "justify-center" : "gap-3",
-                          isActive
-                            ? "bg-primary-50 text-primary-700 font-semibold"
-                            : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
-                        )}
-                      >
-                        <item.icon
-                          className={cn("w-4 h-4 shrink-0", isActive && "text-primary-600")}
-                        />
-                        {!collapsed && item.title}
-                      </Link>
-                    )}
-
-                    {/* Children submenu — only when expanded and not collapsed */}
-                    {hasChildren && isOpen && !collapsed && (
-                      <ul className="mt-0.5 ml-7 space-y-0.5 border-l border-gray-100 pl-3">
-                        {item.children!.map((child) => {
-                          const isChildActive = pathname === child.href;
-                          return (
-                            <li key={child.href}>
-                              <Link
-                                href={child.href}
-                                className={cn(
-                                  "block px-2 py-1.5 rounded-md text-xs transition-colors",
-                                  isChildActive
-                                    ? "text-primary-700 font-semibold bg-primary-50"
-                                    : "text-gray-500 hover:text-gray-900 hover:bg-gray-50"
-                                )}
-                              >
-                                {child.title}
-                              </Link>
-                            </li>
-                          );
-                        })}
-                      </ul>
-                    )}
-                  </li>
-                );
-              })}
+              {section.items.map((item) => renderNode(item, section.title, 0))}
             </ul>
           </div>
         ))}
@@ -301,7 +247,12 @@ export function Sidebar() {
           collapsed ? "px-2 py-3" : "px-4 py-3"
         )}
       >
-        <div className={cn("flex items-center", collapsed ? "justify-center" : "gap-3")}>
+        <div
+          className={cn(
+            "flex items-center",
+            collapsed ? "justify-center" : "gap-3"
+          )}
+        >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={
