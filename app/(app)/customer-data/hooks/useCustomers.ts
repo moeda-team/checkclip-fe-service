@@ -91,7 +91,9 @@ export const usePostCustomer = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (form: CustomerFormDto) =>
-      axios.post<ApiResponse<CustomerDto>>(CUSTOMER_URL, form),
+      // Trailing slash avoids the backend's 307 redirect (and the dropped
+      // Authorization header / body that comes with it on cross-origin POSTs).
+      axios.post<ApiResponse<CustomerDto>>(`${CUSTOMER_URL}/`, form),
     meta: {
       errorMessage: "Failed to create customer",
       successMessage: "Customer created successfully",
