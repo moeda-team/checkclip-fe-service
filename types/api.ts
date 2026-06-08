@@ -69,6 +69,16 @@ export const queryKeys = {
     infinite: (search: string) => ["getCampaignInfinite", search] as const,
     detail: (id: string) => ["getOneCampaign", id] as const,
   },
+  customer: {
+    all: () => ["getCustomer"] as const,
+    list: (filter: PaginationFilter) => ["getCustomer", filter] as const,
+    infinite: (search: string) => ["getCustomerInfinite", search] as const,
+    detail: (id: string) => ["getOneCustomer", id] as const,
+  },
+  customerField: {
+    all: () => ["getCustomerField"] as const,
+    detail: (id: string) => ["getOneCustomerField", id] as const,
+  },
 } as const;
 
 /** Meta type for query/mutation error/success messages.
