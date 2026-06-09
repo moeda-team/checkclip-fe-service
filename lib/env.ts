@@ -8,7 +8,8 @@
 const clientRequired = {
   NEXT_PUBLIC_API_BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL,
   NEXT_PUBLIC_GOOGLE_REDIRECT_URI: process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URI,
-  NEXT_PUBLIC_YAHOO_REDIRECT_URI: process.env.NEXT_PUBLIC_YAHOO_REDIRECT_URI
+  NEXT_PUBLIC_YAHOO_REDIRECT_URI: process.env.NEXT_PUBLIC_YAHOO_REDIRECT_URI,
+  NEXT_PUBLIC_GOOGLE_ADS_REDIRECT_URI: process.env.NEXT_PUBLIC_GOOGLE_ADS_REDIRECT_URI,
 } as const;
 
 // Server env vars are injected at container runtime; validate lazily
@@ -69,6 +70,9 @@ export const env = {
   // Google OAuth
   googleClientId: optional.NEXT_PUBLIC_GOOGLE_CLIENT_ID ?? "",
   googleRedirectUri: clientRequired.NEXT_PUBLIC_GOOGLE_REDIRECT_URI!,
+
+  // Google Ads OAuth
+  googleAdsRedirectUri: clientRequired.NEXT_PUBLIC_GOOGLE_ADS_REDIRECT_URI ?? "",
 
   // Yahoo OAuth
   yahooClientId: optional.NEXT_PUBLIC_YAHOO_CLIENT_ID ?? "",

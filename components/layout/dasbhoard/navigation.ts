@@ -2,7 +2,8 @@ import {
   LayoutDashboard,
   FileText,
   Megaphone,
-  Sparkles
+  Sparkles,
+  Settings
 } from "lucide-react";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -66,6 +67,16 @@ export const navigationItems: NavSection[] = [
         title: "Strategy Planner",
         href: "/strategy-planner",
         icon: Sparkles
+      }
+    ]
+  },
+  {
+    title: "Settings",
+    items: [
+      {
+        title: "Settings",
+        href: "/setting",
+        icon: Settings
       }
     ]
   }
