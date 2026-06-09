@@ -28,21 +28,21 @@ const optional = {
 } as const;
 
 // Validate client env vars at module load time (server-side only)
-function validateClientRequired() {
-  if (typeof window !== "undefined") return;
+// function validateClientRequired() {
+//   if (typeof window !== "undefined") return;
 
-  const missing = Object.entries(clientRequired)
-    .filter(([, v]) => !v)
-    .map(([k]) => k);
+//   const missing = Object.entries(clientRequired)
+//     .filter(([, v]) => !v)
+//     .map(([k]) => k);
 
-  if (missing.length > 0) {
-    throw new Error(
-      `Missing required environment variables: ${missing.join(", ")}`
-    );
-  }
-}
+//   if (missing.length > 0) {
+//     throw new Error(
+//       `Missing required environment variables: ${missing.join(", ")}`
+//     );
+//   }
+// }
 
-validateClientRequired();
+// validateClientRequired();
 
 // Lazy validator for server-only env vars
 function getServerVar<K extends keyof typeof serverRequired>(key: K): string {
