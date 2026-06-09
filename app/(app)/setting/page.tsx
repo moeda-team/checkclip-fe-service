@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { toast } from "sonner";
 
@@ -13,7 +13,9 @@ import {
 import { ConnectedAccountsCard } from "./components/ConnectedAccountsCard";
 import { AdAccountsTable } from "./components/AdAccountsTable";
 
-export default function SettingPage() {
+// ── Inner component — isolates useSearchParams so Suspense boundary works ──
+
+function SettingContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -38,7 +40,6 @@ export default function SettingPage() {
     }
   }, [searchParams, router]);
 
-  // ── Connect handler ──────────────────────────────────────────────────────
   const handleConnect = async (platform: AdsPlatform) => {
     if (platform === "google_ads") {
       const result = await fetchGoogleAdsUrl();
@@ -51,14 +52,12 @@ export default function SettingPage() {
     }
   };
 
-  // ── Disconnect handler ───────────────────────────────────────────────────
   const handleDisconnect = (platform: AdsPlatform) => {
     disconnect(platform);
   };
 
   return (
     <div className="p-6 max-w-5xl mx-auto space-y-6">
-      {/* Page title */}
       <div>
         <h2 className="text-xl font-semibold text-gray-900">
           Manage Connected Accounts
@@ -69,7 +68,6 @@ export default function SettingPage() {
         </p>
       </div>
 
-      {/* Platform connection cards */}
       <ConnectedAccountsCard
         accounts={accounts}
         isLoading={isLoadingAccounts}
@@ -79,11 +77,20 @@ export default function SettingPage() {
         onDisconnect={handleDisconnect}
       />
 
-      {/* Ad accounts table */}
       <AdAccountsTable
         onSyncGoogle={() => toast.info("Sync Google Ads — coming soon")}
         onSyncMeta={() => toast.info("Sync Meta Ads — coming soon")}
       />
     </div>
+  );
+}
+
+// ── Page export — wraps inner component in Suspense ──────────────────────────
+
+export default function SettingPage() {
+  return (
+    <Suspense>
+      <SettingContent />
+    </Suspense>
   );
 }
