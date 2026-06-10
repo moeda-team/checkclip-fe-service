@@ -19,7 +19,6 @@ const AD_ACCOUNT_URL = "/auth/user/ad-accounts";
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 export type AdsPlatform = "google_ads" | "meta_ads" | "line_ads";
-export type AdAccountStatus = "active" | "expired" | "disconnected";
 
 export interface AdAccountDto {
   id: string;
@@ -28,7 +27,6 @@ export interface AdAccountDto {
   external_account_name: string;
   external_email?: string;
   scopes: string;
-  status: AdAccountStatus;
 }
 
 export interface ConnectGoogleAdsDto {
@@ -45,7 +43,7 @@ export const useGetAdAccounts = () =>
       const res = await axios.get<ApiResponse<AdAccountDto[]>>(AD_ACCOUNT_URL);
       return res.data;
     },
-    enabled: false, // disabled — enable when backend is ready
+    // enabled: false, // disabled — enable when backend is ready
     meta: { errorMessage: "Failed to fetch connected ad accounts" },
   });
 

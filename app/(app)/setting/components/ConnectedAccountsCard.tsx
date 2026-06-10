@@ -143,7 +143,7 @@ export function PlatformCard({
   isConnecting,
   isDisconnecting,
 }: PlatformCardProps) {
-  const isConnected = account?.status === "active";
+  const isConnected = account != null;
   const isComingSoon = config.connectAction === "coming_soon";
 
   return (
@@ -235,7 +235,6 @@ export function ConnectedAccountsCard({
 }: ConnectedAccountsCardProps) {
   const getAccount = (platform: AdsPlatform) =>
     accounts.find((a) => a.platform === platform);
-
   if (isLoading) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
