@@ -9,6 +9,7 @@ import {
   useGetGoogleAdsAuthUrl,
   useDisconnectAdAccount,
   type AdsPlatform,
+  useSyncGoogleAds,
 } from "@/app/(app)/setting/hooks/use-ad-accounts";
 import { ConnectedAccountsCard } from "./components/ConnectedAccountsCard";
 import { AdAccountsTable } from "./components/AdAccountsTable";
@@ -27,6 +28,8 @@ function SettingContent() {
 
   const { mutate: disconnect, isPending: isDisconnecting } =
     useDisconnectAdAccount();
+
+    const { mutate: syncGoogleAds, isPending } = useSyncGoogleAds();
 
   const accounts = adAccountsData?.data ?? [];
 
@@ -56,6 +59,10 @@ function SettingContent() {
     disconnect(platform);
   };
 
+  const handleSyncGoogleAds = () => {
+    syncGoogleAds();
+  }
+
   return (
     <div className="p-6 max-w-5xl mx-auto space-y-6">
       <div>
@@ -78,7 +85,7 @@ function SettingContent() {
       />
 
       <AdAccountsTable
-        onSyncGoogle={() => toast.info("Sync Google Ads — coming soon")}
+        onSyncGoogle={handleSyncGoogleAds}
         onSyncMeta={() => toast.info("Sync Meta Ads — coming soon")}
       />
     </div>

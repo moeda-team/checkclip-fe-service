@@ -7,7 +7,7 @@
 "use client";
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import type { AxiosError } from "axios";
+import { Axios, AxiosError } from "axios";
 import { axiosConfig } from "@/lib/axios";
 import { env } from "@/lib/env";
 import type { ApiResponse, ApiResponseError } from "@/types/api";
@@ -54,7 +54,7 @@ export const useGetGoogleAdsAuthUrl = () =>
     queryKey: ["getGoogleAdsAuthUrl"],
     queryFn: async () => {
       const res = await axios.get<ApiResponse<{ url: string }>>(
-        `${AD_ACCOUNT_URL}/connect/google/url`
+        `${AD_ACCOUNT_URL}/connect/google/url`,
       );
       return res.data;
     },
@@ -70,7 +70,7 @@ export const useConnectGoogleAds = () => {
     mutationFn: async (payload: ConnectGoogleAdsDto) => {
       const res = await axios.post<ApiResponse<AdAccountDto>>(
         `${AD_ACCOUNT_URL}/connect/google`,
-        payload
+        payload,
       );
       return res.data;
     },
@@ -91,7 +91,7 @@ export const useDisconnectAdAccount = () => {
   return useMutation({
     mutationFn: async (platform: AdsPlatform) => {
       const res = await axios.delete<ApiResponse<null>>(
-        `${AD_ACCOUNT_URL}/${platform}`
+        `${AD_ACCOUNT_URL}/${platform}`,
       );
       return res.data;
     },
@@ -101,6 +101,18 @@ export const useDisconnectAdAccount = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["getAdAccounts"] });
+    },
+  });
+};
+
+// ─── Query: Get Customer Google Ads ───────────────────────────────────────────
+
+export const useSyncGoogleAds = () => {
+  return useMutation({
+    mutationFn: async () => {
+      const res = await axios.get(`${AD_ACCOUNT_URL}/google/customers`);
+
+      return res.data;
     },
   });
 };
