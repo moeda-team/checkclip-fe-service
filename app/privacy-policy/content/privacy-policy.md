@@ -1,358 +1,188 @@
-1\. Introduction #
+---
+title: Privacy Policy
+description: AIMOS Privacy Policy
+lastUpdated: 2026-06-15
+---
 
-Welcome to AIMOS – Platform Digital Marketing (“AIMOS”, “we”, “our”, or “us”). 
+# Privacy Policy
 
-AIMOS is a digital marketing platform designed to help businesses, marketers, agencies, and organizations manage marketing assets, products, campaigns, 
+**AIMOS – AI-Powered Marketing & Campaign Management Platform**
 
-audience data, and AI-powered marketing strategies. 
+**Effective Date:** June 15, 2025
 
-We are committed to protecting your privacy and ensuring that all personal, organizational, and marketing-related information is processed securely and 
+## 1. Introduction
 
-responsibly. 
+PT. Altimeda Cipta Visitama ("Company," "we," "us," or "our") operates AIMOS, an AI-powered marketing and campaign management platform.
 
-By accessing or using AIMOS, you agree to the collection, use, and disclosure of information as described in this Privacy Policy.
+This Privacy Policy explains how we collect, access, process, and handle data when you use our platform, including our integration with Google Ads API and other third-party advertising services.
 
+By using AIMOS, you agree to the practices described in this Privacy Policy.
 
+## 2. Company Information
 
-2\. Information We Collect #
+**Company Name**
+PT. Altimeda Cipta Visitama
 
-2.1 Account Information 
+**Address**
+Puri Depok Mas No. 3
+Kec. Pancoran Mas, Kel. Pancoran Mas
+Kota Depok, Jawa Barat 16436
+Indonesia
 
-When creating or managing an AIMOS account, we may collect: 
+**Email**
+[altimeda@altimeda.com](mailto:altimeda@altimeda.com)
 
-Full name 
+## 3. Data We Access
 
-Email address 
+AIMOS connects to your existing advertising accounts (such as Google Ads) via official APIs.
 
-Company or organization name 
+We do not independently collect or store your personal advertising data on our servers. Instead, we access and process data directly from your connected accounts in real time.
 
-Job title 
+The types of data we access include:
 
-Profile photo (optional) 
+* Google Ads account data (campaigns, ad groups, ads, keywords)
+* Campaign performance data (impressions, clicks, conversions, cost)
+* Conversion tracking data
+* Billing and budget information associated with your Google Ads account
+* Campaign setup and configuration data
 
-Phone number (optional) 
+This data is accessed solely for the purpose of enabling AIMOS to provide its campaign management and optimization services on your behalf.
 
-Authentication credentials 
+## 4. How We Use Your Data
 
-2.2 Organization \& Business Information 
+The data accessed through your connected advertising accounts is used exclusively for:
 
-Users may provide business-related information, including but not limited to: 
+* Managing, monitoring, and optimizing your advertising campaigns
+* Providing campaign performance reporting and analytics within the AIMOS platform
+* Enabling automated or AI-assisted campaign adjustments based on performance data
+* Supporting billing and budget management features
+* Improving the functionality and performance of the AIMOS platform
 
-Company profiles 
+We do not sell, rent, or trade your Google Ads data or other connected advertising account data to third parties.
 
-Brand information 
+We do not share, transfer, or disclose Google user data except where necessary to:
 
-Product information 
+* Provide and maintain the platform services requested by you
+* Process data through trusted service providers acting on our behalf
+* Comply with applicable laws, regulations, legal processes, or governmental requests
+* Protect the rights, safety, and security of our users, our company, or the public
 
-Service information 
+## 5. Google API Services User Data Policy
 
-Marketing assets 
+AIMOS's use and transfer of information received from Google APIs adheres to the Google API Services User Data Policy, including the Limited Use requirements.
 
-Campaign information 
+This means:
 
-Marketing objectives 
+* We only use Google user data to provide or improve features visible to the user in AIMOS
+* We do not use Google user data to serve advertisements
+* We do not allow humans to read Google user data unless required for security, legal compliance, internal operations, or with your explicit consent
+* We do not use Google user data for any purpose not disclosed in this Privacy Policy
 
-Audience personas 
+For more information:
 
-Competitor information 
+https://developers.google.com/terms/api-services-user-data-policy
 
-Promotional content 
+## 6. OAuth Permissions and Scope of Access
 
-Landing page content 
+When you connect your Google Ads account to AIMOS, we request access through OAuth 2.0 authorization.
 
-Media files and documents 
+The specific permission currently requested is:
 
-2.3 AI Input \& Generated Content 
+* `https://www.googleapis.com/auth/adwords`
 
-To provide AI-powered features, AIMOS may process: 
+This scope allows AIMOS to read and manage Google Ads campaigns, ad groups, ads, keywords, and related settings.
 
-\* Marketing prompts 
+You may review or revoke permissions at any time through:
 
-\* Campaign briefs 
+https://myaccount.google.com/permissions
 
-\* Product descriptions 
+## 7. Data Storage and Retention
 
-\* Audience targeting information 
+AIMOS is designed to access advertising data in real time through authorized API connections.
 
-\* Marketing objectives 
+We do not permanently store Google Ads campaign data, conversion data, or billing information beyond what is necessary for platform functionality and session-based processing.
 
-\* Competitor analysis 
+Temporary data is processed securely and is not retained after the session ends unless required for campaign management features explicitly enabled by you.
 
-\* Content generation requests 
+If you have questions regarding data retention, please contact us at:
 
-\* AI-generated recommendations and outputs 
+[altimeda@altimeda.com](mailto:altimeda@altimeda.com)
 
-2.4 Usage and Technical Information 
+## 8. Third-Party Integrations
 
-We may automatically collect: 
+AIMOS integrates with advertising and marketing platforms including:
 
-Device information 
+* Google Ads API
+* Meta Ads (planned integration)
+* LINE Ads (planned integration)
 
-Browser information 
+Each integration is governed by the respective provider's privacy policy and terms of service.
 
-Operating system 
+### Google
 
-IP address 
+https://policies.google.com/privacy
 
-Session information 
+### Meta
 
-Log data 
+https://www.facebook.com/privacy/policy
 
-Error reports 
+### LINE
 
-Platform activity records 
+https://terms.line.me/line_rules
 
-Feature usage analytics
+We only request the minimum permissions necessary to provide AIMOS services.
 
+## 9. Data Security
 
+We implement industry-standard security measures including:
 
-3\. How We Use Information #
+* Secure HTTPS connections
+* OAuth 2.0 authentication
+* Access controls for authorized personnel only
+* Regular security reviews
 
-AIMOS uses collected information to: 
+While we strive to protect your data, no method of transmission over the Internet can be guaranteed to be 100% secure.
 
-Provide and maintain platform services 
+## 10. Your Rights and Control
 
-Generate AI-powered marketing strategies 
+Depending on applicable law, you may have the right to:
 
-Create content recommendations and campaign plans 
+* Access information AIMOS accesses from your connected accounts
+* Revoke platform access to third-party services
+* Request deletion of temporary account-related data
+* Correct or update account information
 
-Improve user experience 
+To exercise these rights, contact:
 
-Deliver customer support 
+[altimeda@altimeda.com](mailto:altimeda@altimeda.com)
 
-Analyze platform performance 
+## 11. Children's Privacy
 
-Prevent fraud, abuse, and unauthorized access 
+AIMOS is a business-to-business (B2B) platform intended for professionals and organizations.
 
-Enhance platform security 
+Our services are not directed toward individuals under the age of 18, and we do not knowingly collect personal data from minors.
 
-Develop and improve platform features 
+## 12. Changes to This Privacy Policy
 
-Fulfill legal and contractual obligations
+We may update this Privacy Policy periodically to reflect changes in technology, legal requirements, or business practices.
 
+Any material updates will be published on our website along with an updated effective date.
 
+Continued use of AIMOS after such changes constitutes acceptance of the revised Privacy Policy.
 
-4\. AI-Powered Features #
+## 13. Contact Us
 
-AIMOS provides AI-powered capabilities that may assist users in: 
+If you have questions, concerns, or requests regarding this Privacy Policy, please contact:
 
-Marketing strategy generation 
+**PT. Altimeda Cipta Visitama**
 
-Campaign planning 
+Puri Depok Mas No. 3
+Kec. Pancoran Mas, Kel. Pancoran Mas
+Kota Depok, Jawa Barat 16436
+Indonesia
 
-Content ideation 
+**Email:** [altimeda@altimeda.com](mailto:altimeda@altimeda.com)
 
-Advertising recommendations 
+---
 
-Audience analysis 
-
-SEO recommendations 
-
-Marketing performance insights 
-
-Marketing automation workflows 
-
-User-provided information may be processed through AI systems solely for delivering requested services and improving platform functionality. 
-
-AI-generated outputs are intended as recommendations only. Users remain responsible for reviewing, validating, and approving any generated content, strategy, 
-
-or business decision before implementation.
-
-
-
-5\. Data Ownership #
-
-All data uploaded, created, or managed within AIMOS remains the property of the respective user or organization. This includes: 
-
-Products 
-
-Campaigns 
-
-Marketing assets 
-
-Business information 
-
-Documents 
-
-Generated content 
-
-Brand materials 
-
-AIMOS does not claim ownership of user content. Users are responsible for ensuring they have the appropriate rights and permissions to upload and manage 
-
-content within the platform.
-
-
-
-6\. Third-Party Integrations #
-
-AIMOS may integrate with third-party platforms and services, including: 
-
-Google Ads 
-
-Google Analytics 
-
-Google Search Console 
-
-Meta Ads 
-
-Instagram 
-
-Facebook 
-
-LinkedIn 
-
-TikTok Ads 
-
-YouTube 
-
-CRM platforms 
-
-Marketing automation platforms 
-
-Analytics and reporting tools 
-
-Information exchanged with third-party services is subject to the respective provider’s privacy policies and terms of service.
-
-
-
-7\. Data Sharing and Disclosure #
-
-AIMOS does not sell personal data or customer information. Information may only be shared under the following circumstances: 
-
-\##Service Providers ##
-
-With trusted vendors and service providers supporting: 
-
-Cloud infrastructure 
-
-Authentication services 
-
-Data storage 
-
-Analytics services 
-
-Payment processing 
-
-AI processing services 
-
-\## Legal Compliance ##
-
-When required by applicable laws, regulations, legal processes, or governmental requests. 
-
-\## Business Transactions ##
-
-In connection with mergers, acquisitions, investments, restructurings, or asset transfers.
-
-
-
-8\. Data Security #
-
-AIMOS implements reasonable technical and organizational measures to protect information, including: 
-
-1. Secure authentication 
-2. HTTPS/TLS encryption 
-3. Access control mechanisms 
-4. Role-based permissions 
-5. Infrastructure monitoring 
-6. Backup and disaster recovery procedures 
-7. Security auditing and logging 
-
-While we strive to maintain industry-standard security practices, no electronic storage or transmission method can be guaranteed to be completely secure.
-
-
-
-9\. Data Retention #
-
-We retain information only for as long as necessary to: 
-
-1. Provide platform services 
-2. Maintain account functionality 
-3. Fulfill legal obligations 
-4. Resolve disputes 
-5. Enforce agreements 
-
-
-
-10\. User Rights #
-
-Depending on applicable laws and regulations, users may have the right to:
-
-1. Access personal information 
-2. Update inaccurate information 
-3. Request deletion of data 
-4. Export platform data 
-5. Restrict certain processing activities 
-6. Withdraw consent where applicable 
-7. Maintain secure sessions 
-8. Store preferences 
-9. Improve performance 
-10. Analyze platform usage 
-11. Enhance security and reliability 
-12. While we strive to maintain industry-standard security practices, no electronic storage or transmission method can be guaranteed to be completely secure.
-13. Users may request deletion of their account and associated information, subject to legal and operational requirements.
-
-&#x20;
-
-Requests may be submitted through the contact information listed below.
-
-
-
-11\. Cookies and Similar Technologies #
-
-AIMOS may use cookies and related technologies to: 
-
-1.Maintain secure sessions 
-
-2.Store preferences 
-
-3.Improve performance 
-
-4.Analyze platform usage 
-
-5.Enhance security and reliability 
-
-Users may manage cookie preferences through their browser settings.
-
-
-
-12\. International Data Processing #
-
-Information may be stored or processed in locations where AIMOS, its affiliates, or service providers operate. We take reasonable measures to ensure appropriate 
-
-protection of information regardless of processing location.
-
-
-
-13\. Children’s Privacy #
-
-AIMOS is intended for professional and business use and is not designed for individuals under the age of 13. We do not knowingly collect personal information 
-
-from children.
-
-
-
-14\. Changes to This Privacy Policy #
-
-We may update this Privacy Policy periodically. Any updates will be published on this page along with the revised effective date. Continued use of AIMOS 
-
-following any changes constitutes acceptance of the updated Privacy Policy.
-
-
-
-15\. Contact Information #
-
-For questions regarding this Privacy Policy, data protection practices, or privacy-related requests, please contact: 
-
-AIMOS Support Team 
-
-Email: support@aimos.ai 
-
-Website: aimos.ai 
-
-Your Privacy Matters 
-
-At AIMOS, we are committed to building a secure, transparent, and trustworthy digital marketing platform that empowers organizations to leverage AI responsibly 
-
-while maintaining control and ownership of their data
-
+*Last updated: June 15, 2026*
