@@ -1,129 +1,71 @@
-"use client";
+import fs from "node:fs";
+import path from "node:path";
+import matter from "gray-matter";
+import { remark } from "remark";
+import html from "remark-html";
+import { Shield } from "lucide-react";
+import { BackButton } from "./back-button";
 
-import { useRouter } from "next/navigation";
-import { ArrowLeft, Shield } from "lucide-react";
-import {
-  Accordion,
-  AccordionItem,
-  AccordionTrigger,
-  AccordionContent
-} from "@/components/ui/accordion";
-import {
-  privacyPolicySections,
-  privacyPolicyEffectiveDate,
-  type PolicyBlock
-} from "./content/privacy-policy-data";
+async function getPrivacyPolicyContent() {
+  const filePath = path.join(
+    process.cwd(),
+    "app/privacy-policy/content/privacy-policy.md"
+  );
+  const fileContents = fs.readFileSync(filePath, "utf8");
+  const { data, content } = matter(fileContents);
 
-function renderBlock(block: PolicyBlock, index: number) {
-  switch (block.type) {
-    case "subheading":
-      return (
-        <h3
-          key={index}
-          className="mt-4 mb-2 text-sm font-semibold text-gray-900"
-        >
-          {block.text}
-        </h3>
-      );
-    case "paragraph":
-      return (
-        <p key={index} className="mb-3 text-sm leading-6 text-gray-600">
-          {block.text}
-        </p>
-      );
-    case "list":
-      return (
-        <ul
-          key={index}
-          className="mb-3 ml-5 list-disc space-y-1 text-sm leading-6 text-gray-600 marker:text-purple-500"
-        >
-          {block.items.map((item, i) => (
-            <li key={i}>{item}</li>
-          ))}
-        </ul>
-      );
-    case "ordered-list":
-      return (
-        <ol
-          key={index}
-          className="mb-3 ml-5 list-decimal space-y-1 text-sm leading-6 text-gray-600 marker:text-purple-500"
-        >
-          {block.items.map((item, i) => (
-            <li key={i}>{item}</li>
-          ))}
-        </ol>
-      );
-    case "contact":
-      return (
-        <div
-          key={index}
-          className="mb-3 rounded-xl border border-purple-100 bg-purple-50 px-4 py-3 text-sm leading-6 text-gray-700"
-        >
-          {block.lines.map((line, i) => (
-            <p key={i} className={i === 0 ? "font-semibold" : undefined}>
-              {line}
-            </p>
-          ))}
-        </div>
-      );
-    default:
-      return null;
-  }
+  const processedContent = await remark().use(html).process(content);
+  const contentHtml = processedContent.toString();
+
+  const lastUpdated =
+    data.lastUpdated instanceof Date
+      ? data.lastUpdated.toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "long",
+          day: "numeric"
+        })
+      : String(data.lastUpdated ?? "");
+
+  return {
+    frontmatter: {
+      title: String(data.title ?? ""),
+      description: String(data.description ?? ""),
+      lastUpdated
+    },
+    contentHtml
+  };
 }
 
-export default function PrivacyPolicyPage() {
-  const router = useRouter();
+export default async function PrivacyPolicyPage() {
+  const { frontmatter, contentHtml } = await getPrivacyPolicyContent();
 
   return (
     <div className="min-h-screen bg-gray-50 py-10 px-4 sm:px-6">
       <div className="mx-auto w-full max-w-5xl">
-        <button
-          type="button"
-          onClick={() => router.back()}
-          className="mb-6 inline-flex items-center gap-2 text-sm font-medium text-gray-600 hover:text-purple-600"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Back
-        </button>
+        <BackButton />
 
         <header className="mb-8 border-b border-gray-200 pb-8">
           <div className="flex items-start justify-between gap-4">
             <div>
               <h1 className="text-4xl font-extrabold tracking-tight text-purple-600 sm:text-5xl">
-                Privacy Policy
+                {frontmatter.title}
               </h1>
-              <p className="mt-3 text-lg text-gray-500">
-                AIMOS &ndash; Platform Digital Marketing
-              </p>
               <p className="mt-2 text-sm font-semibold text-purple-600">
-                {privacyPolicyEffectiveDate}
+                Effective Date: {frontmatter.lastUpdated}
               </p>
             </div>
             <Shield className="h-12 w-12 shrink-0 text-purple-600" />
           </div>
         </header>
 
-        <Accordion
-          type="single"
-          collapsible
-          defaultValue="introduction"
-          className="space-y-4"
-        >
-          {privacyPolicySections.map((section) => (
-            <AccordionItem
-              key={section.id}
-              value={section.id}
-              className="rounded-2xl border border-gray-200 bg-white px-6 shadow-sm"
-            >
-              <AccordionTrigger className="py-5 text-lg font-bold text-gray-900 hover:no-underline">
-                {section.number}. {section.title}
-              </AccordionTrigger>
-              <AccordionContent>
-                {section.blocks.map((block, i) => renderBlock(block, i))}
-              </AccordionContent>
-            </AccordionItem>
-          ))}
-        </Accordion>
+        <article
+          className="prose prose-sm prose-purple max-w-none prose-headings:text-gray-900 prose-p:text-gray-600 prose-a:text-purple-600 prose-strong:text-gray-900 prose-li:text-gray-600 prose-li:marker:text-purple-500"
+          dangerouslySetInnerHTML={{ __html: contentHtml }}
+        />
+
+        <p className="mt-8 text-center text-sm italic text-gray-400">
+          Last updated: {frontmatter.lastUpdated}
+        </p>
       </div>
     </div>
   );
