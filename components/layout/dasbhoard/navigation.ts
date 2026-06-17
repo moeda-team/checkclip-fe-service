@@ -50,21 +50,6 @@ export const navigationItems: NavSection[] = [
     ]
   },
   {
-    title: "CRM2",
-    items: [
-      {
-        title: "Customer Data",
-        icon: FileText,
-        children: [
-          {
-            title: "Customer Profile",
-            href: "/campaigns"
-          }
-        ]
-      }
-    ]
-  },
-  {
     title: "Campaigns",
     items: [
       {
