@@ -30,7 +30,7 @@ Kota Depok, Jawa Barat 16436
 Indonesia
 
 **Email**
-[altimeda@altimeda.com](mailto:altimeda@altimeda.com)
+[admin@altimeda.com](mailto:admin@altimeda.com)
 
 ## 3. Data We Access
 
@@ -106,7 +106,7 @@ Temporary data is processed securely and is not retained after the session ends 
 
 If you have questions regarding data retention, please contact us at:
 
-[altimeda@altimeda.com](mailto:altimeda@altimeda.com)
+[admin@altimeda.com](mailto:admin@altimeda.com)
 
 ## 8. Third-Party Integrations
 
@@ -154,7 +154,7 @@ Depending on applicable law, you may have the right to:
 
 To exercise these rights, contact:
 
-[altimeda@altimeda.com](mailto:altimeda@altimeda.com)
+[admin@altimeda.com](mailto:admin@altimeda.com)
 
 ## 11. Children's Privacy
 
@@ -181,7 +181,7 @@ Kec. Pancoran Mas, Kel. Pancoran Mas
 Kota Depok, Jawa Barat 16436
 Indonesia
 
-**Email:** [altimeda@altimeda.com](mailto:altimeda@altimeda.com)
+**Email:** [admin@altimeda.com](mailto:admin@altimeda.com)
 
 ---
 
