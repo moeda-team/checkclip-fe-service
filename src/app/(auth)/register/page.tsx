@@ -156,11 +156,16 @@ export default function RegisterPage() {
       return;
     }
 
+    const payload = {
+      ...formData,
+      phone_number: `+62${formData.phone_number}`,
+    };
+
     setIsLoading(true);
     setErrors({});
 
     try {
-      await register(formData);
+      await register(payload);
       router.push("/");
     } catch (error: unknown) {
       console.error("Register error:", error);
@@ -178,6 +183,21 @@ export default function RegisterPage() {
       setErrors({ general: errorMessage });
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const normalizePhoneNumber = (value: string): string => {
+    const digits = value.replace(/\D/g, "");
+    if (digits.startsWith("62")) return digits.slice(2);
+    if (digits.startsWith("0")) return digits.slice(1);
+    return digits;
+  };
+
+  const handlePhoneChange = (value: string) => {
+    const normalized = normalizePhoneNumber(value);
+    setFormData((prev) => ({ ...prev, phone_number: normalized }));
+    if (errors.phone_number) {
+      setErrors((prev) => ({ ...prev, phone_number: undefined, general: undefined }));
     }
   };
 
@@ -322,15 +342,26 @@ export default function RegisterPage() {
                 {errors.role && <span className="text-[13px] text-destructive font-medium">{errors.role}</span>}
               </div>
 
-              <IconInput
-                icon={Phone}
-                label="Phone Number"
-                type="tel"
-                placeholder="Enter your phone number"
-                value={formData.phone_number}
-                onChange={handleInputChange("phone_number")}
-                error={errors.phone_number}
-              />
+              <div className="flex flex-col gap-2">
+                <Label className="text-sm font-semibold text-slate-700">Phone Number</Label>
+                <div className={cn(
+                  "relative flex items-center border-2 rounded-[14px] bg-white transition-all",
+                  errors.phone_number ? "border-red-500" : "border-slate-200 focus-within:border-lavender focus-within:ring-4 focus-within:ring-lavender/10"
+                )}>
+                  <Phone className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" size={20} />
+                  <span className="flex items-center pl-[44px] pr-1 text-[15px] font-semibold text-midnight select-none border-r-2 border-slate-200 h-full py-[14px]">+62</span>
+                  <input
+                    type="tel"
+                    placeholder="81234567890"
+                    value={formData.phone_number}
+                    onChange={(e) => handlePhoneChange(e.target.value)}
+                    className="w-full py-[14px] px-4 border-none rounded-r-[14px] bg-transparent font-sans text-[15px] text-midnight outline-none placeholder:text-slate-400"
+                    autoCapitalize="off"
+                    autoCorrect="off"
+                  />
+                </div>
+                {errors.phone_number && <span className="text-[13px] text-red-500 font-medium">{errors.phone_number}</span>}
+              </div>
 
               <div />
             </div>
