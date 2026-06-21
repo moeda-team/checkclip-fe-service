@@ -1,10 +1,17 @@
 import type { Metadata } from "next";
+import { Inter } from "next/font/google";
 import { Providers } from "@/components/providers";
 import "./globals.css";
 
+const inter = Inter({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-inter",
+});
+
 export const metadata: Metadata = {
-  title: "CheckClip - HR Intelligence",
-  description: "Indonesian HR Compliance Platform",
+  title: "Workforce — People & Culture Platform",
+  description: "Human-centered workforce management",
   icons: {
     icon: "/favicon.svg",
   },
@@ -16,8 +23,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className="min-h-screen bg-cloud text-midnight antialiased">
+    <html lang="en" className={inter.variable}>
+      <body className="min-h-screen bg-[#F8FAFF] text-[#0F172A] antialiased font-sans">
         <Providers>
           <main className="w-full">
             {children}

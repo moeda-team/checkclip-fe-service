@@ -6,7 +6,7 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const fabPositionVariants = cva(
-  "fixed z-[1000] w-16 h-16 rounded-fab border-none cursor-pointer bg-gradient-to-br from-lavender to-periwinkle shadow-fab flex items-center justify-center transition-all text-midnight outline-none hover:-translate-y-0.5 hover:scale-105 hover:shadow-[0_16px_48px_rgba(40,60,120,0.16)] active:translate-y-0 active:scale-100",
+  "fixed z-[1000] w-16 h-16 rounded-[--radius-badge] border-none cursor-pointer bg-gradient-to-br from-primary to-primary-light shadow-[--shadow-fab] flex items-center justify-center transition-all text-white outline-none hover:-translate-y-0.5 hover:scale-105 hover:shadow-[0_16px_48px_rgba(108,99,255,0.35)] active:translate-y-0 active:scale-100",
   {
     variants: {
       position: {

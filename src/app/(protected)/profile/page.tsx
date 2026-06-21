@@ -18,48 +18,48 @@ export default function ProfilePage() {
     <div className="pb-[120px]">
       <header className="pt-8 pb-6 flex justify-between items-center">
         <h1 className="text-heading">Profile</h1>
-        <button className="bg-none border-none cursor-pointer text-midnight p-2 rounded-button transition-all hover:bg-mist">
+        <button className="bg-none border-none cursor-pointer text-foreground p-2 rounded-[16px] transition-all hover:bg-muted">
           <Settings size={24} />
         </button>
       </header>
 
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-6">
         <Card variant="default" className="min-h-[120px]">
           <div className="flex items-center gap-4">
             <Avatar size="xl"><AvatarFallback>U</AvatarFallback></Avatar>
             <div>
               <h2 className="text-heading mb-1">User Name</h2>
-              <p className="text-body">Wellness Enthusiast</p>
+              <p className="text-body text-muted-foreground">Wellness Enthusiast</p>
             </div>
           </div>
         </Card>
 
-        <Card variant="lavender-mist" className="min-h-[120px]">
+        <Card variant="primary-soft" className="min-h-[120px]">
           <div className="grid grid-cols-2 gap-6">
             <div className="text-center flex flex-col items-center gap-2">
-              <Award className="text-lavender" size={32} />
+              <Award className="text-primary" size={32} />
               <p className="text-heading m-0">12</p>
-              <p className="text-caption">Achievements</p>
+              <p className="text-caption text-muted-foreground">Achievements</p>
             </div>
             <div className="text-center flex flex-col items-center gap-2">
-              <TrendingUp className="text-lavender" size={32} />
+              <TrendingUp className="text-primary" size={32} />
               <p className="text-heading m-0">85</p>
-              <p className="text-caption">Wellness Score</p>
+              <p className="text-caption text-muted-foreground">Wellness Score</p>
             </div>
           </div>
         </Card>
 
         <Card variant="default" className="min-h-[200px]">
-          <div className="py-4 border-b border-mist cursor-pointer transition-colors hover:text-lavender">
+          <div className="py-4 border-b border-border cursor-pointer transition-colors hover:text-primary">
             <span className="text-body">Personal Info</span>
           </div>
-          <div className="py-4 border-b border-mist cursor-pointer transition-colors hover:text-lavender">
+          <div className="py-4 border-b border-border cursor-pointer transition-colors hover:text-primary">
             <span className="text-body">Goals</span>
           </div>
-          <div className="py-4 border-b border-mist cursor-pointer transition-colors hover:text-lavender">
+          <div className="py-4 border-b border-border cursor-pointer transition-colors hover:text-primary">
             <span className="text-body">Notifications</span>
           </div>
-          <div className="py-4 cursor-pointer transition-colors hover:text-lavender">
+          <div className="py-4 cursor-pointer transition-colors hover:text-primary">
             <span className="text-body">Privacy</span>
           </div>
         </Card>

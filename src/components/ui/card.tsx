@@ -4,16 +4,16 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const cardVariants = cva(
-  "rounded-card shadow-card p-6 transition-all border-none outline-none",
+  "rounded-[--radius-card] shadow-[--shadow-card] p-6 transition-all border-none outline-none",
   {
     variants: {
       variant: {
-        default: "bg-cloud",
-        lavender: "bg-gradient-to-br from-lavender to-periwinkle text-midnight",
-        mint: "bg-mint text-midnight",
-        peach: "bg-peach text-midnight",
-        aqua: "bg-aqua text-midnight",
-        "lavender-mist": "bg-lavender-mist text-midnight",
+        default: "bg-surface",
+        primary: "bg-gradient-to-br from-primary to-primary-light text-white",
+        success: "bg-success-soft text-foreground",
+        warning: "bg-warning-soft text-foreground",
+        info: "bg-info-soft text-foreground",
+        "primary-soft": "bg-primary-soft text-foreground",
       },
     },
     defaultVariants: {
@@ -33,7 +33,7 @@ function Card({ className, variant, clickable, onClick, ...props }: CardProps) {
       data-variant={variant}
       className={cn(
         cardVariants({ variant }),
-        clickable && "cursor-pointer hover:-translate-y-0.5 hover:shadow-floating active:translate-y-0",
+        clickable && "cursor-pointer hover:-translate-y-0.5 hover:shadow-[--shadow-floating] active:translate-y-0",
         className
       )}
       onClick={onClick}

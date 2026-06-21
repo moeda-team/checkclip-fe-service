@@ -23,8 +23,8 @@ export default function ProtectedLayout({
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-mist">
-        <div className="w-10 h-10 border-4 border-lavender border-t-transparent rounded-full animate-spin" />
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
@@ -36,7 +36,7 @@ export default function ProtectedLayout({
   const hideShell = pathname === "/add";
 
   return (
-    <div className="mx-auto w-full max-w-[390px] md:max-w-[768px] lg:max-w-[1024px] xl:max-w-[1280px] 2xl:max-w-[1536px] pb-[120px]">
+    <div className="mx-auto w-full max-w-[1440px] px-4 md:px-6 lg:px-8 pb-[120px]">
       {children}
       {!hideShell && <AppShell />}
     </div>

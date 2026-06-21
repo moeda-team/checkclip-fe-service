@@ -93,120 +93,119 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex">
       {/* Left Panel */}
-      <div className="hidden md:flex w-[40%] min-h-screen bg-gradient-to-br from-[#1a2a4a] to-[#0f766e] flex-col p-12 relative">
+      <div className="hidden md:flex w-[40%] min-h-screen bg-gradient-to-br from-[#2D2478] to-[#6C63FF] flex-col p-12 relative">
         <div className="flex flex-col flex-1 justify-between">
           <div className="mb-[60px]">
             <div className="mb-6">
-              <h1 className="text-[32px] font-bold text-white m-0 tracking-tight">CheckClip</h1>
-              <p className="text-sm text-white/70 mt-1 font-medium">HR Intelligence</p>
+              <h1 className="text-[32px] font-bold text-white m-0 tracking-tight">Workforce</h1>
+              <p className="text-sm text-white/70 mt-1 font-medium">People & Culture Platform</p>
             </div>
-            <div className="inline-block bg-white/15 text-white px-4 py-2 rounded-[20px] text-xs font-semibold tracking-wide backdrop-blur-[10px]">
-              INDONESIAN HR COMPLIANCE
+            <div className="inline-block bg-white/15 text-white px-4 py-2 rounded-[--radius-badge] text-xs font-semibold tracking-wide backdrop-blur-[10px]">
+              WORKFORCE MANAGEMENT
             </div>
           </div>
 
           <div className="flex-1 flex flex-col justify-center">
             <h2 className="text-[42px] font-bold text-white m-0 mb-6 leading-tight tracking-tight lg:text-[36px]">
-              Welcome Back to Your HR Dashboard
+              Welcome Back to Your Growth Journey
             </h2>
             <p className="text-base text-white/80 m-0 mb-8 leading-relaxed">
-              Access your employee portal, manage your profile, view payslips,
-              and stay connected with your workplace community.
+              Track your progress, celebrate achievements, and grow with your team every single day.
             </p>
             <ul className="list-none p-0 m-0">
               <li className="flex items-center gap-3 text-white/90 text-[15px] mb-4 leading-normal">
-                <span className="text-[#10b981] font-bold text-lg">&#10003;</span>
-                Secure employee authentication
+                <span className="text-[#4ADE80] font-bold text-lg">&#10003;</span>
+                Progress-driven attendance tracking
               </li>
               <li className="flex items-center gap-3 text-white/90 text-[15px] mb-4 leading-normal">
-                <span className="text-[#10b981] font-bold text-lg">&#10003;</span>
-                Real-time attendance tracking
+                <span className="text-[#4ADE80] font-bold text-lg">&#10003;</span>
+                AI-powered wellness insights
               </li>
               <li className="flex items-center gap-3 text-white/90 text-[15px] mb-4 leading-normal">
-                <span className="text-[#10b981] font-bold text-lg">&#10003;</span>
-                Comprehensive HR management
+                <span className="text-[#4ADE80] font-bold text-lg">&#10003;</span>
+                Friendly, human-centered experience
               </li>
             </ul>
           </div>
 
           <div className="mt-[60px]">
-            <p className="text-[13px] text-white/50 m-0">CheckClips Cloud HRIS · Bandung, ID</p>
+            <p className="text-[13px] text-white/50 m-0">Workforce Platform · Built for People Teams</p>
           </div>
         </div>
       </div>
 
       {/* Right Panel */}
-      <div className="w-full md:w-[60%] min-h-screen bg-white flex items-center justify-center p-8 md:p-12">
+      <div className="w-full md:w-[60%] min-h-screen bg-surface flex items-center justify-center p-8 md:p-12">
         <div className="w-full max-w-[500px]">
           <div className="mb-12">
-            <h1 className="text-[42px] font-bold text-midnight m-0 mb-4 leading-tight tracking-tight md:text-[36px]">
-              Sign In
+            <h1 className="text-[36px] font-bold text-foreground m-0 mb-4 leading-tight tracking-tight md:text-[32px]">
+              Welcome Back
             </h1>
-            <p className="text-base text-muted-foreground m-0 leading-relaxed">
-              Enter your credentials to access your workspace
+            <p className="text-body text-muted-foreground m-0 leading-relaxed">
+              Let&apos;s continue your progress today
             </p>
           </div>
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-6">
             {errors.general && (
-              <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-2">
-                <span className="text-sm text-red-600 font-medium">{errors.general}</span>
+              <div className="bg-destructive-soft border border-destructive/20 rounded-[16px] p-4 mb-2">
+                <span className="text-sm text-destructive font-medium">{errors.general}</span>
               </div>
             )}
 
             <div className="flex flex-col gap-2">
-              <Label className="text-sm font-semibold text-slate-700">Corporate Email</Label>
+              <Label className="text-sm font-semibold text-foreground">Email</Label>
               <div className={cn(
-                "relative flex items-center border-2 rounded-[14px] bg-white transition-all",
-                errors.email ? "border-red-500" : "border-slate-200 focus-within:border-lavender focus-within:ring-4 focus-within:ring-lavender/10"
+                "relative flex items-center border-2 rounded-[16px] bg-surface transition-all",
+                errors.email ? "border-destructive" : "border-border focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/10"
               )}>
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" size={20} />
+                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" size={20} />
                 <input
                   type="email"
-                  placeholder="Enter your corporate email"
+                  placeholder="Enter your email"
                   value={formData.email}
                   onChange={(e) => handleInputChange("email")(e.target.value)}
-                  className="w-full py-[14px] px-4 pl-[52px] border-none rounded-[14px] bg-transparent font-sans text-[15px] text-midnight outline-none placeholder:text-slate-400"
+                  className="w-full py-[14px] px-4 pl-[52px] border-none rounded-[16px] bg-transparent font-sans text-[15px] text-foreground outline-none placeholder:text-muted-foreground"
                   autoCapitalize="off"
                   autoCorrect="off"
                 />
               </div>
-              {errors.email && <span className="text-[13px] text-red-500 font-medium">{errors.email}</span>}
+              {errors.email && <span className="text-[13px] text-destructive font-medium">{errors.email}</span>}
             </div>
 
             <div className="flex flex-col gap-2">
-              <Label className="text-sm font-semibold text-slate-700">Password</Label>
+              <Label className="text-sm font-semibold text-foreground">Password</Label>
               <div className={cn(
-                "relative flex items-center border-2 rounded-[14px] bg-white transition-all",
-                errors.password ? "border-red-500" : "border-slate-200 focus-within:border-lavender focus-within:ring-4 focus-within:ring-lavender/10"
+                "relative flex items-center border-2 rounded-[16px] bg-surface transition-all",
+                errors.password ? "border-destructive" : "border-border focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/10"
               )}>
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" size={20} />
+                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" size={20} />
                 <input
                   type={showPassword ? "text" : "password"}
                   placeholder="Enter your password"
                   value={formData.password}
                   onChange={(e) => handleInputChange("password")(e.target.value)}
-                  className="w-full py-[14px] px-4 pl-[52px] border-none rounded-[14px] bg-transparent font-sans text-[15px] text-midnight outline-none placeholder:text-slate-400"
+                  className="w-full py-[14px] px-4 pl-[52px] border-none rounded-[16px] bg-transparent font-sans text-[15px] text-foreground outline-none placeholder:text-muted-foreground"
                   autoCapitalize="off"
                   autoCorrect="off"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 bg-none border-none cursor-pointer p-1 flex items-center justify-center text-slate-400 hover:text-lavender transition-colors"
+                  className="absolute right-4 bg-none border-none cursor-pointer p-1 flex items-center justify-center text-muted-foreground hover:text-primary transition-colors"
                 >
                   {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
               </div>
-              {errors.password && <span className="text-[13px] text-red-500 font-medium">{errors.password}</span>}
+              {errors.password && <span className="text-[13px] text-destructive font-medium">{errors.password}</span>}
             </div>
 
             <div className="flex justify-between items-center gap-4">
               <label className="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" className="w-[18px] h-[18px] rounded border-slate-300 accent-lavender cursor-pointer" />
-                <span className="text-sm text-slate-500">Remember me</span>
+                <input type="checkbox" className="w-[18px] h-[18px] rounded border-border accent-primary cursor-pointer" />
+                <span className="text-sm text-muted-foreground">Remember me</span>
               </label>
-              <a href="/forgot-password" className="text-sm text-lavender no-underline font-medium hover:underline">
+              <a href="/forgot-password" className="text-sm text-primary no-underline font-medium hover:underline">
                 Forgot Password?
               </a>
             </div>
@@ -214,16 +213,16 @@ export default function LoginPage() {
             <Button
               type="submit"
               disabled={isLoading}
-              className="w-full h-[52px] rounded-[14px] bg-gradient-to-br from-lavender to-periwinkle text-white font-sans text-base font-semibold shadow-[0_4px_14px_rgba(141,158,255,0.3)] mt-4 hover:-translate-y-0.5 hover:shadow-[0_6px_20px_rgba(141,158,255,0.4)] active:translate-y-0 disabled:opacity-60"
+              className="w-full h-[52px] rounded-[16px] bg-gradient-to-br from-primary to-primary-light text-white font-sans text-base font-semibold shadow-[0_4px_14px_rgba(108,99,255,0.3)] mt-4 hover:-translate-y-0.5 hover:shadow-[0_6px_20px_rgba(108,99,255,0.4)] active:translate-y-0 disabled:opacity-60"
             >
-              {isLoading ? "Signing in..." : "Sign In →"}
+              {isLoading ? "Signing in..." : "Sign In"}
             </Button>
 
             <div className="text-center mt-6">
-              <p className="text-sm text-slate-500 m-0">
-                Don&apos;t have an account?{" "}
-                <Link href="/register" className="text-lavender no-underline font-semibold ml-1 hover:underline">
-                  Create Employee Space
+              <p className="text-sm text-muted-foreground m-0">
+                New to Workforce?{" "}
+                <Link href="/register" className="text-primary no-underline font-semibold ml-1 hover:underline">
+                  Join Your Team
                 </Link>
               </p>
             </div>

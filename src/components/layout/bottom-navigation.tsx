@@ -35,7 +35,7 @@ export function BottomNavigation({
     <nav
       data-slot="bottom-nav"
       className={cn(
-        "fixed bottom-4 left-1/2 -translate-x-1/2 w-[calc(100%-48px)] max-w-[600px] md:max-w-[700px] lg:max-w-[800px] h-[72px] bg-cloud rounded-bottom-nav shadow-floating flex items-center justify-around px-4 z-[999]",
+        "fixed bottom-4 left-1/2 -translate-x-1/2 w-[calc(100%-48px)] max-w-[600px] md:max-w-[700px] lg:max-w-[800px] h-[72px] bg-surface rounded-[24px] shadow-[--shadow-floating] flex items-center justify-around px-4 z-[999]",
         className
       )}
     >
@@ -43,10 +43,10 @@ export function BottomNavigation({
         <button
           key={item.id}
           className={cn(
-            "bg-none border-none cursor-pointer flex flex-col items-center gap-1 p-2 rounded-button transition-all min-w-[44px] min-h-[44px]",
+            "bg-none border-none cursor-pointer flex flex-col items-center gap-1 p-2 rounded-[16px] transition-all min-w-[44px] min-h-[44px]",
             activeItem === item.id
-              ? "opacity-100 text-lavender"
-              : "text-midnight opacity-50 hover:opacity-70"
+              ? "opacity-100 text-primary"
+              : "text-foreground opacity-50 hover:opacity-70"
           )}
           onClick={() => router.push(item.path)}
         >

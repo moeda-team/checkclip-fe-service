@@ -5,17 +5,17 @@ import { cva, type VariantProps } from "class-variance-authority"
 
 import { cn } from "@/lib/utils"
 
-const progressColorVariants = cva("h-full rounded-button transition-all", {
+const progressColorVariants = cva("h-full rounded-[--radius-badge] transition-all", {
   variants: {
     color: {
-      lavender: "bg-gradient-to-r from-lavender to-periwinkle",
-      mint: "bg-gradient-to-r from-mint to-green",
-      peach: "bg-gradient-to-r from-peach to-orange",
-      aqua: "bg-gradient-to-r from-aqua to-lavender",
+      primary: "bg-gradient-to-r from-primary to-primary-light",
+      success: "bg-gradient-to-r from-[#4ADE80] to-[#22C55E]",
+      warning: "bg-gradient-to-r from-[#F59E0B] to-[#EAB308]",
+      info: "bg-gradient-to-r from-[#38BDF8] to-[#0EA5E9]",
     },
   },
   defaultVariants: {
-    color: "lavender",
+    color: "primary",
   },
 })
 
@@ -27,14 +27,14 @@ interface ProgressBarProps extends VariantProps<typeof progressColorVariants> {
 function ProgressBar({
   className,
   progress,
-  color = "lavender",
+  color = "primary",
 }: ProgressBarProps) {
   const clampedProgress = Math.min(Math.max(progress, 0), 100)
 
   return (
     <div
       data-slot="progress-bar"
-      className={cn("w-full h-2 bg-mist rounded-button overflow-hidden", className)}
+      className={cn("w-full h-2 bg-muted rounded-[--radius-badge] overflow-hidden", className)}
     >
       <div
         data-slot="progress-fill"
