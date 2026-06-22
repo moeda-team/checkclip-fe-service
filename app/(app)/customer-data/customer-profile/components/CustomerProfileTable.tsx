@@ -1,7 +1,7 @@
 "use client";
 
-import { useMemo, useRef, useState, type Key } from "react";
-import { Plus, Search, Trash2 } from "lucide-react";
+import { useEffect, useMemo, useRef, useState, type Key } from "react";
+import { Plus, PlusCircle, Search, Trash2, Columns2 } from "lucide-react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -12,13 +12,19 @@ import {
   usePostCustomer,
   useDeleteCustomer
 } from "../../hooks/useCustomers";
-import { useGetCustomerFields } from "../../hooks/useCustomerFields";
+import {
+  useGetCustomerFields,
+  usePutCustomerField,
+  useDeleteCustomerField
+} from "../../hooks/useCustomerFields";
 import { AddCustomFieldDialog } from "./AddCustomFieldDialog";
+import { TableSettings } from "./TableSettings";
 import { EditableCell } from "./EditableCell";
 import type {
   CustomerCustomFieldValue,
   CustomerDto,
   CustomerFieldDto,
+  CustomerFieldFormDto,
   CustomerFieldType,
   CustomerFormDto
 } from "@/types/type-customer";
@@ -131,6 +137,42 @@ export function CustomerProfileTable() {
   const { mutate: updateCustomer } = usePutCustomer();
   const { mutate: createCustomer, isPending: isCreating } = usePostCustomer();
   const { mutate: deleteCustomer, isPending: isDeleting } = useDeleteCustomer();
+  const { mutate: updateField } = usePutCustomerField();
+  const { mutate: deleteField } = useDeleteCustomerField();
+
+  // Order and visibility of all columns (static + custom). Static columns are
+  // always shown first in a fixed order; only custom-field order is synced to
+  // the backend via PUT /customer-field/{id}.
+  const [columnOrder, setColumnOrder] = useState<string[]>([]);
+  const [visibleColumnIds, setVisibleColumnIds] = useState<string[]>([]);
+
+  // Sync order/visibility with the fetched custom fields.
+  useEffect(() => {
+    const staticIds = [
+      "customer_id",
+      "full_name",
+      "age",
+      "gender",
+      "company_name",
+      "job_title",
+      "email"
+    ];
+    const customIds = customFields.map((f) => f.field_key);
+    const allIds = [...staticIds, ...customIds];
+
+    setColumnOrder((prev) => {
+      const ordered = prev.filter((id) => allIds.includes(id));
+      const newIds = allIds.filter((id) => !ordered.includes(id));
+      return [...ordered, ...newIds];
+    });
+
+    setVisibleColumnIds((prev) => {
+      if (prev.length === 0) return allIds;
+      const existingVisible = prev.filter((id) => allIds.includes(id));
+      const newIds = allIds.filter((id) => !prev.includes(id));
+      return [...existingVisible, ...newIds];
+    });
+  }, [customFields]);
 
   // Add a blank draft row locally; it is only POSTed once the user edits a cell.
   const handleAddRow = () => {
@@ -216,57 +258,183 @@ export function CustomerProfileTable() {
     });
   };
 
-  // Build static + dynamic custom-field columns for the shared DataTable.
-  const columns = useMemo<ColumnDef<CustomerDto, unknown>[]>(() => {
-    // Frontend-only column with hard-coded customer IDs.
-    const idColumn: ColumnDef<CustomerDto, unknown> = {
+  // ─── Column builders ────────────────────────────────────────────────────────
+
+  const idColumn: ColumnDef<CustomerDto, unknown> = useMemo(
+    () => ({
       id: "customer_id",
       header: "Customer id",
       enableSorting: false,
       cell: ({ row }) => (
         <span className="font-medium">{getStaticCustomerId(row.index)}</span>
       )
-    };
+    }),
+    []
+  );
 
-    const staticDefs: ColumnDef<CustomerDto, unknown>[] = STATIC_COLUMNS.filter(
-      (col) => col.id !== "id"
-    ).map((col) => ({
-      id: col.id,
-      header: col.label,
-      accessorFn: (row) => col.accessor(row),
-      cell: ({ row }) => (
-        <div className={col.id === "full_name" ? "font-medium" : ""}>
-          <EditableCell
-            value={col.accessor(row.original)}
-            fieldType={col.type}
-            editable={col.editable ?? true}
-            onSave={(value) => saveStaticValue(row.original, col.id, value)}
-          />
-        </div>
-      )
-    }));
+  const buildStaticColumn = (
+    col: StaticColumn
+  ): ColumnDef<CustomerDto, unknown> => ({
+    id: col.id,
+    header: col.label,
+    accessorFn: (row) => col.accessor(row),
+    cell: ({ row }) => (
+      <div className={col.id === "full_name" ? "font-medium" : ""}>
+        <EditableCell
+          value={col.accessor(row.original)}
+          fieldType={col.type}
+          editable={col.editable ?? true}
+          onSave={(value) => saveStaticValue(row.original, col.id, value)}
+        />
+      </div>
+    )
+  });
 
-    const customDefs: ColumnDef<CustomerDto, unknown>[] = customFields.map(
-      (field) => ({
-        id: field.field_key,
-        header: field.field_label,
-        accessorFn: (row) => row.custom_fields?.[field.field_key],
-        cell: ({ row }) => (
-          <EditableCell
-            value={row.original.custom_fields?.[field.field_key]}
-            fieldType={field.field_type}
-            options={field.options}
-            onSave={(value) =>
-              saveCustomValue(row.original, field.field_key, value)
-            }
-          />
-        )
+  const buildCustomColumn = (
+    field: CustomerFieldDto
+  ): ColumnDef<CustomerDto, unknown> => ({
+    id: field.field_key,
+    header: field.field_label,
+    accessorFn: (row) => row.custom_fields?.[field.field_key],
+    cell: ({ row }) => (
+      <EditableCell
+        value={row.original.custom_fields?.[field.field_key]}
+        fieldType={field.field_type}
+        options={field.options}
+        onSave={(value) =>
+          saveCustomValue(row.original, field.field_key, value)
+        }
+      />
+    )
+  });
+
+  // Reorderable metadata for all columns (static + custom). Used by the
+  // TableSettings popover for drag-and-drop and visibility toggles.
+  const columnItems = useMemo(() => {
+    const staticItems = STATIC_COLUMNS.filter((c) => c.id !== "id").map(
+      (c) => ({
+        id: c.id,
+        label: c.label,
+        source: "static" as const,
+        staticColumn: c
       })
     );
-
-    return [idColumn, ...staticDefs, ...customDefs];
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const staticIds = new Set(STATIC_COLUMNS.map((c) => c.id));
+    const customItems = customFields
+      .filter((f) => !staticIds.has(f.field_key))
+      .map((f) => ({
+        id: f.field_key,
+        label: f.field_label,
+        source: "custom" as const,
+        field: f
+      }));
+    return [
+      { id: "customer_id", label: "Customer id", source: "id" as const },
+      ...staticItems,
+      ...customItems
+    ];
   }, [customFields]);
+
+  const orderedItems = useMemo(() => {
+    if (columnOrder.length === 0) return columnItems;
+    const orderMap = new Map(columnOrder.map((id, index) => [id, index]));
+    return [...columnItems].sort((a, b) => {
+      const orderA = orderMap.get(a.id) ?? Infinity;
+      const orderB = orderMap.get(b.id) ?? Infinity;
+      return orderA - orderB;
+    });
+  }, [columnItems, columnOrder]);
+
+  // Final tanstack columns, filtered by visibility.
+  const columns = useMemo<ColumnDef<CustomerDto, unknown>[]>(
+    () =>
+      orderedItems
+        .filter((item) => visibleColumnIds.includes(item.id))
+        .map((item) => {
+          if (item.source === "id") return idColumn;
+          if (item.source === "static")
+            return buildStaticColumn(item.staticColumn);
+          return buildCustomColumn(item.field);
+        }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [orderedItems, visibleColumnIds, idColumn]
+  );
+
+  // Reorder handler: update local order and persist custom-field positions.
+  //
+  // Only custom fields are persisted (static columns are frontend-only). We use
+  // the single PUT /customer-field/{id} endpoint, so we minimize calls by:
+  //  1. Skipping entirely when the custom-field order did not change (e.g. only
+  //     a static column moved, or a no-op drag).
+  //  2. Reusing the backend's existing display_order values (preserving its
+  //     numbering scheme) and only PUTting fields whose value actually changes.
+  const handleReorder = (newOrder: string[]) => {
+    setColumnOrder(newOrder);
+
+    const fieldByKey = new Map(customFields.map((f) => [f.field_key, f]));
+
+    // Custom fields in their new visual order.
+    const nextCustomOrder = newOrder
+      .filter((id) => fieldByKey.has(id))
+      .map((id) => fieldByKey.get(id)!);
+
+    // Custom fields in their currently persisted order.
+    const currentCustomOrder = [...customFields].sort(
+      (a, b) => a.display_order - b.display_order
+    );
+
+    // No change to the custom-field order → no API calls.
+    const unchanged =
+      nextCustomOrder.length === currentCustomOrder.length &&
+      nextCustomOrder.every(
+        (f, i) => f.field_key === currentCustomOrder[i]?.field_key
+      );
+    if (unchanged) return;
+
+    // Keep the existing display_order values and just reassign them to the new
+    // slots, so we don't care whether the backend is 0- or 1-based.
+    const slotOrders = currentCustomOrder.map((f) => f.display_order);
+
+    nextCustomOrder.forEach((field, index) => {
+      const nextDisplayOrder = slotOrders[index];
+      if (field.display_order === nextDisplayOrder) return;
+
+      const form: CustomerFieldFormDto = {
+        field_key: field.field_key,
+        field_label: field.field_label,
+        field_type: field.field_type,
+        is_required: field.is_required,
+        display_order: nextDisplayOrder,
+        options: field.options
+      };
+      updateField({ id: field.id, form });
+    });
+  };
+
+  // Rename a custom column via PUT /customer-field/{id} (custom columns only).
+  const handleRenameColumn = (fieldKey: string, label: string) => {
+    const field = customFields.find((f) => f.field_key === fieldKey);
+    if (!field) return;
+
+    const form: CustomerFieldFormDto = {
+      field_key: field.field_key,
+      field_label: label,
+      field_type: field.field_type,
+      is_required: field.is_required,
+      display_order: field.display_order,
+      options: field.options
+    };
+    updateField({ id: field.id, form });
+  };
+
+  // Delete a custom column via DELETE /customer-field/{id} (custom columns only).
+  const handleDeleteColumn = (fieldKey: string) => {
+    const field = customFields.find((f) => f.field_key === fieldKey);
+    if (!field) return;
+    deleteField(field.id);
+    setColumnOrder((prev) => prev.filter((id) => id !== fieldKey));
+    setVisibleColumnIds((prev) => prev.filter((id) => id !== fieldKey));
+  };
 
   const paginationDto: PaginationDto = useMemo(
     () => ({
@@ -318,6 +486,34 @@ export function CustomerProfileTable() {
         </div>
 
         <div className="flex items-center gap-3">
+          <TableSettings
+            columns={orderedItems.map((item) => ({
+              id: item.id,
+              label: item.label,
+              isCustom: item.source === "custom"
+            }))}
+            onReorder={handleReorder}
+            onRenameColumn={handleRenameColumn}
+            onDeleteColumn={handleDeleteColumn}
+            addColumnTrigger={
+              <AddCustomFieldDialog
+                nextDisplayOrder={customFields.length}
+                trigger={
+                  <button
+                    type="button"
+                    className="flex w-full items-center justify-between rounded-md px-2 py-2 text-sm transition-colors hover:bg-accent"
+                  >
+                    <span className="flex items-center gap-2">
+                      <Columns2 className="h-4 w-4 text-muted-foreground" />
+                      Add Column
+                    </span>
+                    <PlusCircle className="h-4 w-4 text-muted-foreground" />
+                  </button>
+                }
+              />
+            }
+          />
+
           <Button
             type="button"
             onClick={handleAddRow}
@@ -325,7 +521,7 @@ export function CustomerProfileTable() {
             className="bg-gray-900 hover:bg-gray-800 text-white"
           >
             <Plus className="h-4 w-4 mr-1" />
-            {isCreating ? "Adding..." : "Add Row"}
+            {isCreating ? "Adding..." : "Add New"}
           </Button>
 
           {selectedRowKeys.length > 0 && (
@@ -344,7 +540,7 @@ export function CustomerProfileTable() {
         </div>
       </div>
 
-      {/* Shared DataTable with dynamic columns + side add-column panel */}
+      {/* Shared DataTable with dynamic columns */}
       <DataTable<CustomerDto>
         data={rows}
         columns={columns}
@@ -360,20 +556,6 @@ export function CustomerProfileTable() {
           paginationFilter: filter,
           setPaginationFilter: (next) => setFilter(next)
         }}
-        sidePanel={
-          <AddCustomFieldDialog
-            nextDisplayOrder={customFields.length}
-            trigger={
-              <button
-                type="button"
-                aria-label="Add custom field"
-                className="flex w-16 shrink-0 items-center justify-center rounded-r-md border border-l-0 bg-primary-50 text-primary-600 transition-colors hover:bg-primary-100"
-              >
-                <Plus className="h-5 w-5" />
-              </button>
-            }
-          />
-        }
       />
     </div>
   );

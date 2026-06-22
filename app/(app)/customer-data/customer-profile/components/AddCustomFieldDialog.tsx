@@ -113,7 +113,11 @@ export function AddCustomFieldDialog({
 
   const handleDragEnd = () => setDragIndex(null);
 
+  // Both dropdown and checkbox columns are backed by a list of options.
   const isDropdown = fieldType === "dropdown";
+  const isCheckbox = fieldType === "checkbox";
+  const hasOptions = isDropdown || isCheckbox;
+  const optionsLabel = isCheckbox ? "Checkbox options" : "Options";
 
   // Value mirrors label for the payload.
   const cleanedOptions: CustomerFieldOption[] = options
@@ -124,7 +128,7 @@ export function AddCustomFieldDialog({
   const isValid =
     fieldLabel.trim() !== "" &&
     fieldType !== "" &&
-    (!isDropdown || cleanedOptions.length > 0);
+    (!hasOptions || cleanedOptions.length > 0);
 
   const handleSubmit = () => {
     if (!isValid) return;
@@ -135,7 +139,7 @@ export function AddCustomFieldDialog({
       field_type: fieldType,
       is_required: false,
       display_order: nextDisplayOrder,
-      ...(isDropdown ? { options: cleanedOptions } : {})
+      ...(hasOptions ? { options: cleanedOptions } : {})
     };
 
     createField(payload, {
@@ -206,10 +210,10 @@ export function AddCustomFieldDialog({
             />
           </div>
 
-          {isDropdown && (
+          {hasOptions && (
             <div className="space-y-2">
               <Label>
-                Options <span className="text-destructive">*</span>
+                {optionsLabel} <span className="text-destructive">*</span>
               </Label>
               <div className="space-y-2">
                 {options.map((opt, index) => (

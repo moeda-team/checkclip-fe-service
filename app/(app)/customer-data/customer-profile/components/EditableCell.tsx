@@ -1,9 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { Upload, Check, ChevronDown } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Badge } from "@/components/ui/badge";
 import {
   Select,
   SelectContent,
@@ -11,6 +14,11 @@ import {
   SelectTrigger,
   SelectValue
 } from "@/components/ui/select";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger
+} from "@/components/ui/popover";
 import { cn } from "@/components/ui/utils";
 import type {
   CustomerCustomFieldValue,
@@ -35,8 +43,18 @@ export function formatFieldValue(
       return String(value);
     }
     case "boolean":
-    case "checkbox":
       return value === true || value === "true" ? "Yes" : "No";
+    case "checkbox": {
+      if (!options?.length) return String(value);
+      const selected = String(value || "")
+        .split(",")
+        .map((v) => v.trim())
+        .filter(Boolean);
+      const labels = selected
+        .map((v) => options.find((o) => o.value === v)?.label)
+        .filter(Boolean) as string[];
+      return labels.length ? labels.join(", ") : "-";
+    }
     case "date": {
       const date = new Date(String(value));
       return Number.isNaN(date.getTime())
@@ -83,9 +101,10 @@ export function EditableCell({
 }: EditableCellProps) {
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState("");
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // ── Inline controls (always interactive) ───────────────────────────────────
-  if (fieldType === "boolean" || fieldType === "checkbox") {
+  if (fieldType === "boolean") {
     const checked = value === true || value === "true";
     return (
       <Checkbox
@@ -94,6 +113,131 @@ export function EditableCell({
         onCheckedChange={(c) => onSave(c === true)}
         aria-label="Toggle value"
       />
+    );
+  }
+
+  if (fieldType === "checkbox") {
+    const selected = String(value || "")
+      .split(",")
+      .map((v) => v.trim())
+      .filter(Boolean);
+    const selectedSet = new Set(selected);
+
+    const toggle = (optionValue: string) => {
+      const next = new Set(selectedSet);
+      if (next.has(optionValue)) next.delete(optionValue);
+      else next.add(optionValue);
+      onSave(next.size ? Array.from(next).join(",") : null);
+    };
+
+    const selectedLabels =
+      options?.filter((o) => selectedSet.has(o.value)).map((o) => o.label) ??
+      [];
+
+    return (
+      <Popover>
+        <PopoverTrigger asChild>
+          <button
+            type="button"
+            disabled={!editable}
+            className={cn(
+              "flex h-8 w-full items-center justify-between gap-1 rounded-md border border-input bg-transparent px-2 py-1 text-sm text-left",
+              !editable && "opacity-50"
+            )}
+          >
+            <span className="flex flex-1 flex-wrap gap-1 overflow-hidden">
+              {selectedLabels.length > 0 ? (
+                selectedLabels.map((label) => (
+                  <Badge
+                    key={label}
+                    variant="secondary"
+                    className="h-5 px-1.5 text-xs"
+                  >
+                    {label}
+                  </Badge>
+                ))
+              ) : (
+                <span className="text-muted-foreground">-</span>
+              )}
+            </span>
+            <ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground" />
+          </button>
+        </PopoverTrigger>
+        <PopoverContent className="w-56 p-1" align="start">
+          <div className="max-h-48 overflow-y-auto">
+            {options?.map((o, index) => {
+              const isSelected = selectedSet.has(o.value);
+              return (
+                <button
+                  key={`${o.value}-${index}`}
+                  type="button"
+                  className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-sm hover:bg-accent"
+                  onClick={() => toggle(o.value)}
+                >
+                  <div className="flex h-4 w-4 shrink-0 items-center justify-center rounded-sm border border-primary">
+                    {isSelected && <Check className="h-3 w-3 text-primary" />}
+                  </div>
+                  <span className="flex-1 text-left">{o.label}</span>
+                </button>
+              );
+            })}
+            {(!options || options.length === 0) && (
+              <p className="px-2 py-1.5 text-sm text-muted-foreground">
+                No options configured.
+              </p>
+            )}
+          </div>
+        </PopoverContent>
+      </Popover>
+    );
+  }
+
+  if (fieldType === "file") {
+    const fileName =
+      value === undefined || value === null || value === ""
+        ? ""
+        : String(value).split(/[/\\]/).pop() || String(value);
+
+    return (
+      <div className="flex items-center gap-2">
+        <input
+          ref={fileInputRef}
+          type="file"
+          className="hidden"
+          disabled={!editable}
+          onChange={(e) => {
+            const file = e.target.files?.[0];
+            if (file) onSave(file.name);
+            e.target.value = "";
+          }}
+        />
+        {fileName ? (
+          <button
+            type="button"
+            disabled={!editable}
+            onClick={() => fileInputRef.current?.click()}
+            className={cn(
+              "truncate text-left text-sm text-primary underline-offset-2 hover:underline",
+              !editable && "pointer-events-none text-foreground no-underline"
+            )}
+            title={fileName}
+          >
+            {fileName}
+          </button>
+        ) : (
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            disabled={!editable}
+            onClick={() => fileInputRef.current?.click()}
+            className="h-8 gap-2"
+          >
+            Upload File
+            <Upload className="h-4 w-4" />
+          </Button>
+        )}
+      </div>
     );
   }
 

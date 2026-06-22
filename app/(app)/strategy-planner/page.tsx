@@ -209,6 +209,7 @@ export default function StrategyPlannerPage() {
         columns={columns}
         isLoading={isLoading}
         enableSorting
+        isStriped
         rowSelection={{
           selectedRowKeys,
           onChange: (keys) => setSelectedRowKeys(keys)

@@ -26,7 +26,7 @@ import {
 import type { CustomerFieldDto, CustomerFieldFormDto } from "@/types/type-customer";
 
 // ─── Module-level axios instance ──────────────────────────────────────────────
-const CUSTOMER_FIELD_URL = `${env.apiBaseUrl}/crm/customer-field/`;
+const CUSTOMER_FIELD_URL = `${env.apiBaseUrl}/crm/customer-field`;
 const axios = axiosConfig(env.apiBaseUrl);
 // ─── Query: GET list ──────────────────────────────────────────────────────────
 
@@ -35,7 +35,7 @@ export const useGetCustomerFields = () =>
     queryKey: queryKeys.customerField.all(),
     queryFn: async () => {
       const response = await axios.get<ApiResponsePagination<CustomerFieldDto[]>>(
-        CUSTOMER_FIELD_URL
+        `${CUSTOMER_FIELD_URL}/`
       );
       return response.data;
     },
@@ -63,7 +63,7 @@ export const usePostCustomerField = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (form: CustomerFieldFormDto) =>
-      axios.post<ApiResponse<CustomerFieldDto>>(CUSTOMER_FIELD_URL, form),
+      axios.post<ApiResponse<CustomerFieldDto>>(`${CUSTOMER_FIELD_URL}/`, form),
     meta: {
       errorMessage: "Failed to create customer field",
       successMessage: "Customer field created successfully",
