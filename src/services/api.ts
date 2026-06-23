@@ -214,6 +214,22 @@ class ApiClient {
     return response.data;
   }
 
+  public async forgotPassword(email: string) {
+    const response = await this.client.post('/auth/forgot-password', {
+      email,
+    });
+    return response.data;
+  }
+
+  public async resetPassword(token: string, newPassword: string, confirmPassword: string) {
+    const response = await this.client.post('/auth/reset-password', {
+      token,
+      new_password: newPassword,
+      confirm_password: confirmPassword,
+    });
+    return response.data;
+  }
+
   public getClient(): AxiosInstance {
     return this.client;
   }
