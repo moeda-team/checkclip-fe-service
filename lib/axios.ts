@@ -9,17 +9,16 @@
 //
 // ARCHITECTURE DECISIONS:
 // - Token refresh is handled by NextAuth's JWT callback (server-side)
-// - 401 responses trigger sign-out (the JWT callback should have refreshed already)
+// - Sign-out only happens via the logout button, not automatically on API errors
 // - AbortController helper exposed for React Query signal-based cancellation
 
 import axios from "axios";
 import type {
   AxiosError,
   AxiosInstance,
-  AxiosRequestConfig,
   InternalAxiosRequestConfig,
 } from "axios";
-import { getSession, signOut } from "next-auth/react";
+import { getSession } from "next-auth/react";
 import { env } from "@/lib/env";
 
 // ─── Factory function ──────────────────────────────────────────────────────────
@@ -43,30 +42,10 @@ export function axiosConfig(baseURL?: string): AxiosInstance {
     (error) => Promise.reject(error)
   );
 
-  // ── Response interceptor: handle 401 + retry ──────────────────────────────
+  // ── Response interceptor ─────────────────────────────────────────────────
   instance.interceptors.response.use(
     (response) => response,
-    async (error: AxiosError) => {
-      const originalRequest = error.config as AxiosRequestConfig & {
-        _retry?: boolean;
-      };
-
-      if (
-        error.response?.status === 401 &&
-        !originalRequest._retry &&
-        originalRequest.headers?.Authorization
-      ) {
-        originalRequest._retry = true;
-        // The request was authenticated but still got 401 — the session is
-        // genuinely invalid (token expired and refresh failed). Sign out.
-        // If there was no Authorization header, getSession() likely failed
-        // (transient CLIENT_FETCH_ERROR) — don't sign out, just reject.
-        await signOut({ callbackUrl: "/auth/login" });
-        return Promise.reject(error);
-      }
-
-      return Promise.reject(error);
-    }
+    (error: AxiosError) => Promise.reject(error)
   );
 
   return instance;
