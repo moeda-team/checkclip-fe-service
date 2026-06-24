@@ -51,10 +51,16 @@ export function axiosConfig(baseURL?: string): AxiosInstance {
         _retry?: boolean;
       };
 
-      if (error.response?.status === 401 && !originalRequest._retry) {
+      if (
+        error.response?.status === 401 &&
+        !originalRequest._retry &&
+        originalRequest.headers?.Authorization
+      ) {
         originalRequest._retry = true;
-        // NextAuth's JWT callback handles token refresh server-side.
-        // If we still get a 401, the session is invalid → sign out.
+        // The request was authenticated but still got 401 — the session is
+        // genuinely invalid (token expired and refresh failed). Sign out.
+        // If there was no Authorization header, getSession() likely failed
+        // (transient CLIENT_FETCH_ERROR) — don't sign out, just reject.
         await signOut({ callbackUrl: "/auth/login" });
         return Promise.reject(error);
       }
