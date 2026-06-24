@@ -1,7 +1,8 @@
 import axios, { AxiosError } from 'axios';
 import type { AxiosInstance, InternalAxiosRequestConfig } from 'axios';
 
-const API_BASE_URL = 'https://checkclip-be-service.onrender.com';
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_BASE_URL ?? 'https://checkclip-be-service.onrender.com';
 
 class ApiClient {
   private client: AxiosInstance;
