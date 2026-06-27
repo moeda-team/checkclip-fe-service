@@ -35,7 +35,7 @@ export function BottomNavigation({
     <nav
       data-slot="bottom-nav"
       className={cn(
-        "fixed bottom-4 left-1/2 -translate-x-1/2 w-[calc(100%-48px)] max-w-[600px] md:max-w-[700px] lg:max-w-[800px] h-[72px] bg-surface rounded-[24px] shadow-[--shadow-floating] flex items-center justify-around px-4 z-[999]",
+        "fixed bottom-4 left-1/2 -translate-x-1/2 w-[calc(100%-48px)] max-w-[600px] md:max-w-[700px] lg:max-w-[800px] h-[72px] bg-surface rounded-[24px] shadow-[--shadow-floating] flex items-center justify-around px-4 z-999",
         className
       )}
     >

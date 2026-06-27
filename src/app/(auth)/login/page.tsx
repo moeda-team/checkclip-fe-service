@@ -93,7 +93,7 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex">
       {/* Left Panel */}
-      <div className="hidden md:flex w-[40%] min-h-screen bg-gradient-to-br from-[#2D2478] to-[#6C63FF] flex-col p-12 relative">
+      <div className="hidden md:flex w-[40%] min-h-screen bg-linear-to-br from-[#2D2478] to-[#6C63FF] flex-col p-12 relative">
         <div className="flex flex-col flex-1 justify-between">
           <div className="mb-[60px]">
             <div className="mb-6">
@@ -213,7 +213,7 @@ export default function LoginPage() {
             <Button
               type="submit"
               disabled={isLoading}
-              className="w-full h-[52px] rounded-[16px] bg-gradient-to-br from-primary to-primary-light text-white font-sans text-base font-semibold shadow-[0_4px_14px_rgba(108,99,255,0.3)] mt-4 hover:-translate-y-0.5 hover:shadow-[0_6px_20px_rgba(108,99,255,0.4)] active:translate-y-0 disabled:opacity-60"
+              className="w-full h-[52px] rounded-[16px] bg-linear-to-br from-primary to-primary-light text-white font-sans text-base font-semibold shadow-[0_4px_14px_rgba(108,99,255,0.3)] mt-4 hover:-translate-y-0.5 hover:shadow-[0_6px_20px_rgba(108,99,255,0.4)] active:translate-y-0 disabled:opacity-60"
             >
               {isLoading ? "Signing in..." : "Sign In"}
             </Button>

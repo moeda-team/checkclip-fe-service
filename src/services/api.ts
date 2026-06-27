@@ -96,16 +96,13 @@ class ApiClient {
               },
             });
 
-            console.log('Attempting token refresh with:', refreshToken.substring(0, 20) + '...');
             const response = await refreshClient.post('/auth/refresh-token', {
               refresh_token: refreshToken,
             });
 
-            console.log('Refresh Response:', response.data);
             
             // Extract tokens from nested data structure
             const tokens = response.data.data;
-            console.log('New Tokens:', tokens);
             
             // Validate new tokens
             if (!tokens?.access_token || !tokens?.refresh_token) {
@@ -140,7 +137,6 @@ class ApiClient {
   }
 
   private clearTokensAndRedirect() {
-    console.log('Clearing auth tokens and redirecting to login');
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');
     // Use window.location.replace to prevent back button issues
@@ -155,12 +151,8 @@ class ApiClient {
       password,
     });
     
-    // Debug logging
-    console.log('Login Response:', response.data);
     
-    // Extract tokens from nested data structure
     const tokens = response.data.data;
-    console.log('Extracted Tokens:', tokens);
     
     // Validate tokens before returning
     if (!tokens?.access_token || !tokens?.refresh_token) {
@@ -185,12 +177,9 @@ class ApiClient {
   }) {
     const response = await this.client.post('/auth/register', data);
     
-    // Debug logging
-    console.log('Register Response:', response.data);
     
     // Extract tokens from nested data structure
     const tokens = response.data.data;
-    console.log('Extracted Tokens:', tokens);
     
     // Validate tokens before returning
     if (!tokens?.access_token || !tokens?.refresh_token) {
