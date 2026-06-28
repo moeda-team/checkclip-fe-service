@@ -1,228 +1,136 @@
-import axios, { AxiosError } from 'axios';
-import type { AxiosInstance, InternalAxiosRequestConfig } from 'axios';
+/**
+ * Core fetch utility — thin wrapper around the native fetch API.
+ * Handles: base URL, auth token injection, token refresh, and redirect on auth failure.
+ */
+
+import { getAccessToken, getRefreshToken, persistTokens, clearTokens } from '@/lib/cookies';
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL ?? 'https://checkclip-be-service.onrender.com';
 
-class ApiClient {
-  private client: AxiosInstance;
-  private isRefreshing = false;
-  private refreshSubscribers: Array<(token: string) => void> = [];
+// ─── Token refresh ────────────────────────────────────────────────────────────
 
-  constructor() {
-    this.client = axios.create({
-      baseURL: API_BASE_URL,
-      headers: {
-        'Content-Type': 'application/json',
-      },
+let isRefreshing = false;
+let refreshQueue: Array<(token: string | null) => void> = [];
+
+async function refreshAccessToken(): Promise<string | null> {
+  const refreshToken = getRefreshToken();
+  if (!refreshToken) {
+    clearTokens();
+    return null;
+  }
+
+  try {
+    const res = await fetch(`${API_BASE_URL}/auth/refresh-token`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ refresh_token: refreshToken }),
     });
 
-    this.setupInterceptors();
-  }
+    if (!res.ok) throw new Error('Refresh failed');
 
-  private subscribeTokenRefresh(callback: (token: string) => void) {
-    this.refreshSubscribers.push(callback);
-  }
+    const json = await res.json();
+    const tokens = json.data;
 
-  private onRefreshed(token: string) {
-    this.refreshSubscribers.forEach(callback => callback(token));
-    this.refreshSubscribers = [];
-  }
+    if (!tokens?.access_token || !tokens?.refresh_token) {
+      throw new Error('Invalid token response');
+    }
 
-  private setupInterceptors() {
-    // Request interceptor to add auth token
-    this.client.interceptors.request.use(
-      (config: InternalAxiosRequestConfig) => {
-        const token = localStorage.getItem('access_token');
-        if (token && config.headers) {
-          config.headers.Authorization = `Bearer ${token}`;
-        }
-        return config;
-      },
-      (error) => {
-        return Promise.reject(error);
-      }
-    );
-
-    // Response interceptor to handle errors and token refresh
-    this.client.interceptors.response.use(
-      (response) => response,
-      async (error: AxiosError) => {
-        const originalRequest = error.config as InternalAxiosRequestConfig & { 
-          _retry?: boolean;
-          _skipAuthRefresh?: boolean;
-        };
-
-        // Skip auth refresh for the refresh token endpoint itself
-        if (originalRequest._skipAuthRefresh) {
-          return Promise.reject(error);
-        }
-
-        // Handle 401 errors with token refresh
-        if (error.response?.status === 401 && !originalRequest._retry) {
-          if (this.isRefreshing) {
-            // If already refreshing, queue the request
-            return new Promise((resolve, reject) => {
-              this.subscribeTokenRefresh((token: string) => {
-                if (originalRequest.headers) {
-                  originalRequest.headers.Authorization = `Bearer ${token}`;
-                }
-                this.client(originalRequest)
-                  .then(resolve)
-                  .catch(reject);
-              });
-            });
-          }
-
-          originalRequest._retry = true;
-          this.isRefreshing = true;
-
-          try {
-            const refreshToken = localStorage.getItem('refresh_token');
-            
-            // Validate refresh token before attempting refresh
-            if (!refreshToken || refreshToken === 'undefined' || refreshToken === 'null') {
-              console.log('Invalid refresh token detected, clearing auth');
-              this.isRefreshing = false;
-              this.clearTokensAndRedirect();
-              return Promise.reject(error);
-            }
-            
-            // Create a separate axios instance for refresh to avoid interceptor loop
-            const refreshClient = axios.create({
-              baseURL: API_BASE_URL,
-              headers: {
-                'Content-Type': 'application/json',
-              },
-            });
-
-            const response = await refreshClient.post('/auth/refresh-token', {
-              refresh_token: refreshToken,
-            });
-
-            
-            // Extract tokens from nested data structure
-            const tokens = response.data.data;
-            
-            // Validate new tokens
-            if (!tokens?.access_token || !tokens?.refresh_token) {
-              throw new Error('Invalid token response from refresh endpoint');
-            }
-            
-            const access_token = tokens.access_token;
-            const newRefreshToken = tokens.refresh_token;
-              
-            localStorage.setItem('access_token', access_token);
-            localStorage.setItem('refresh_token', newRefreshToken);
-
-            this.onRefreshed(access_token);
-            this.isRefreshing = false;
-
-            if (originalRequest.headers) {
-              originalRequest.headers.Authorization = `Bearer ${access_token}`;
-            }
-              
-            return this.client(originalRequest);
-          } catch (refreshError) {
-            console.log('Token refresh failed:', refreshError);
-            this.isRefreshing = false;
-            this.clearTokensAndRedirect();
-            return Promise.reject(refreshError);
-          }
-        }
-
-        return Promise.reject(error);
-      }
-    );
-  }
-
-  private clearTokensAndRedirect() {
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('refresh_token');
-    // Use window.location.replace to prevent back button issues
+    persistTokens(tokens.access_token, tokens.refresh_token);
+    return tokens.access_token;
+  } catch {
+    clearTokens();
     if (typeof window !== 'undefined' && window.location.pathname !== '/login') {
-      window.location.replace('/login');
+      window.location.replace('/login?error=session_expired');
     }
-  }
-
-  public async login(email: string, password: string) {
-    const response = await this.client.post('/auth/login', {
-      email,
-      password,
-    });
-    
-    
-    const tokens = response.data.data;
-    
-    // Validate tokens before returning
-    if (!tokens?.access_token || !tokens?.refresh_token) {
-      throw new Error('Invalid token response from server');
-    }
-    
-    return {
-      access_token: tokens.access_token,
-      refresh_token: tokens.refresh_token
-    };
-  }
-
-  public async register(data: {
-    full_name: string;
-    email: string;
-    password: string;
-    job_title: string;
-    department_unit: string;
-    role: string;
-    address?: string;
-    phone_number?: string;
-  }) {
-    const response = await this.client.post('/auth/register', data);
-    
-    
-    // Extract tokens from nested data structure
-    const tokens = response.data.data;
-    
-    // Validate tokens before returning
-    if (!tokens?.access_token || !tokens?.refresh_token) {
-      throw new Error('Invalid token response from server');
-    }
-    
-    return {
-      access_token: tokens.access_token,
-      refresh_token: tokens.refresh_token
-    };
-  }
-
-  public async refreshToken(refreshToken: string) {
-    const response = await this.client.post('/auth/refresh-token', {
-      refresh_token: refreshToken,
-    });
-    return response.data;
-  }
-
-  public async getProfile() {
-    const response = await this.client.get('/user/profile');
-    return response.data;
-  }
-
-  public async forgotPassword(email: string) {
-    const response = await this.client.post('/auth/forgot-password', {
-      email,
-    });
-    return response.data;
-  }
-
-  public async resetPassword(token: string, newPassword: string, confirmPassword: string) {
-    const response = await this.client.post('/auth/reset-password', {
-      token,
-      new_password: newPassword,
-      confirm_password: confirmPassword,
-    });
-    return response.data;
-  }
-
-  public getClient(): AxiosInstance {
-    return this.client;
+    return null;
   }
 }
 
-export const apiClient = new ApiClient();
+// ─── Request options ──────────────────────────────────────────────────────────
+
+export interface ApiRequestOptions {
+  method?: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
+  body?: unknown;
+  headers?: Record<string, string>;
+  /** Skip auth token injection (e.g. login, register, forgot/reset password) */
+  skipAuth?: boolean;
+}
+
+// ─── Core fetch function ──────────────────────────────────────────────────────
+
+export async function apiFetch<T = unknown>(
+  path: string,
+  options: ApiRequestOptions = {}
+): Promise<T> {
+  const { method = 'GET', body, headers = {}, skipAuth = false } = options;
+
+  const buildHeaders = (token?: string | null): HeadersInit => ({
+    'Content-Type': 'application/json',
+    ...headers,
+    ...(!skipAuth && token ? { Authorization: `Bearer ${token}` } : {}),
+  });
+
+  const buildInit = (token?: string | null): RequestInit => ({
+    method,
+    headers: buildHeaders(token),
+    ...(body !== undefined ? { body: JSON.stringify(body) } : {}),
+  });
+
+  const url = `${API_BASE_URL}${path}`;
+  const accessToken = skipAuth ? null : getAccessToken();
+
+  let response = await fetch(url, buildInit(accessToken));
+
+  // ── Handle 401 with token refresh ──
+  if (response.status === 401 && !skipAuth) {
+    if (isRefreshing) {
+      // Queue this request until the in-flight refresh resolves
+      const newToken = await new Promise<string | null>((resolve) => {
+        refreshQueue.push(resolve);
+      });
+      if (!newToken) throw new ApiError('Session expired', 401);
+      response = await fetch(url, buildInit(newToken));
+    } else {
+      isRefreshing = true;
+      const newToken = await refreshAccessToken();
+      isRefreshing = false;
+
+      // Flush the queue
+      refreshQueue.forEach((cb) => cb(newToken));
+      refreshQueue = [];
+
+      if (!newToken) throw new ApiError('Session expired', 401);
+      response = await fetch(url, buildInit(newToken));
+    }
+  }
+
+  if (!response.ok) {
+    let message = `Request failed with status ${response.status}`;
+    try {
+      const err = await response.json();
+      message = err?.message ?? err?.error ?? message;
+    } catch {
+      // ignore JSON parse errors on error responses
+    }
+    throw new ApiError(message, response.status);
+  }
+
+  // 204 No Content — nothing to parse
+  if (response.status === 204) return undefined as T;
+
+  const json = await response.json();
+  return json as T;
+}
+
+// ─── Typed error ──────────────────────────────────────────────────────────────
+
+export class ApiError extends Error {
+  constructor(
+    message: string,
+    public readonly status: number
+  ) {
+    super(message);
+    this.name = 'ApiError';
+  }
+}

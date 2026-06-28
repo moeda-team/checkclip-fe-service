@@ -9,7 +9,7 @@ const cardVariants = cva(
     variants: {
       variant: {
         default: "bg-surface",
-        primary: "bg-gradient-to-br from-primary to-primary-light text-white",
+        primary: "bg-linear-to-br from-primary to-primary-light text-white",
         success: "bg-success-soft text-foreground",
         warning: "bg-warning-soft text-foreground",
         info: "bg-info-soft text-foreground",

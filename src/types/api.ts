@@ -61,6 +61,7 @@ export interface ProfileResponse {
   role: string;
   job_title: string;
   department_unit: string;
+  profile_picture_url?: string;
   address?: string;
   phone_number?: string;
 }

@@ -2,8 +2,10 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { useSidebarProfile } from "./hooks/useSidebarProfile";
 import {
   LayoutDashboard,
   Clock,
@@ -265,14 +267,31 @@ function SubmitRequestButton() {
 }
 
 function SidebarProfile() {
+  const { loading, fullName, jobTitle, profilePictureUrl, initials } = useSidebarProfile();
+
   return (
     <div className="flex items-center gap-3 px-4 py-4 mx-2 mb-2 rounded-xl hover:bg-[#252D52] transition-colors cursor-pointer">
       {/* Avatar */}
       <div className="relative shrink-0">
         <div className="w-9 h-9 rounded-full bg-[#3D4870] overflow-hidden ring-2 ring-[#3D4870]">
-          <div className="w-full h-full bg-linear-to-br from-[#6C63FF] to-[#9B8FFF] flex items-center justify-center text-white text-sm font-bold">
-            B
-          </div>
+          {profilePictureUrl ? (
+            <Image
+              src={profilePictureUrl}
+              alt={fullName}
+              width={36}
+              height={36}
+              className="w-full h-full object-cover"
+              unoptimized
+            />
+          ) : (
+            <div className="w-full h-full bg-linear-to-br from-[#6C63FF] to-[#9B8FFF] flex items-center justify-center text-white text-sm font-bold">
+              {loading ? (
+                <span className="w-3 h-3 rounded-full bg-white/30 animate-pulse" />
+              ) : (
+                initials
+              )}
+            </div>
+          )}
         </div>
         {/* Online indicator */}
         <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-[#4ADE80] ring-2 ring-[#1E2343]" />
@@ -280,16 +299,25 @@ function SidebarProfile() {
 
       {/* Info */}
       <div className="flex-1 min-w-0">
-        <p className="text-white text-[13px] font-semibold leading-tight truncate">
-          Budi
-        </p>
-        <p className="text-[#5A658A] text-[11px] leading-tight truncate mt-0.5">
-          Senior Software Engineer
-        </p>
-        <p className="text-[#4ADE80] text-[10px] font-medium mt-0.5 flex items-center gap-1">
-          <Circle size={6} fill="#4ADE80" strokeWidth={0} />
-          Online
-        </p>
+        {loading ? (
+          <div className="flex flex-col gap-1.5">
+            <div className="h-3 w-20 rounded bg-white/10 animate-pulse" />
+            <div className="h-2.5 w-28 rounded bg-white/10 animate-pulse" />
+          </div>
+        ) : (
+          <>
+            <p className="text-white text-[13px] font-semibold leading-tight truncate">
+              {fullName || '—'}
+            </p>
+            <p className="text-[#5A658A] text-[11px] leading-tight truncate mt-0.5">
+              {jobTitle || '—'}
+            </p>
+            <p className="text-[#4ADE80] text-[10px] font-medium mt-0.5 flex items-center gap-1">
+              <Circle size={6} fill="#4ADE80" strokeWidth={0} />
+              Online
+            </p>
+          </>
+        )}
       </div>
 
       {/* Chevron */}
