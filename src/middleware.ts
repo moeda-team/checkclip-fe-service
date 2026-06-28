@@ -31,6 +31,7 @@ const protectedRoutes = [
   "/reports",
   "/settings",
   "/users",
+  "/"
 ];
 
 // Routes that should redirect to /dashboard if already authenticated
