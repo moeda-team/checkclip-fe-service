@@ -18,6 +18,7 @@ import {
   ProductForm,
   ProductIndustryDto,
 } from "@/types/type-product";
+import { Key } from "react";
 
 const PRODUCT_URL = `${env.apiBaseUrl}/campaign`;
 const axios = axiosConfig(env.apiBaseUrl);
@@ -126,6 +127,24 @@ export const useDeleteProduct = () => {
     meta: {
       errorMessage: "Failed to delete product",
       successMessage: "Product deleted successfully",
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["getProducts"] });
+    },
+  });
+};
+
+export const useDeleteBulkProduct = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (payload: { product_ids: Key[] }) =>
+      axios.post<ApiResponse<ProductCategoryDto>>(
+        `${PRODUCT_URL}/product/bulk-delete`,
+        payload,
+      ),
+    meta: {
+      errorMessage: "Failed to bulk delete product",
+      successMessage: "Products deleted successfully",
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["getProducts"] });

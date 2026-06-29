@@ -188,7 +188,7 @@ export function DataTable<T>({
       pagination: pagination
         ? {
             pageIndex: pagination.paginationFilter.page - 1,
-            pageSize: pagination.paginationFilter.perPage,
+            pageSize: pagination.paginationFilter.perPage ?? 10,
           }
         : undefined,
     },

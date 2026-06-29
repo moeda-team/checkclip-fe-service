@@ -134,19 +134,20 @@ function AdAccountTabTable({
   const totalItems = filtered.length;
   const totalPages = Math.max(
     1,
-    Math.ceil(totalItems / paginationFilter.perPage),
+    Math.ceil(totalItems / (paginationFilter.perPage ?? 10)),
   );
-  const pageStart = (paginationFilter.page - 1) * paginationFilter.perPage;
+  const pageStart =
+    (paginationFilter.page - 1) * (paginationFilter.perPage ?? 10);
   const pageData = filtered.slice(
     pageStart,
-    pageStart + paginationFilter.perPage,
+    pageStart + (paginationFilter.perPage ?? 10),
   );
 
   const paginationDto: PaginationDto = {
     total: totalItems,
     total_pages: totalPages,
     current_page: paginationFilter.page,
-    per_page: paginationFilter.perPage,
+    per_page: paginationFilter.perPage ?? 10,
   };
 
   return (

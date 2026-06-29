@@ -6,7 +6,7 @@ export interface UploadFile {
   id: string;
   file: File;
   previewUrl: string;
-  status: UploadStatus;
+  status?: UploadStatus;
 }
 
 interface FilePreviewThumbProps {

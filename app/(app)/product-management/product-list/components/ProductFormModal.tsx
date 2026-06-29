@@ -30,6 +30,17 @@ import FilePreviewThumb, {
 } from "@/components/form/FilePreviewThumb";
 import { Switch } from "@/components/ui/switch";
 
+interface PreviewFile extends File {
+  id: string;
+  previewUrl: string;
+}
+
+const uploadFileSchema = z.object({
+  id: z.string(),
+  file: z.instanceof(File),
+  previewUrl: z.string(),
+});
+
 const productSchema = z
   .object({
     name: z
@@ -45,10 +56,10 @@ const productSchema = z
     industry_id: z.string().trim().min(1, "Product industry is required"),
     description: z.string().trim().max(2000, "Description is too long"),
     tags: z.array(z.string()),
-    images: z.array(z.instanceof(File)),
+    images: z.array(uploadFileSchema),
     is_video_url_mode: z.boolean(),
     video_url: z.string().trim().optional(),
-    videos: z.array(z.instanceof(File)).optional(),
+    videos: z.array(uploadFileSchema).optional(),
   })
   .refine(
     (data) => {
@@ -467,15 +478,18 @@ export default function ProductFormModal({
               id: `${file.name}-${file.lastModified}-${Math.random().toString(36).slice(2)}`,
               file,
               previewUrl: URL.createObjectURL(file),
-              // status: "uploading",
             }));
             field.onChange([...(field.value ?? []), ...newItems]);
           };
 
           const handleRemove = (id: string) => {
-            const target = (field.value ?? []).find((v) => v.id === id);
-            if (target) URL.revokeObjectURL(target.previewUrl);
-            field.onChange((field.value ?? []).filter((v) => v.id !== id));
+            const currentValues = field.value ?? [];
+            const target = currentValues.find((v) => v.id === id);
+
+            if (target?.previewUrl) {
+              URL.revokeObjectURL(target.previewUrl);
+            }
+            field.onChange(currentValues.filter((v) => v.id !== id));
           };
 
           return (
@@ -525,7 +539,6 @@ export default function ProductFormModal({
                   id: `${file.name}-${file.lastModified}-${Math.random().toString(36).slice(2)}`,
                   file,
                   previewUrl: URL.createObjectURL(file),
-                  // status: "uploading",
                 }));
                 videosField.onChange([
                   ...(videosField.value ?? []),
@@ -534,15 +547,14 @@ export default function ProductFormModal({
               };
 
               const handleRemove = (id: string) => {
-                const target = (videosField.value ?? []).find(
-                  (v) => v.id === id,
-                );
-                if (target) URL.revokeObjectURL(target.previewUrl);
-                videosField.onChange(
-                  (videosField.value ?? []).filter((v) => v.id !== id),
-                );
-              };
+                const currentValues = videosField.value ?? [];
+                const target = currentValues.find((v) => v.id === id);
 
+                if (target?.previewUrl) {
+                  URL.revokeObjectURL(target.previewUrl);
+                }
+                videosField.onChange(currentValues.filter((v) => v.id !== id));
+              };
               return (
                 <div>
                   <div className="flex items-center justify-between">
@@ -572,9 +584,9 @@ export default function ProductFormModal({
                         primaryLabel="Drag & drop files here, or click to select files"
                         helperLabel="MP4, MOV (Max. 50MB)"
                       />
-                      {videosField.value?.length > 0 && (
+                      {(videosField.value ?? []).length > 0 && (
                         <div className="flex flex-wrap gap-2 pt-3">
-                          {videosField.value.map((item: UploadFile) => (
+                          {(videosField.value ?? []).map((item) => (
                             <FilePreviewThumb
                               key={item.id}
                               item={item}

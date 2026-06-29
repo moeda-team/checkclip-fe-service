@@ -1,21 +1,23 @@
 "use client";
 
 import { DataTable } from "@/components/ui/data-table";
-import { useDeleteProduct, useGetProducts } from "../../hooks/useProducts";
+import {
+  useDeleteBulkProduct,
+  useDeleteProduct,
+  useGetProducts,
+} from "../../hooks/useProducts";
 import { Key, useEffect, useMemo, useState } from "react";
 import { ApiResponsePagination, PaginationFilter } from "@/types/api";
 import { ColumnDef } from "@tanstack/react-table";
 import { ProductDto } from "@/types/type-product";
 import PerPageSelector from "@/components/table/PerPageSelector";
-import { EyeIcon, Search, Trash2 } from "lucide-react";
-import { Input } from "@/components/ui/input";
+import { EyeIcon, Trash2 } from "lucide-react";
 import AddRowButton from "@/components/table/AddRowButton";
 import DeleteRowButton from "@/components/table/DeleteRowButton";
 import { Button } from "@/components/ui/button";
 import DeleteConfModal from "../../../../../components/modal/DeleteConfModal";
 import StatusModal from "@/components/modal/StatusModal";
 import SearchInput from "@/components/table/SearchInput";
-import LoadingSpinner from "@/components/LoadingSpinner";
 import ProductFormModal from "./ProductFormModal";
 
 export default function ProductListTable() {
@@ -30,9 +32,12 @@ export default function ProductListTable() {
   const [isOpenDeleteModal, setIsOpenDeleteModal] = useState<boolean>(false);
   const [deleteId, setDeleteId] = useState<string>("");
   const [statusHandle, setStatusHandle] = useState<string>("");
+  const [deleteMode, setDeleteMode] = useState<"single" | "bulk">("single");
 
   const { data, isLoading } = useGetProducts(filter);
-  const { mutate: deleteMutate } = useDeleteProduct();
+  const { mutate: deleteMutate, isPending: deletePending } = useDeleteProduct();
+  const { mutate: deleteBulkMutate, isPending: deleteBulkPending } =
+    useDeleteBulkProduct();
 
   const columns: ColumnDef<ProductDto>[] = [
     {
@@ -78,12 +83,12 @@ export default function ProductListTable() {
       cell: ({ row }) => {
         return (
           <div className="flex gap-2 px-1 max-w-50 overflow-x-scroll scroll-hidden">
-            {row.original.tags.map((tag) => (
+            {row.original.tags.map((tag, index) => (
               <span
-                key={tag.id}
+                key={typeof tag === "string" ? index : (tag as any).id}
                 className="inline-flex items-center gap-0.5 rounded-full bg-[#1717171A] px-2 h-5 text-xs font-medium text-gray-800"
               >
-                {tag.tag}
+                {typeof tag === "string" ? tag : (tag as any).tag}
               </span>
             ))}
           </div>
@@ -119,8 +124,9 @@ export default function ProductListTable() {
             <Button
               variant="destructive"
               onClick={() => {
-                setIsOpenDeleteModal(true);
                 setDeleteId(id);
+                setDeleteMode("single");
+                setIsOpenDeleteModal(true);
               }}
               className="w-7 h-7 flex items-center justify-center rounded-md"
             >
@@ -160,19 +166,21 @@ export default function ProductListTable() {
   };
 
   const handleDelete = () => {
-    deleteMutate(deleteId, {
-      onSuccess: () => {
-        setStatusHandle("success-delete");
-      },
-      onError: () => {
-        setStatusHandle("error-delete");
-      },
+    const mutationOptions = {
+      onSuccess: () => setStatusHandle("success-delete"),
+      onError: () => setStatusHandle("error-delete"),
       onSettled: () => {
         setIsOpenDeleteModal(false);
+        setDeleteId("");
       },
-    });
-  };
+    };
 
+    if (deleteMode === "bulk") {
+      deleteBulkMutate({ product_ids: selectedRowKeys }, mutationOptions);
+    } else if (deleteMode === "single" && deleteId) {
+      deleteMutate(deleteId, mutationOptions);
+    }
+  };
   useEffect(() => {
     if (!isOpenDeleteModal) {
       setDeleteId("");
@@ -192,7 +200,13 @@ export default function ProductListTable() {
 
         <div className="space-x-4">
           <AddRowButton handleAddRow={() => setIsOpenAddModal(true)} />
-          <DeleteRowButton disabled={selectedRowKeys.length === 0} />
+          <DeleteRowButton
+            disabled={selectedRowKeys.length === 0}
+            handleDeleteRow={() => {
+              setDeleteMode("bulk");
+              setIsOpenDeleteModal(true);
+            }}
+          />
         </div>
       </div>
 
@@ -229,6 +243,7 @@ export default function ProductListTable() {
         isOpen={isOpenDeleteModal}
         onClose={() => setIsOpenDeleteModal(false)}
         handleDelete={handleDelete}
+        isLoading={deletePending || deleteBulkPending}
       />
 
       <StatusModal
