@@ -8,7 +8,7 @@ import {
   FaInstagram,
   FaLinkedin,
   FaXTwitter,
-  FaYoutube,
+  FaYoutube
 } from "react-icons/fa6";
 import ReactCountryFlag from "react-country-flag";
 // ─── Marquee items ────────────────────────────────────────────────────────────
@@ -20,7 +20,7 @@ const marqueeItems = [
   "REAL-TIME SYNTHESIS",
   "CAMPAIGN INTELLIGENCE",
   "PERFORMANCE ALIGNMENT",
-  "DATA-DRIVEN DECISIONS",
+  "DATA-DRIVEN DECISIONS"
 ];
 
 // ─── Translations ─────────────────────────────────────────────────────────────
@@ -34,14 +34,15 @@ const t = {
       about: "About Us",
       services: "Services",
       portfolio: "Portfolio",
+      privacy: "Privacy Policy",
       pricing: "Pricing",
-      cta: "Let's Talk",
+      cta: "Let's Talk"
     },
     hero: {
       h1: ["Marketing Operations", "That Actually Align"],
       sub: "Atlas helps teams unify marketing data, automate decisions, and improve campaign performance across channels.",
       demo: "Book a Demo",
-      deploy: "See Deployment",
+      deploy: "See Deployment"
     },
     planSmarter: {
       h2a: "Plan Smarter.",
@@ -50,22 +51,22 @@ const t = {
       features: [
         {
           title: "AI-Powered Recommendations",
-          desc: "Get smart strategy and brief suggestions based on your goals, audience and historical performance.",
+          desc: "Get smart strategy and brief suggestions based on your goals, audience and historical performance."
         },
         {
           title: "Structured & Consistent",
-          desc: "Use standardized frameworks to ensure every strategy and brief is clear, complete, and on-brand.",
+          desc: "Use standardized frameworks to ensure every strategy and brief is clear, complete, and on-brand."
         },
         {
           title: "Collaborative & Aligned",
-          desc: "Keep your team aligned with real-time collaboration, feedback, and centralized campaign information.",
-        },
-      ],
+          desc: "Keep your team aligned with real-time collaboration, feedback, and centralized campaign information."
+        }
+      ]
     },
     japanese: {
       h2: "Built with Japanese Precision",
       sub: "Built for Japan, designed for global growth. Our platform combines strategic planning, campaign execution, collaboration, and performance analytics into one seamless ecosystem for modern marketing teams.",
-      kanji: "日本向けに構築",
+      kanji: "日本向けに構築"
     },
     evidence: {
       h2: "Evidence Over Vibes",
@@ -73,7 +74,7 @@ const t = {
       stats: [
         { value: "+34 %", label: "Marketing Efficiency Lift" },
         { value: "− 28 %", label: "Manual Analysis Time" },
-        { value: "12 d", label: "Median Time-To-Value" },
+        { value: "12 d", label: "Median Time-To-Value" }
       ],
       opinionsH: "Opinions we're willing to deploy",
       opinionsSub:
@@ -82,19 +83,19 @@ const t = {
         {
           num: "1",
           title: "Unify fragmented operations",
-          desc: "CRM, ad platforms, ERP, finance — built independently, now speaking one language. AIMOS consolidates without forklift upgrades.",
+          desc: "CRM, ad platforms, ERP, finance — built independently, now speaking one language. AIMOS consolidates without forklift upgrades."
         },
         {
           num: "2",
           title: "Evidence Over Dashboard",
-          desc: "We refuse to show projections. Every number is from a live production deployment. Ask and we'll show you the audit trail.",
+          desc: "We refuse to show projections. Every number is from a live production deployment. Ask and we'll show you the audit trail."
         },
         {
           num: "3",
           title: "Operators OverAlgorithms",
-          desc: "If the recommendation can't be acted on in under 10 seconds by a non-technical marketer, we didn't ship it.",
-        },
-      ],
+          desc: "If the recommendation can't be acted on in under 10 seconds by a non-technical marketer, we didn't ship it."
+        }
+      ]
     },
     shipped: {
       h2: "Shipped. In production.",
@@ -103,42 +104,42 @@ const t = {
         {
           tag: "STRATEGY & INVESTMENT",
           title: "CRM Agent",
-          desc: "Identify high-potential segments and shift budget to the right channels for stronger returns.",
+          desc: "Identify high-potential segments and shift budget to the right channels for stronger returns."
         },
         {
           tag: "PROMOTION",
           title: "Marketing Agent",
-          desc: "Align promotions with inventory in real time to maximize sell-through and reduce waste.",
+          desc: "Align promotions with inventory in real time to maximize sell-through and reduce waste."
         },
         {
           tag: "CHANNEL MANAGEMENT",
           title: "Finance Agent",
-          desc: "Dynamically rebalance channels based on performance to capture every growth opportunity.",
+          desc: "Dynamically rebalance channels based on performance to capture every growth opportunity."
         },
         {
           tag: "PERFORMANCE & OPTIMIZATION",
           title: "Inventory Agent",
-          desc: "Monitor results in real time and continuously learn to improve future campaigns.",
-        },
-      ],
+          desc: "Monitor results in real time and continuously learn to improve future campaigns."
+        }
+      ]
     },
     planCampaigns: {
       h2: "Plan Campaigns Your Way",
       sub: "Plan smarter campaigns with AI-powered recommendations and structured workflows built for modern marketing teams.",
       card1: {
         title: "Strategy Planner",
-        desc: "Create smarter marketing strategies with AI-powered recommendations tailored to your goals, audience, budget, and campaign objectives.",
+        desc: "Create smarter marketing strategies with AI-powered recommendations tailored to your goals, audience, budget, and campaign objectives."
       },
       card2: {
         title: "Create Campaign Brief",
-        desc: "Create structured campaign briefs with AI-powered recommendations or manual workflows tailored to your campaign goals and requirements.",
-      },
+        desc: "Create structured campaign briefs with AI-powered recommendations or manual workflows tailored to your campaign goals and requirements."
+      }
     },
     cta: {
       h2: "Let's Unify Your  Marketing Operations",
       sub: "Talk to an engineer. We'll share a case study from your vertical before the first call.",
       btn: "Request Brief",
-      placeholder: "Enter your email here",
+      placeholder: "Enter your email here"
     },
     services: {
       h2a: "We Provide Exclusive Service",
@@ -148,24 +149,24 @@ const t = {
         {
           title: "CRM Agent",
           desc: "Dynamic segmentation from real-time customer behavior. Churn prediction and LTV analysis. Identify high-value customers at risk.",
-          icon: "crm",
+          icon: "crm"
         },
         {
           title: "Marketing Agent",
           desc: "Campaign performance analysis across LINE, Yahoo, Google & Meta. Channel comparison and budget optimization in real-time.",
-          icon: "marketing",
+          icon: "marketing"
         },
         {
           title: "Finance Agent",
           desc: "Campaign-to-revenue attribution. Prove marketing impact on bottom line. Cost-per-acquisition analysis by channel and segment.",
-          icon: "finance",
+          icon: "finance"
         },
         {
           title: "Inventory Agent",
           desc: "Slow-moving product detection. Promotion opportunity identification. Align marketing campaigns with inventory position.",
-          icon: "inventory",
-        },
-      ],
+          icon: "inventory"
+        }
+      ]
     },
     footer: {
       tagline:
@@ -183,10 +184,21 @@ const t = {
         "CRM Intelligence",
         "Marketing Intelligence",
         "Finance Intelligence",
-        "Inventory Intelligence",
+        "Inventory Intelligence"
       ],
-      companyLinks: ["Deployment", "Customers", "Research", "Careers", "Press"],
+      companyLinks: [
+        "Deployment",
+        "Customers",
+        "Research",
+        "Careers",
+        "Press",
+        "Privacy Policy"
+      ]
     },
+    links: {
+      "Privacy Policy": "privacy-policy",
+      プライバシーポリシー: "privacy-policy"
+    } as Record<string, string>
   },
   ja: {
     nav: {
@@ -194,14 +206,15 @@ const t = {
       about: "会社概要",
       services: "サービス",
       portfolio: "実績",
+      privacy: "プライバシーポリシー",
       pricing: "料金",
-      cta: "お問い合わせ",
+      cta: "お問い合わせ"
     },
     hero: {
       h1: ["マーケティング業務を", "一元化する"],
       sub: "Atlasはチームがマーケティングデータを統合し、意思決定を自動化し、チャネル全体のキャンペーンパフォーマンスを向上させるお手伝いをします。",
       demo: "デモを予約",
-      deploy: "導入事例を見る",
+      deploy: "導入事例を見る"
     },
     planSmarter: {
       h2a: "賢く計画。",
@@ -210,22 +223,22 @@ const t = {
       features: [
         {
           title: "AIによる推奨",
-          desc: "目標、オーディエンス、過去の実績に基づいたスマートな戦略とブリーフの提案を取得します。",
+          desc: "目標、オーディエンス、過去の実績に基づいたスマートな戦略とブリーフの提案を取得します。"
         },
         {
           title: "構造化された一貫性",
-          desc: "標準化されたフレームワークを使用して、すべての戦略とブリーフが明確で完全かつブランドに沿ったものになるようにします。",
+          desc: "標準化されたフレームワークを使用して、すべての戦略とブリーフが明確で完全かつブランドに沿ったものになるようにします。"
         },
         {
           title: "協調的な連携",
-          desc: "リアルタイムのコラボレーション、フィードバック、一元化されたキャンペーン情報でチームの連携を維持します。",
-        },
-      ],
+          desc: "リアルタイムのコラボレーション、フィードバック、一元化されたキャンペーン情報でチームの連携を維持します。"
+        }
+      ]
     },
     japanese: {
       h2: "日本の精度で構築",
       sub: "日本向けに構築され、グローバルな成長のために設計されています。私たちのプラットフォームは、戦略的計画、キャンペーン実行、コラボレーション、パフォーマンス分析を現代のマーケティングチームのためのシームレスなエコシステムに統合します。",
-      kanji: "日本向けに構築",
+      kanji: "日本向けに構築"
     },
     evidence: {
       h2: "データが証明する成果",
@@ -233,7 +246,7 @@ const t = {
       stats: [
         { value: "+34 %", label: "マーケティング効率向上" },
         { value: "− 28 %", label: "手動分析時間削減" },
-        { value: "12 日", label: "価値実現までの中央値" },
+        { value: "12 日", label: "価値実現までの中央値" }
       ],
       opinionsH: "私たちが自信を持って展開する考え方",
       opinionsSub:
@@ -242,19 +255,19 @@ const t = {
         {
           num: "1",
           title: "分断された業務を統合",
-          desc: "CRM、広告プラットフォーム、ERP、財務 — 独立して構築され、今や一つの言語で話しています。AIMOSは大規模な移行なしに統合します。",
+          desc: "CRM、広告プラットフォーム、ERP、財務 — 独立して構築され、今や一つの言語で話しています。AIMOSは大規模な移行なしに統合します。"
         },
         {
           num: "2",
           title: "ダッシュボードより証拠",
-          desc: "予測は表示しません。すべての数字は本番導入からのものです。監査証跡をお見せします。",
+          desc: "予測は表示しません。すべての数字は本番導入からのものです。監査証跡をお見せします。"
         },
         {
           num: "3",
           title: "アルゴリズムより運用者",
-          desc: "非技術系マーケターが10秒以内に実行できない推奨事項は、私たちは出荷しません。",
-        },
-      ],
+          desc: "非技術系マーケターが10秒以内に実行できない推奨事項は、私たちは出荷しません。"
+        }
+      ]
     },
     shipped: {
       h2: "本番環境で稼働中。",
@@ -263,42 +276,42 @@ const t = {
         {
           tag: "戦略・投資",
           title: "CRMエージェント",
-          desc: "高ポテンシャルセグメントを特定し、より強いリターンのために適切なチャネルに予算をシフトします。",
+          desc: "高ポテンシャルセグメントを特定し、より強いリターンのために適切なチャネルに予算をシフトします。"
         },
         {
           tag: "プロモーション",
           title: "マーケティングエージェント",
-          desc: "在庫とプロモーションをリアルタイムで連携させ、売上を最大化し廃棄を削減します。",
+          desc: "在庫とプロモーションをリアルタイムで連携させ、売上を最大化し廃棄を削減します。"
         },
         {
           tag: "チャネル管理",
           title: "ファイナンスエージェント",
-          desc: "パフォーマンスに基づいてチャネルを動的に再調整し、すべての成長機会を捉えます。",
+          desc: "パフォーマンスに基づいてチャネルを動的に再調整し、すべての成長機会を捉えます。"
         },
         {
           tag: "パフォーマンス最適化",
           title: "在庫エージェント",
-          desc: "リアルタイムで結果を監視し、将来のキャンペーンを改善するために継続的に学習します。",
-        },
-      ],
+          desc: "リアルタイムで結果を監視し、将来のキャンペーンを改善するために継続的に学習します。"
+        }
+      ]
     },
     planCampaigns: {
       h2: "自分のやり方でキャンペーンを計画",
       sub: "現代のマーケティングチームのために構築されたAI搭載の推奨事項と構造化されたワークフローで、よりスマートなキャンペーンを計画します。",
       card1: {
         title: "戦略プランナー",
-        desc: "目標、オーディエンス、予算、キャンペーン目標に合わせたAI搭載の推奨事項でよりスマートなマーケティング戦略を作成します。",
+        desc: "目標、オーディエンス、予算、キャンペーン目標に合わせたAI搭載の推奨事項でよりスマートなマーケティング戦略を作成します。"
       },
       card2: {
         title: "キャンペーンブリーフ作成",
-        desc: "キャンペーンの目標と要件に合わせたAI搭載の推奨事項または手動ワークフローで構造化されたキャンペーンブリーフを作成します。",
-      },
+        desc: "キャンペーンの目標と要件に合わせたAI搭載の推奨事項または手動ワークフローで構造化されたキャンペーンブリーフを作成します。"
+      }
     },
     cta: {
       h2: "マーケティング業務を統合しましょう",
       sub: "エンジニアとお話しください。最初の通話前にあなたの業界のケーススタディをお伝えします。",
       btn: "ブリーフを依頼",
-      placeholder: "メールアドレスを入力",
+      placeholder: "メールアドレスを入力"
     },
     services: {
       h2a: "独自のサービスを提供します",
@@ -308,24 +321,24 @@ const t = {
         {
           title: "CRMエージェント",
           desc: "リアルタイムの顧客行動からの動的セグメンテーション。チャーン予測とLTV分析。リスクのある高価値顧客を特定します。",
-          icon: "crm",
+          icon: "crm"
         },
         {
           title: "マーケティングエージェント",
           desc: "LINE、Yahoo、Google、Metaにわたるキャンペーンパフォーマンス分析。チャネル比較とリアルタイムの予算最適化。",
-          icon: "marketing",
+          icon: "marketing"
         },
         {
           title: "ファイナンスエージェント",
           desc: "キャンペーンから収益への帰属。マーケティングの収益への影響を証明。チャネルとセグメント別のCPA分析。",
-          icon: "finance",
+          icon: "finance"
         },
         {
           title: "在庫エージェント",
           desc: "動きの遅い製品の検出。プロモーション機会の特定。マーケティングキャンペーンを在庫ポジションに合わせます。",
-          icon: "inventory",
-        },
-      ],
+          icon: "inventory"
+        }
+      ]
     },
     footer: {
       tagline:
@@ -343,18 +356,29 @@ const t = {
         "CRMインテリジェンス",
         "マーケティングインテリジェンス",
         "ファイナンスインテリジェンス",
-        "在庫インテリジェンス",
+        "在庫インテリジェンス"
       ],
-      companyLinks: ["導入事例", "顧客", "研究", "採用", "プレス"],
+      companyLinks: [
+        "導入事例",
+        "顧客",
+        "研究",
+        "採用",
+        "プレス",
+        "プライバシーポリシー"
+      ]
     },
-  },
+    links: {
+      "Privacy Policy": "privacy-policy",
+      プライバシーポリシー: "privacy-policy"
+    } as Record<string, string>
+  }
 } as const;
 function drawSparkle(
   ctx: CanvasRenderingContext2D,
   x: number,
   y: number,
   size: number,
-  color: string,
+  color: string
 ) {
   ctx.save();
 
@@ -396,7 +420,7 @@ function ServiceCardItem({
   card,
   index,
   dealt,
-  iconNode,
+  iconNode
 }: {
   card: ServiceCard;
   index: number;
@@ -442,7 +466,7 @@ function ServiceCardItem({
         opacity: dealt ? 1 : 0,
         transition: dealt
           ? `transform 0.55s cubic-bezier(0.22,1,0.36,1) ${index * 120}ms, opacity 0.4s ease ${index * 120}ms, box-shadow 0.3s ease, translate 0.3s ease`
-          : "none",
+          : "none"
       }}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
@@ -498,7 +522,7 @@ function ServiceCards({ cards }: { cards: readonly ServiceCard[] }) {
           observer.disconnect();
         }
       },
-      { threshold: 0.15 },
+      { threshold: 0.15 }
     );
     observer.observe(el);
     return () => observer.disconnect();
@@ -555,7 +579,7 @@ function ServiceCards({ cards }: { cards: readonly ServiceCard[] }) {
         <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
         <line x1="12" y1="22.08" x2="12" y2="12" />
       </svg>
-    ),
+    )
   };
 
   return (
@@ -597,12 +621,12 @@ function OrbitRings() {
       { r: 150 },
       { r: 210 },
       { r: 280 },
-      { r: 350 },
+      { r: 350 }
     ];
 
     const orbitDots = [
       { ringIndex: 4, speed: 0.85, dotR: 7, color: "#d4d4d8" },
-      { ringIndex: 5, speed: -0.85, dotR: 9, color: "#e5e7eb" },
+      { ringIndex: 5, speed: -0.85, dotR: 9, color: "#e5e7eb" }
     ];
 
     function resize() {
@@ -672,7 +696,7 @@ function OrbitRings() {
 
 function FadeInSection({
   children,
-  className = "",
+  className = ""
 }: {
   children: React.ReactNode;
   className?: string;
@@ -688,7 +712,7 @@ function FadeInSection({
         // Toggle on both enter and leave — animates in both scroll directions
         setVisible(entry.isIntersecting);
       },
-      { threshold: 0.12 },
+      { threshold: 0.12 }
     );
     observer.observe(el);
     return () => observer.disconnect();
@@ -758,6 +782,12 @@ export default function LandingPage() {
             </a>
             <a href="#" className="hover:text-gray-900 transition-colors">
               {tx.nav.pricing}
+            </a>
+            <a
+              href={tx.links[tx.nav.privacy] ?? "#"}
+              className="hover:text-gray-900 transition-colors"
+            >
+              {tx.nav.privacy}
             </a>
           </div>
 
@@ -849,7 +879,7 @@ shadow-[0_0_20px_rgba(59,130,246,0.15)]
                 <div className="absolute right-0 top-full mt-2 w-44 bg-white rounded-2xl shadow-xl border border-gray-100 py-2 z-50">
                   {[
                     { code: "en" as Lang, country: "GB", label: "English" },
-                    { code: "ja" as Lang, country: "JP", label: "Japan" },
+                    { code: "ja" as Lang, country: "JP", label: "Japan" }
                   ].map((item) => (
                     <button
                       key={item.code}
@@ -944,7 +974,7 @@ shadow-[0_0_20px_rgba(59,130,246,0.15)]
             maskImage:
               "linear-gradient(to bottom, black 0%, black 50%, transparent 100%)",
             WebkitMaskImage:
-              "linear-gradient(to bottom, black 0%, black 50%, transparent 100%)",
+              "linear-gradient(to bottom, black 0%, black 50%, transparent 100%)"
           }}
         />
 
@@ -1002,7 +1032,7 @@ shadow-[0_0_20px_rgba(59,130,246,0.15)]
                           <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
                           <circle cx="9" cy="7" r="4" />
                           <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
-                        </svg>,
+                        </svg>
                       ][i]
                     }
                   </div>
@@ -1030,7 +1060,7 @@ shadow-[0_0_20px_rgba(59,130,246,0.15)]
                   maskImage:
                     "linear-gradient(to bottom, black 0%, black 55%, transparent 100%)",
                   WebkitMaskImage:
-                    "linear-gradient(to bottom, black 0%, black 55%, transparent 100%)",
+                    "linear-gradient(to bottom, black 0%, black 55%, transparent 100%)"
                 }}
               />
 
@@ -1232,7 +1262,7 @@ shadow-[0_0_20px_rgba(59,130,246,0.15)]
               style={{
                 backgroundImage:
                   "linear-gradient(rgba(59,130,246,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(59,130,246,0.06) 1px, transparent 1px)",
-                backgroundSize: "40px 40px",
+                backgroundSize: "40px 40px"
               }}
             />
 
@@ -1258,7 +1288,7 @@ shadow-[0_0_20px_rgba(59,130,246,0.15)]
                       <line x1="1" y1="12" x2="4" y2="12" />
                       <line x1="20" y1="12" x2="23" y2="12" />
                     </svg>
-                  ),
+                  )
                 },
                 {
                   tag: tx.shipped.cards[1].tag,
@@ -1276,7 +1306,7 @@ shadow-[0_0_20px_rgba(59,130,246,0.15)]
                       <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
                       <line x1="12" y1="22.08" x2="12" y2="12" />
                     </svg>
-                  ),
+                  )
                 },
                 {
                   tag: tx.shipped.cards[2].tag,
@@ -1294,7 +1324,7 @@ shadow-[0_0_20px_rgba(59,130,246,0.15)]
                       <polyline points="2 17 12 22 22 17" />
                       <polyline points="2 12 12 17 22 12" />
                     </svg>
-                  ),
+                  )
                 },
                 {
                   tag: tx.shipped.cards[3].tag,
@@ -1310,8 +1340,8 @@ shadow-[0_0_20px_rgba(59,130,246,0.15)]
                     >
                       <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
                     </svg>
-                  ),
-                },
+                  )
+                }
               ].map((card, i) => (
                 <FadeInSection key={i}>
                   <div
@@ -1329,7 +1359,7 @@ shadow-[0_0_20px_rgba(59,130,246,0.15)]
                         maskImage:
                           "linear-gradient(to left, rgba(0,0,0,1) 30%, rgba(0,0,0,0) 75%)",
                         WebkitMaskImage:
-                          "linear-gradient(to left, rgba(0,0,0,1) 30%, rgba(0,0,0,0) 75%)",
+                          "linear-gradient(to left, rgba(0,0,0,1) 30%, rgba(0,0,0,0) 75%)"
                       }}
                     />
 
@@ -1381,7 +1411,7 @@ shadow-[0_0_20px_rgba(59,130,246,0.15)]
                   style={{
                     backgroundImage:
                       "linear-gradient(rgba(59,130,246,0.07) 1px, transparent 1px), linear-gradient(90deg, rgba(59,130,246,0.07) 1px, transparent 1px)",
-                    backgroundSize: "32px 32px",
+                    backgroundSize: "32px 32px"
                   }}
                 />
                 {/* Fade-out gradient at bottom so grid doesn't clash with content */}
@@ -1422,7 +1452,7 @@ shadow-[0_0_20px_rgba(59,130,246,0.15)]
                   style={{
                     backgroundImage:
                       "linear-gradient(rgba(59,130,246,0.07) 1px, transparent 1px), linear-gradient(90deg, rgba(59,130,246,0.07) 1px, transparent 1px)",
-                    backgroundSize: "32px 32px",
+                    backgroundSize: "32px 32px"
                   }}
                 />
                 {/* Fade-out gradient at bottom */}
@@ -1581,7 +1611,7 @@ shadow-[0_0_20px_rgba(59,130,246,0.15)]
                 {tx.footer.companyLinks.map((item) => (
                   <li key={item}>
                     <a
-                      href="#"
+                      href={tx.links[item] ?? "#"}
                       className="hover:text-gray-900 transition-colors"
                     >
                       {item}
@@ -1661,7 +1691,7 @@ shadow-[0_0_20px_rgba(59,130,246,0.15)]
                 { icon: FaXTwitter, href: "#" },
                 { icon: FaInstagram, href: "#" },
                 { icon: FaLinkedin, href: "#" },
-                { icon: FaYoutube, href: "#" },
+                { icon: FaYoutube, href: "#" }
               ].map(({ icon: Icon, href }, i) => (
                 <a
                   key={i}

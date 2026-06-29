@@ -90,48 +90,61 @@ export const authOptions: NextAuthOptions = {
           throw new Error("Email and password are required");
         }
 
-        const loginRes = await fetch(`${env.apiBaseUrl}/auth/login`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            email: credentials.email,
-            password: credentials.password,
-          }),
-        });
+        try {
+          // console.log("[AUTH] apiBaseUrl:", env.apiBaseUrl);
+          // console.log("[AUTH] Attempting login fetch to:", `${env.apiBaseUrl}/auth/login`);
 
-        const loginJson: LoginApiResponse = await loginRes.json();
+          const loginRes = await fetch(`${env.apiBaseUrl}/auth/login`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              email: credentials.email,
+              password: credentials.password,
+            }),
+          });
 
-        if (!loginRes.ok || !loginJson.status) {
-          throw new Error(loginJson.message ?? "Login failed");
+          // console.log("[AUTH] login response status:", loginRes.status, loginRes.statusText);
+
+          const loginJson: LoginApiResponse = await loginRes.json();
+          // console.log("[AUTH] login response body:", JSON.stringify(loginJson));
+
+          if (!loginRes.ok || !loginJson.status) {
+            throw new Error(loginJson.message ?? "Login failed");
+          }
+
+          const { access_token, refresh_token } = loginJson.data;
+
+          const meRes = await fetch(`${env.apiBaseUrl}/auth/me`, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: access_token,
+            },
+          });
+
+          // console.log("[AUTH] /auth/me response status:", meRes.status, meRes.statusText);
+
+          if (!meRes.ok) throw new Error("Failed to fetch user profile");
+
+          const meJson: MeApiResponse = await meRes.json();
+          if (!meJson.status || !meJson.data) throw new Error("Invalid user data");
+
+          const user = meJson.data;
+
+          return {
+            id: user.id,
+            name: user.full_name,
+            email: user.email,
+            role: user.role as UserRole,
+            accessToken: access_token,
+            refreshToken: refresh_token,
+            phoneNumber: user.phone_number,
+            profilePictureUrl: user.profile_picture_url,
+          };
+        } catch (error) {
+          // console.error("[AUTH] authorize error:", error);
+          throw error;
         }
-
-        const { access_token, refresh_token } = loginJson.data;
-
-        const meRes = await fetch(`${env.apiBaseUrl}/auth/me`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: access_token,
-          },
-        });
-
-        if (!meRes.ok) throw new Error("Failed to fetch user profile");
-
-        const meJson: MeApiResponse = await meRes.json();
-        if (!meJson.status || !meJson.data) throw new Error("Invalid user data");
-
-        const user = meJson.data;
-
-        return {
-          id: user.id,
-          name: user.full_name,
-          email: user.email,
-          role: user.role as UserRole,
-          accessToken: access_token,
-          refreshToken: refresh_token,
-          phoneNumber: user.phone_number,
-          profilePictureUrl: user.profile_picture_url,
-        };
       },
     }),
 
