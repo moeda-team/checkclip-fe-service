@@ -10,7 +10,7 @@ import {
   RowSelectionState,
   getSortedRowModel,
   PaginationState,
-  Updater
+  Updater,
 } from "@tanstack/react-table";
 import { PaginationDto, PaginationFilter } from "@/types/api";
 import { ArrowDown, ArrowUp, ArrowUpDown } from "lucide-react";
@@ -21,7 +21,7 @@ import {
   TableCell,
   TableHead,
   TableHeader,
-  TableRow
+  TableRow,
 } from "./table";
 import { Button } from "./button";
 import { Skeleton } from "./skeleton";
@@ -32,7 +32,7 @@ import {
   PaginationItem,
   PaginationLink,
   PaginationNext,
-  PaginationPrevious
+  PaginationPrevious,
 } from "./pagination";
 
 export interface PaginationProps {
@@ -106,7 +106,7 @@ function DataTablePagination({ pagination }: { pagination: PaginationProps }) {
     setPaginationFilter({
       ...paginationFilter,
       page,
-      search: undefined
+      search: undefined,
     });
   };
 
@@ -158,7 +158,7 @@ export function DataTable<T>({
   isStriped = false,
   rowSelection,
   pagination,
-  sidePanel
+  sidePanel,
 }: DataTableProps<T>) {
   const getRowId =
     rowSelection?.getRowKey ??
@@ -175,7 +175,7 @@ export function DataTable<T>({
 
   const rowSelectionState: RowSelectionState = rowSelection
     ? Object.fromEntries(
-        rowSelection.selectedRowKeys.map((k) => [String(k), true])
+        rowSelection.selectedRowKeys.map((k) => [String(k), true]),
       )
     : {};
 
@@ -188,9 +188,9 @@ export function DataTable<T>({
       pagination: pagination
         ? {
             pageIndex: pagination.paginationFilter.page - 1,
-            pageSize: pagination.paginationFilter.perPage
+            pageSize: pagination.paginationFilter.perPage,
           }
-        : undefined
+        : undefined,
     },
     enableRowSelection: (row) => isSelectable(row.original),
     onRowSelectionChange: (updater) => {
@@ -219,9 +219,9 @@ export function DataTable<T>({
       pagination?.setPaginationFilter({
         ...pagination.paginationFilter,
         perPage,
-        page
+        page,
       });
-    }
+    },
   });
 
   const selectableRows = table
@@ -234,7 +234,7 @@ export function DataTable<T>({
     if (!rowSelection || !selectAllRef.current) return;
 
     const selectedCount = selectableRows.filter((r) =>
-      r.getIsSelected()
+      r.getIsSelected(),
     ).length;
 
     selectAllRef.current.indeterminate =
@@ -247,7 +247,7 @@ export function DataTable<T>({
         <div
           className={cn(
             "flex-1 overflow-auto rounded-md border",
-            sidePanel && "rounded-r-none border-r-0"
+            sidePanel && "rounded-r-none border-r-0",
           )}
         >
           <Table>
@@ -282,11 +282,15 @@ export function DataTable<T>({
                           ? "cursor-pointer select-none"
                           : ""
                       }
+                      style={{
+                        minWidth: (header.column.columnDef.meta as any)
+                          ?.minWidth,
+                      }}
                     >
-                      <div className="flex items-center gap-1">
+                      <div className="flex items-center gap-1 text-muted-foreground">
                         {flexRender(
                           header.column.columnDef.header,
-                          header.getContext()
+                          header.getContext(),
                         )}
                         {enableSorting && header.column.getCanSort() && (
                           <Button
@@ -307,7 +311,7 @@ export function DataTable<T>({
                         )}
                       </div>
                     </TableHead>
-                  ))
+                  )),
                 )}
               </TableRow>
             </TableHeader>
@@ -368,7 +372,7 @@ export function DataTable<T>({
                       <TableCell key={cell.id}>
                         {flexRender(
                           cell.column.columnDef.cell,
-                          cell.getContext()
+                          cell.getContext(),
                         )}
                       </TableCell>
                     ))}

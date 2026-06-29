@@ -13,7 +13,7 @@ import {
   ChevronRight,
   LogOut,
   Menu,
-  LayoutGrid
+  LayoutGrid,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -22,13 +22,13 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuTrigger
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
 import { Sidebar } from "./dasbhoard/Sidebar";
 import {
   SidebarProvider,
-  useSidebar
+  useSidebar,
 } from "./dasbhoard/ResponsiveSidebarProvider";
 import { cn } from "@/lib/utils";
 import { useAutoSignOut } from "@/hooks/useAutoSignOut";
@@ -54,7 +54,7 @@ const segmentLabels: Record<string, string> = {
   database: "Database",
   calendar: "Calendar",
   brief: "Campaign Briefs",
-  strategy: "Strategy Planner"
+  strategy: "Strategy Planner",
 };
 
 // Check if a segment is a dynamic ID (UUID or numeric string)
@@ -266,7 +266,7 @@ function AppLayoutContent({ children }: { children: ReactNode }) {
         className={cn(
           "fixed top-0 left-0 h-screen z-50 transition-transform duration-300 ease-in-out",
           sidebarOpen ? "translate-x-0" : "-translate-x-full",
-          "lg:translate-x-0"
+          "lg:translate-x-0",
         )}
       >
         <Sidebar />
@@ -276,12 +276,12 @@ function AppLayoutContent({ children }: { children: ReactNode }) {
       <div
         className={cn(
           "flex-1 flex flex-col min-h-screen transition-all duration-300 ease-in-out",
-          collapsed ? "lg:ml-16" : "lg:ml-64"
+          collapsed ? "lg:ml-16" : "lg:ml-64",
         )}
       >
         <AppHeader />
         <main className="flex-1">
-          <div className="max-w-6xl mx-auto">{children}</div>
+          <div className="max-w-300 mx-auto">{children}</div>
         </main>
       </div>
     </div>

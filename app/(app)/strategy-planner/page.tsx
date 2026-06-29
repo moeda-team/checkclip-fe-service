@@ -11,11 +11,11 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuTrigger
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
   useGetStrategyPlanners,
-  useDeleteStrategyPlanner
+  useDeleteStrategyPlanner,
 } from "./hooks/useStrategyPlanner";
 import type { StrategyPlannerFilter, StrategyPlannerTableRow } from "./types";
 import type { ApiResponsePagination, PaginationFilter } from "@/types/api";
@@ -27,7 +27,7 @@ export default function StrategyPlannerPage() {
   const [filter, setFilter] = useState<StrategyPlannerFilter>({
     page: 1,
     limit: 5,
-    search: ""
+    search: "",
   });
 
   const { data, isLoading } = useGetStrategyPlanners(filter);
@@ -42,9 +42,9 @@ export default function StrategyPlannerPage() {
     () => ({
       page: filter.page ?? 1,
       perPage: filter.limit ?? 5,
-      search: filter.search
+      search: filter.search,
     }),
-    [filter]
+    [filter],
   );
 
   const paginationDto = useMemo(
@@ -52,9 +52,9 @@ export default function StrategyPlannerPage() {
       total: apiData?.total ?? 0,
       current_page: filter.page ?? 1,
       per_page: filter.limit ?? 5,
-      total_pages: Math.ceil((apiData?.total ?? 0) / (filter.limit ?? 5))
+      total_pages: Math.ceil((apiData?.total ?? 0) / (filter.limit ?? 5)),
     }),
-    [apiData?.total, filter]
+    [apiData?.total, filter],
   );
 
   const handleSearch = (value: string) => {
@@ -62,7 +62,7 @@ export default function StrategyPlannerPage() {
     setFilter((prev) => ({
       ...prev,
       search: value,
-      page: 1
+      page: 1,
     }));
   };
 
@@ -76,16 +76,16 @@ export default function StrategyPlannerPage() {
       header: "Campaign Name",
       cell: ({ row }) => (
         <div className="font-medium">{row.getValue("title")}</div>
-      )
+      ),
     },
     {
       id: "brand_name",
       header: "Brand Name",
-      accessorFn: (row) => row.brand?.name ?? "-"
+      accessorFn: (row) => row.brand?.name ?? "-",
     },
     {
       accessorKey: "planner_type",
-      header: "Objective"
+      header: "Objective",
     },
     {
       id: "total_budget",
@@ -95,9 +95,9 @@ export default function StrategyPlannerPage() {
           ? new Intl.NumberFormat("en-US", {
               style: "currency",
               currency: "USD",
-              minimumFractionDigits: 0
+              minimumFractionDigits: 0,
             }).format(row.budget.amount)
-          : "-"
+          : "-",
     },
     {
       id: "budget_type",
@@ -105,7 +105,7 @@ export default function StrategyPlannerPage() {
       accessorFn: (row) =>
         row.budget?.type
           ? row.budget.type.charAt(0).toUpperCase() + row.budget.type.slice(1)
-          : "-"
+          : "-",
     },
     {
       id: "actions",
@@ -140,8 +140,8 @@ export default function StrategyPlannerPage() {
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-      )
-    }
+      ),
+    },
   ];
 
   return (
@@ -161,7 +161,7 @@ export default function StrategyPlannerPage() {
               setFilter((prev) => ({
                 ...prev,
                 limit: Number(e.target.value),
-                page: 1
+                page: 1,
               }))
             }
           >
@@ -170,6 +170,7 @@ export default function StrategyPlannerPage() {
             <option value={25}>25 Rows</option>
             <option value={50}>50 Rows</option>
           </select>
+
           <div className="relative flex-1 max-w-sm">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <Input
@@ -212,7 +213,7 @@ export default function StrategyPlannerPage() {
         isStriped
         rowSelection={{
           selectedRowKeys,
-          onChange: (keys) => setSelectedRowKeys(keys)
+          onChange: (keys) => setSelectedRowKeys(keys),
         }}
         pagination={{
           paginationDto,
@@ -222,8 +223,8 @@ export default function StrategyPlannerPage() {
               ...prev,
               page: newFilter.page,
               limit: newFilter.perPage,
-              search: newFilter.search
-            }))
+              search: newFilter.search,
+            })),
         }}
       />
     </div>
