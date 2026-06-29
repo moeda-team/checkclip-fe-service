@@ -63,8 +63,9 @@ export const useGetCustomersInfinite = (search: string) =>
       return response.data;
     },
     getNextPageParam: (lastPage) => {
-      const nextOffset = lastPage.offset + lastPage.limit;
-      return nextOffset < lastPage.total ? nextOffset : undefined;
+      const nextOffset = lastPage.offset + 1;
+      const totalPages = Math.ceil(lastPage.total / lastPage.limit);
+      return nextOffset < totalPages ? nextOffset : undefined;
     },
     initialPageParam: 0,
     meta: { errorMessage: "Failed to fetch customers" },

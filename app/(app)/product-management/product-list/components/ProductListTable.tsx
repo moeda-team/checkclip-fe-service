@@ -144,7 +144,7 @@ export default function ProductListTable() {
   const paginationFilter: PaginationFilter = useMemo(
     () => ({
       offset: filter.offset ?? 0,
-      limit: filter.limit ?? 10,
+      limit: filter.limit ?? 5,
       search: filter.search
     }),
     [filter]
@@ -153,8 +153,8 @@ export default function ProductListTable() {
   const paginationDto = useMemo(
     () => ({
       total: apiData?.total ?? 0,
-      current_page: Math.floor((filter.offset ?? 0) / (filter.limit ?? 10)) + 1,
-      per_page: filter.limit ?? 10,
+      current_page: (filter.offset ?? 0) + 1,
+      per_page: filter.limit ?? 5,
       total_pages: Math.ceil((apiData?.total ?? 0) / (filter.limit ?? 10))
     }),
     [apiData?.total, filter]

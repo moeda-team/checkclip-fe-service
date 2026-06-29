@@ -440,7 +440,7 @@ export function CustomerProfileTable() {
   const paginationDto: PaginationDto = useMemo(
     () => ({
       total,
-      current_page: Math.floor((filter.offset ?? 0) / limit) + 1,
+      current_page: (filter.offset ?? 0) + 1,
       per_page: limit,
       total_pages: totalPages
     }),

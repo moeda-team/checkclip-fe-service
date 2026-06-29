@@ -49,7 +49,7 @@ export function DashboardContent() {
   const total = data?.total ?? 0;
   const limit = data?.limit ?? 10;
   const offset = data?.offset ?? 0;
-  const current_page = Math.floor(offset / limit) + 1;
+  const current_page = offset + 1;
   const total_pages = Math.ceil(total / limit);
 
   if (!items.length) {

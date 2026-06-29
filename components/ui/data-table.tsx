@@ -66,7 +66,7 @@ function DataTablePagination({ pagination }: { pagination: PaginationProps }) {
   const { paginationDto, paginationFilter, setPaginationFilter } = pagination;
   const limit = paginationFilter.limit ?? 10;
   const offset = paginationFilter.offset ?? 0;
-  const currentPage = Math.floor(offset / limit) + 1;
+  const currentPage = offset + 1;
   const totalPages = paginationDto.total_pages;
 
   const getPageNumbers = () => {
@@ -105,10 +105,9 @@ function DataTablePagination({ pagination }: { pagination: PaginationProps }) {
   };
 
   const handlePageChange = (page: number) => {
-    const nextOffset = (page - 1) * limit;
     setPaginationFilter({
       ...paginationFilter,
-      offset: nextOffset
+      offset: page - 1
     });
   };
 
@@ -189,10 +188,7 @@ export function DataTable<T>({
       rowSelection: rowSelectionState,
       pagination: pagination
         ? {
-            pageIndex: Math.floor(
-              (pagination.paginationFilter.offset ?? 0) /
-                (pagination.paginationFilter.limit ?? 10)
-            ),
+            pageIndex: pagination.paginationFilter.offset ?? 0,
             pageSize: pagination.paginationFilter.limit ?? 10
           }
         : undefined
@@ -224,7 +220,7 @@ export function DataTable<T>({
       pagination?.setPaginationFilter({
         ...pagination.paginationFilter,
         limit: pageSize,
-        offset: (page - 1) * pageSize
+        offset: page - 1
       });
     }
   });

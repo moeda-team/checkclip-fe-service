@@ -135,13 +135,13 @@ function AdAccountTabTable({
   const limit = paginationFilter.limit ?? 10;
   const offset = paginationFilter.offset ?? 0;
   const totalPages = Math.max(1, Math.ceil(totalItems / limit));
-  const pageStart = offset;
+  const pageStart = offset * limit;
   const pageData = filtered.slice(pageStart, pageStart + limit);
 
   const paginationDto: PaginationDto = {
     total: totalItems,
     total_pages: totalPages,
-    current_page: Math.floor(offset / limit) + 1,
+    current_page: offset + 1,
     per_page: limit
   };
 

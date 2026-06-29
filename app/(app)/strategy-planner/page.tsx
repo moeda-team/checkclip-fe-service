@@ -50,7 +50,7 @@ export default function StrategyPlannerPage() {
   const paginationDto = useMemo(
     () => ({
       total: apiData?.total ?? 0,
-      current_page: Math.floor((filter.offset ?? 0) / (filter.limit ?? 10)) + 1,
+      current_page: (filter.offset ?? 0) + 1,
       per_page: filter.limit ?? 10,
       total_pages: Math.ceil((apiData?.total ?? 0) / (filter.limit ?? 10))
     }),
