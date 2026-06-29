@@ -10,12 +10,12 @@ import {
   useGetCustomers,
   usePutCustomer,
   usePostCustomer,
-  useDeleteCustomer
+  useDeleteCustomer,
 } from "../../hooks/useCustomers";
 import {
   useGetCustomerFields,
   usePutCustomerField,
-  useDeleteCustomerField
+  useDeleteCustomerField,
 } from "../../hooks/useCustomerFields";
 import { AddCustomFieldDialog } from "./AddCustomFieldDialog";
 import { TableSettings } from "./TableSettings";
@@ -26,12 +26,12 @@ import type {
   CustomerFieldDto,
   CustomerFieldFormDto,
   CustomerFieldType,
-  CustomerFormDto
+  CustomerFormDto,
 } from "@/types/type-customer";
 import type {
   ApiResponsePagination,
   PaginationDto,
-  PaginationFilter
+  PaginationFilter,
 } from "@/types/api";
 
 // ─── Static (built-in) columns ─────────────────────────────────────────────────
@@ -95,7 +95,7 @@ const buildCreateForm = (draft: CustomerDto): CustomerFormDto => ({
   gender: draft.gender,
   company_name: draft.company_name,
   job_title: draft.job_title,
-  custom_fields: draft.custom_fields ?? {}
+  custom_fields: draft.custom_fields ?? {},
 });
 
 export function CustomerProfileTable() {
@@ -103,7 +103,7 @@ export function CustomerProfileTable() {
   const [filter, setFilter] = useState<PaginationFilter>({
     page: 1,
     perPage: 10,
-    search: ""
+    search: "",
   });
   const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([]);
   // Locally-added rows that have not been persisted to the API yet.
@@ -123,7 +123,7 @@ export function CustomerProfileTable() {
   // Server rows first, local draft rows appended at the bottom.
   const rows = useMemo(
     () => [...serverRows, ...draftRows],
-    [serverRows, draftRows]
+    [serverRows, draftRows],
   );
 
   const customFields = useMemo<CustomerFieldDto[]>(() => {
@@ -132,7 +132,7 @@ export function CustomerProfileTable() {
   }, [fieldsData]);
 
   const total = apiData?.total ?? 0;
-  const totalPages = Math.max(1, Math.ceil(total / filter.perPage));
+  const totalPages = Math.max(1, Math.ceil(total / (filter.perPage ?? 10)));
 
   const { mutate: updateCustomer } = usePutCustomer();
   const { mutate: createCustomer, isPending: isCreating } = usePostCustomer();
@@ -186,8 +186,8 @@ export function CustomerProfileTable() {
         tenant_id: "",
         full_name: "",
         email: "",
-        custom_fields: {}
-      }
+        custom_fields: {},
+      },
     ]);
   };
 
@@ -199,7 +199,7 @@ export function CustomerProfileTable() {
       .forEach((id) => deleteCustomer(id));
     // Drop any selected draft rows locally.
     setDraftRows((prev) =>
-      prev.filter((d) => !selectedRowKeys.map(String).includes(d.id))
+      prev.filter((d) => !selectedRowKeys.map(String).includes(d.id)),
     );
     setSelectedRowKeys([]);
   };
@@ -218,7 +218,7 @@ export function CustomerProfileTable() {
       },
       onSettled: () => {
         pendingDraftIds.current.delete(draft.id);
-      }
+      },
     });
   };
 
@@ -226,7 +226,7 @@ export function CustomerProfileTable() {
   const saveStaticValue = (
     customer: CustomerDto,
     key: string,
-    value: CustomerCustomFieldValue
+    value: CustomerCustomFieldValue,
   ) => {
     if (isDraftRow(customer)) {
       persistDraft(customer, { ...customer, [key]: value } as CustomerDto);
@@ -234,7 +234,7 @@ export function CustomerProfileTable() {
     }
     updateCustomer({
       id: customer.id,
-      form: { [key]: value } as Partial<CustomerFormDto>
+      form: { [key]: value } as Partial<CustomerFormDto>,
     });
   };
 
@@ -242,11 +242,11 @@ export function CustomerProfileTable() {
   const saveCustomValue = (
     customer: CustomerDto,
     fieldKey: string,
-    value: CustomerCustomFieldValue
+    value: CustomerCustomFieldValue,
   ) => {
     const nextCustomFields = {
       ...(customer.custom_fields ?? {}),
-      [fieldKey]: value
+      [fieldKey]: value,
     };
     if (isDraftRow(customer)) {
       persistDraft(customer, { ...customer, custom_fields: nextCustomFields });
@@ -254,7 +254,7 @@ export function CustomerProfileTable() {
     }
     updateCustomer({
       id: customer.id,
-      form: { custom_fields: nextCustomFields }
+      form: { custom_fields: nextCustomFields },
     });
   };
 
@@ -273,7 +273,7 @@ export function CustomerProfileTable() {
   // );
 
   const buildStaticColumn = (
-    col: StaticColumn
+    col: StaticColumn,
   ): ColumnDef<CustomerDto, unknown> => ({
     id: col.id,
     header: col.label,
@@ -287,11 +287,11 @@ export function CustomerProfileTable() {
           onSave={(value) => saveStaticValue(row.original, col.id, value)}
         />
       </div>
-    )
+    ),
   });
 
   const buildCustomColumn = (
-    field: CustomerFieldDto
+    field: CustomerFieldDto,
   ): ColumnDef<CustomerDto, unknown> => ({
     id: field.field_key,
     header: field.field_label,
@@ -305,7 +305,7 @@ export function CustomerProfileTable() {
           saveCustomValue(row.original, field.field_key, value)
         }
       />
-    )
+    ),
   });
 
   // Reorderable metadata for all columns (static + custom). Used by the
@@ -326,12 +326,12 @@ export function CustomerProfileTable() {
         id: f.field_key,
         label: f.field_label,
         source: "custom" as const,
-        field: f
+        field: f,
       }));
     return [
       // { id: "customer_id", label: "Customer id", source: "id" as const },
       // ...staticItems,
-      ...customItems
+      ...customItems,
     ];
   }, [customFields]);
 
@@ -357,7 +357,7 @@ export function CustomerProfileTable() {
           return buildCustomColumn(item.field);
         }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [orderedItems, visibleColumnIds]
+    [orderedItems, visibleColumnIds],
   );
 
   // Reorder handler: update local order and persist custom-field positions.
@@ -380,14 +380,14 @@ export function CustomerProfileTable() {
 
     // Custom fields in their currently persisted order.
     const currentCustomOrder = [...customFields].sort(
-      (a, b) => a.display_order - b.display_order
+      (a, b) => a.display_order - b.display_order,
     );
 
     // No change to the custom-field order → no API calls.
     const unchanged =
       nextCustomOrder.length === currentCustomOrder.length &&
       nextCustomOrder.every(
-        (f, i) => f.field_key === currentCustomOrder[i]?.field_key
+        (f, i) => f.field_key === currentCustomOrder[i]?.field_key,
       );
     if (unchanged) return;
 
@@ -405,7 +405,7 @@ export function CustomerProfileTable() {
         field_type: field.field_type,
         is_required: field.is_required,
         display_order: nextDisplayOrder,
-        options: field.options
+        options: field.options,
       };
       updateField({ id: field.id, form });
     });
@@ -422,7 +422,7 @@ export function CustomerProfileTable() {
       field_type: field.field_type,
       is_required: field.is_required,
       display_order: field.display_order,
-      options: field.options
+      options: field.options,
     };
     updateField({ id: field.id, form });
   };
@@ -440,10 +440,10 @@ export function CustomerProfileTable() {
     () => ({
       total,
       current_page: filter.page,
-      per_page: filter.perPage,
-      total_pages: totalPages
+      per_page: filter.perPage ?? 10,
+      total_pages: totalPages,
     }),
-    [total, filter.page, filter.perPage, totalPages]
+    [total, filter.page, filter.perPage, totalPages],
   );
 
   const handleSearch = (value: string) => {
@@ -465,7 +465,7 @@ export function CustomerProfileTable() {
               setFilter((prev) => ({
                 ...prev,
                 perPage: Number(e.target.value),
-                page: 1
+                page: 1,
               }))
             }
           >
@@ -490,7 +490,7 @@ export function CustomerProfileTable() {
             columns={orderedItems.map((item) => ({
               id: item.id,
               label: item.label,
-              isCustom: item.source === "custom"
+              isCustom: item.source === "custom",
             }))}
             onReorder={handleReorder}
             onRenameColumn={handleRenameColumn}
@@ -549,12 +549,12 @@ export function CustomerProfileTable() {
         emptyText="No customers found"
         rowSelection={{
           selectedRowKeys,
-          onChange: (keys) => setSelectedRowKeys(keys)
+          onChange: (keys) => setSelectedRowKeys(keys),
         }}
         pagination={{
           paginationDto,
           paginationFilter: filter,
-          setPaginationFilter: (next) => setFilter(next)
+          setPaginationFilter: (next) => setFilter(next),
         }}
       />
     </div>

@@ -6,10 +6,12 @@ export default function DeleteConfModal({
   isOpen,
   onClose,
   handleDelete,
+  isLoading,
 }: {
   isOpen?: boolean;
   onClose?: () => void;
   handleDelete?: () => void;
+  isLoading?: boolean;
 }) {
   return (
     <Modal
@@ -34,8 +36,13 @@ export default function DeleteConfModal({
         <Button variant="secondary" onClick={onClose} className="flex-1">
           Cancel
         </Button>
-        <Button variant="destructive" onClick={handleDelete} className="flex-1">
-          Delete
+        <Button
+          variant="destructive"
+          onClick={handleDelete}
+          className="flex-1"
+          disabled={isLoading}
+        >
+          {isLoading ? "Deleting..." : "Delete"}
         </Button>
       </div>
     </Modal>
