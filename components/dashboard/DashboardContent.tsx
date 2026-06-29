@@ -8,7 +8,7 @@ import { useGetCampaigns } from "@/hooks/use-campaigns";
 import { Loader2, AlertCircle, FolderOpen } from "lucide-react";
 import type { PaginationFilter } from "@/types/api";
 
-const defaultFilter: PaginationFilter = { perPage: 10, page: 1 };
+const defaultFilter: PaginationFilter = { limit: 10, offset: 0 };
 
 export function DashboardContent() {
   const { data, isLoading, isError, error, refetch } =

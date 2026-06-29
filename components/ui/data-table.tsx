@@ -10,7 +10,7 @@ import {
   RowSelectionState,
   getSortedRowModel,
   PaginationState,
-  Updater,
+  Updater
 } from "@tanstack/react-table";
 import { PaginationDto, PaginationFilter } from "@/types/api";
 import { ArrowDown, ArrowUp, ArrowUpDown } from "lucide-react";
@@ -21,7 +21,7 @@ import {
   TableCell,
   TableHead,
   TableHeader,
-  TableRow,
+  TableRow
 } from "./table";
 import { Button } from "./button";
 import { Skeleton } from "./skeleton";
@@ -32,7 +32,7 @@ import {
   PaginationItem,
   PaginationLink,
   PaginationNext,
-  PaginationPrevious,
+  PaginationPrevious
 } from "./pagination";
 
 export interface PaginationProps {
@@ -64,7 +64,9 @@ interface DataTableProps<T> {
 
 function DataTablePagination({ pagination }: { pagination: PaginationProps }) {
   const { paginationDto, paginationFilter, setPaginationFilter } = pagination;
-  const currentPage = paginationFilter.page;
+  const limit = paginationFilter.limit ?? 10;
+  const offset = paginationFilter.offset ?? 0;
+  const currentPage = Math.floor(offset / limit) + 1;
   const totalPages = paginationDto.total_pages;
 
   const getPageNumbers = () => {
@@ -103,10 +105,10 @@ function DataTablePagination({ pagination }: { pagination: PaginationProps }) {
   };
 
   const handlePageChange = (page: number) => {
+    const nextOffset = (page - 1) * limit;
     setPaginationFilter({
       ...paginationFilter,
-      page,
-      search: undefined,
+      offset: nextOffset
     });
   };
 
@@ -158,7 +160,7 @@ export function DataTable<T>({
   isStriped = false,
   rowSelection,
   pagination,
-  sidePanel,
+  sidePanel
 }: DataTableProps<T>) {
   const getRowId =
     rowSelection?.getRowKey ??
@@ -175,7 +177,7 @@ export function DataTable<T>({
 
   const rowSelectionState: RowSelectionState = rowSelection
     ? Object.fromEntries(
-        rowSelection.selectedRowKeys.map((k) => [String(k), true]),
+        rowSelection.selectedRowKeys.map((k) => [String(k), true])
       )
     : {};
 
@@ -187,10 +189,13 @@ export function DataTable<T>({
       rowSelection: rowSelectionState,
       pagination: pagination
         ? {
-            pageIndex: pagination.paginationFilter.page - 1,
-            pageSize: pagination.paginationFilter.perPage ?? 10,
+            pageIndex: Math.floor(
+              (pagination.paginationFilter.offset ?? 0) /
+                (pagination.paginationFilter.limit ?? 10)
+            ),
+            pageSize: pagination.paginationFilter.limit ?? 10
           }
-        : undefined,
+        : undefined
     },
     enableRowSelection: (row) => isSelectable(row.original),
     onRowSelectionChange: (updater) => {
@@ -214,14 +219,14 @@ export function DataTable<T>({
       const current = table.getState().pagination;
       const next = typeof updater === "function" ? updater(current) : updater;
       const page = next.pageIndex + 1;
-      const perPage = next.pageSize;
+      const pageSize = next.pageSize;
 
       pagination?.setPaginationFilter({
         ...pagination.paginationFilter,
-        perPage,
-        page,
+        limit: pageSize,
+        offset: (page - 1) * pageSize
       });
-    },
+    }
   });
 
   const selectableRows = table
@@ -234,7 +239,7 @@ export function DataTable<T>({
     if (!rowSelection || !selectAllRef.current) return;
 
     const selectedCount = selectableRows.filter((r) =>
-      r.getIsSelected(),
+      r.getIsSelected()
     ).length;
 
     selectAllRef.current.indeterminate =
@@ -247,7 +252,7 @@ export function DataTable<T>({
         <div
           className={cn(
             "flex-1 overflow-auto rounded-md border",
-            sidePanel && "rounded-r-none border-r-0",
+            sidePanel && "rounded-r-none border-r-0"
           )}
         >
           <Table>
@@ -284,13 +289,13 @@ export function DataTable<T>({
                       }
                       style={{
                         minWidth: (header.column.columnDef.meta as any)
-                          ?.minWidth,
+                          ?.minWidth
                       }}
                     >
                       <div className="flex items-center gap-1 text-muted-foreground">
                         {flexRender(
                           header.column.columnDef.header,
-                          header.getContext(),
+                          header.getContext()
                         )}
                         {enableSorting && header.column.getCanSort() && (
                           <Button
@@ -311,7 +316,7 @@ export function DataTable<T>({
                         )}
                       </div>
                     </TableHead>
-                  )),
+                  ))
                 )}
               </TableRow>
             </TableHeader>
@@ -372,7 +377,7 @@ export function DataTable<T>({
                       <TableCell key={cell.id}>
                         {flexRender(
                           cell.column.columnDef.cell,
-                          cell.getContext(),
+                          cell.getContext()
                         )}
                       </TableCell>
                     ))}

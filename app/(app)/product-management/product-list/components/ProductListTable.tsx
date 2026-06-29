@@ -4,7 +4,7 @@ import { DataTable } from "@/components/ui/data-table";
 import {
   useDeleteBulkProduct,
   useDeleteProduct,
-  useGetProducts,
+  useGetProducts
 } from "../../hooks/useProducts";
 import { Key, useEffect, useMemo, useState } from "react";
 import { ApiResponsePagination, PaginationFilter } from "@/types/api";
@@ -24,9 +24,9 @@ export default function ProductListTable() {
   const [search, setSearch] = useState<string>("");
   const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([]);
   const [filter, setFilter] = useState<PaginationFilter>({
-    page: 1,
-    limit: 5,
-    search: "",
+    offset: 0,
+    limit: 10,
+    search: ""
   });
   const [isOpenAddModal, setIsOpenAddModal] = useState<boolean>(false);
   const [isOpenDeleteModal, setIsOpenDeleteModal] = useState<boolean>(false);
@@ -43,38 +43,38 @@ export default function ProductListTable() {
     {
       accessorKey: "name",
       header: "Product Name",
-      meta: { minWidth: 200 },
+      meta: { minWidth: 200 }
     },
     {
       id: "product_category",
       header: "Product Category",
       meta: { minWidth: 200 },
-      accessorFn: (row) => row.category?.name ?? "-",
+      accessorFn: (row) => row.category?.name ?? "-"
     },
     {
       accessorKey: "brand",
       header: "Brand",
-      meta: { minWidth: 200 },
+      meta: { minWidth: 200 }
     },
     {
       accessorKey: "description",
       header: "Product Description",
-      meta: { minWidth: 200 },
+      meta: { minWidth: 200 }
     },
     {
       accessorKey: "",
       header: "Image",
-      meta: { minWidth: 100 },
+      meta: { minWidth: 100 }
     },
     {
       accessorKey: "",
       header: "Video",
-      meta: { minWidth: 100 },
+      meta: { minWidth: 100 }
     },
     {
       accessorKey: "price",
       header: "Price",
-      meta: { minWidth: 200 },
+      meta: { minWidth: 200 }
     },
     {
       id: "tags",
@@ -93,18 +93,18 @@ export default function ProductListTable() {
             ))}
           </div>
         );
-      },
+      }
     },
     {
       accessorKey: "",
       header: "Last Update",
-      meta: { minWidth: 120 },
+      meta: { minWidth: 120 }
     },
     {
       id: "industry",
       header: "Industry",
       meta: { minWidth: 200 },
-      accessorFn: (row) => row.industry?.name ?? "-",
+      accessorFn: (row) => row.industry?.name ?? "-"
     },
     {
       id: "actions",
@@ -134,8 +134,8 @@ export default function ProductListTable() {
             </Button>
           </div>
         );
-      },
-    },
+      }
+    }
   ];
 
   const apiData = data as ApiResponsePagination<ProductDto[]> | undefined;
@@ -143,26 +143,26 @@ export default function ProductListTable() {
 
   const paginationFilter: PaginationFilter = useMemo(
     () => ({
-      page: filter.page ?? 1,
-      limit: filter.limit ?? 5,
-      search: filter.search,
+      offset: filter.offset ?? 0,
+      limit: filter.limit ?? 10,
+      search: filter.search
     }),
-    [filter],
+    [filter]
   );
 
   const paginationDto = useMemo(
     () => ({
       total: apiData?.total ?? 0,
-      current_page: filter.page ?? 1,
-      per_page: filter.limit ?? 5,
-      total_pages: Math.ceil((apiData?.total ?? 0) / (filter.limit ?? 5)),
+      current_page: Math.floor((filter.offset ?? 0) / (filter.limit ?? 10)) + 1,
+      per_page: filter.limit ?? 10,
+      total_pages: Math.ceil((apiData?.total ?? 0) / (filter.limit ?? 10))
     }),
-    [apiData?.total, filter],
+    [apiData?.total, filter]
   );
 
   const handleSearch = (value: string) => {
     setSearch(value);
-    setFilter((prev) => ({ ...prev, search: value, page: 1 }));
+    setFilter((prev) => ({ ...prev, search: value, offset: 0 }));
   };
 
   const handleDelete = () => {
@@ -172,7 +172,7 @@ export default function ProductListTable() {
       onSettled: () => {
         setIsOpenDeleteModal(false);
         setDeleteId("");
-      },
+      }
     };
 
     if (deleteMode === "bulk") {
@@ -218,7 +218,7 @@ export default function ProductListTable() {
         isStriped
         rowSelection={{
           selectedRowKeys,
-          onChange: (keys) => setSelectedRowKeys(keys),
+          onChange: (keys) => setSelectedRowKeys(keys)
         }}
         pagination={{
           paginationDto,
@@ -226,10 +226,10 @@ export default function ProductListTable() {
           setPaginationFilter: (newFilter) =>
             setFilter((prev) => ({
               ...prev,
-              page: newFilter.page,
+              offset: newFilter.offset,
               limit: newFilter.limit,
-              search: newFilter.search,
-            })),
+              search: newFilter.search
+            }))
         }}
       />
 

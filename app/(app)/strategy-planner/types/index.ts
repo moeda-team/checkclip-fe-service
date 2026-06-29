@@ -145,7 +145,7 @@ export interface GenerateBriefPayload {
 }
 
 export interface StrategyPlannerFilter {
-  page?: number;
+  offset?: number;
   limit?: number;
   search?: string;
   sortBy?: string;

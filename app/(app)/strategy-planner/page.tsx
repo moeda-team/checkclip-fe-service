@@ -11,11 +11,11 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuTrigger,
+  DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import {
   useGetStrategyPlanners,
-  useDeleteStrategyPlanner,
+  useDeleteStrategyPlanner
 } from "./hooks/useStrategyPlanner";
 import type { StrategyPlannerFilter, StrategyPlannerTableRow } from "./types";
 import type { ApiResponsePagination, PaginationFilter } from "@/types/api";
@@ -25,9 +25,9 @@ export default function StrategyPlannerPage() {
   const [search, setSearch] = useState("");
   const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([]);
   const [filter, setFilter] = useState<StrategyPlannerFilter>({
-    page: 1,
-    limit: 5,
-    search: "",
+    offset: 0,
+    limit: 10,
+    search: ""
   });
 
   const { data, isLoading } = useGetStrategyPlanners(filter);
@@ -40,21 +40,21 @@ export default function StrategyPlannerPage() {
 
   const paginationFilter: PaginationFilter = useMemo(
     () => ({
-      page: filter.page ?? 1,
-      perPage: filter.limit ?? 5,
-      search: filter.search,
+      offset: filter.offset ?? 0,
+      limit: filter.limit ?? 10,
+      search: filter.search
     }),
-    [filter],
+    [filter]
   );
 
   const paginationDto = useMemo(
     () => ({
       total: apiData?.total ?? 0,
-      current_page: filter.page ?? 1,
-      per_page: filter.limit ?? 5,
-      total_pages: Math.ceil((apiData?.total ?? 0) / (filter.limit ?? 5)),
+      current_page: Math.floor((filter.offset ?? 0) / (filter.limit ?? 10)) + 1,
+      per_page: filter.limit ?? 10,
+      total_pages: Math.ceil((apiData?.total ?? 0) / (filter.limit ?? 10))
     }),
-    [apiData?.total, filter],
+    [apiData?.total, filter]
   );
 
   const handleSearch = (value: string) => {
@@ -62,7 +62,7 @@ export default function StrategyPlannerPage() {
     setFilter((prev) => ({
       ...prev,
       search: value,
-      page: 1,
+      offset: 0
     }));
   };
 
@@ -76,16 +76,16 @@ export default function StrategyPlannerPage() {
       header: "Campaign Name",
       cell: ({ row }) => (
         <div className="font-medium">{row.getValue("title")}</div>
-      ),
+      )
     },
     {
       id: "brand_name",
       header: "Brand Name",
-      accessorFn: (row) => row.brand?.name ?? "-",
+      accessorFn: (row) => row.brand?.name ?? "-"
     },
     {
       accessorKey: "planner_type",
-      header: "Objective",
+      header: "Objective"
     },
     {
       id: "total_budget",
@@ -95,9 +95,9 @@ export default function StrategyPlannerPage() {
           ? new Intl.NumberFormat("en-US", {
               style: "currency",
               currency: "USD",
-              minimumFractionDigits: 0,
+              minimumFractionDigits: 0
             }).format(row.budget.amount)
-          : "-",
+          : "-"
     },
     {
       id: "budget_type",
@@ -105,7 +105,7 @@ export default function StrategyPlannerPage() {
       accessorFn: (row) =>
         row.budget?.type
           ? row.budget.type.charAt(0).toUpperCase() + row.budget.type.slice(1)
-          : "-",
+          : "-"
     },
     {
       id: "actions",
@@ -140,8 +140,8 @@ export default function StrategyPlannerPage() {
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-      ),
-    },
+      )
+    }
   ];
 
   return (
@@ -161,7 +161,7 @@ export default function StrategyPlannerPage() {
               setFilter((prev) => ({
                 ...prev,
                 limit: Number(e.target.value),
-                page: 1,
+                offset: 0
               }))
             }
           >
@@ -213,7 +213,7 @@ export default function StrategyPlannerPage() {
         isStriped
         rowSelection={{
           selectedRowKeys,
-          onChange: (keys) => setSelectedRowKeys(keys),
+          onChange: (keys) => setSelectedRowKeys(keys)
         }}
         pagination={{
           paginationDto,
@@ -221,10 +221,10 @@ export default function StrategyPlannerPage() {
           setPaginationFilter: (newFilter) =>
             setFilter((prev) => ({
               ...prev,
-              page: newFilter.page,
-              limit: newFilter.perPage,
-              search: newFilter.search,
-            })),
+              offset: newFilter.offset,
+              limit: newFilter.limit,
+              search: newFilter.search
+            }))
         }}
       />
     </div>

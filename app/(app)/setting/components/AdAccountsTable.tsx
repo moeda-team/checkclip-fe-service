@@ -41,17 +41,17 @@ function StatusBadge({ status }: { status: AdAccountRow["status"] }) {
     active: {
       label: "Active",
       className:
-        "bg-green-100 text-green-700 border-green-200 hover:bg-green-100",
+        "bg-green-100 text-green-700 border-green-200 hover:bg-green-100"
     },
     paused: {
       label: "Paused",
       className:
-        "bg-yellow-100 text-yellow-700 border-yellow-200 hover:bg-yellow-100",
+        "bg-yellow-100 text-yellow-700 border-yellow-200 hover:bg-yellow-100"
     },
     inactive: {
       label: "Inactive",
-      className: "bg-gray-100 text-gray-500 border-gray-200 hover:bg-gray-100",
-    },
+      className: "bg-gray-100 text-gray-500 border-gray-200 hover:bg-gray-100"
+    }
   };
 
   const { label, className } = map[status];
@@ -68,34 +68,34 @@ const columns: ColumnDef<AdAccountRow, unknown>[] = [
       <span className="font-mono text-xs text-gray-700">
         {row.original.account_id}
       </span>
-    ),
+    )
   },
   {
     accessorKey: "account_name",
     header: "Account Name",
     cell: ({ row }) => (
       <span className="text-sm text-gray-900">{row.original.account_name}</span>
-    ),
+    )
   },
   {
     accessorKey: "currency",
     header: "Currency",
     cell: ({ row }) => (
       <span className="text-sm text-gray-600">{row.original.currency}</span>
-    ),
+    )
   },
   {
     accessorKey: "timezone",
     header: "Timezone",
     cell: ({ row }) => (
       <span className="text-sm text-gray-600">{row.original.timezone}</span>
-    ),
+    )
   },
   {
     accessorKey: "status",
     header: "Status",
-    cell: ({ row }) => <StatusBadge status={row.original.status} />,
-  },
+    cell: ({ row }) => <StatusBadge status={row.original.status} />
+  }
 ];
 
 // ─── Per-tab table ────────────────────────────────────────────────────────────
@@ -109,13 +109,13 @@ interface AdAccountTabTableProps {
 function AdAccountTabTable({
   data,
   onSync,
-  isSyncing,
+  isSyncing
 }: AdAccountTabTableProps) {
   const [search, setSearch] = useState("");
   const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([]);
   const [paginationFilter, setPaginationFilter] = useState<PaginationFilter>({
-    page: 1,
-    perPage: 5,
+    offset: 0,
+    limit: 5
   });
 
   const filtered = useMemo(() => {
@@ -126,28 +126,23 @@ function AdAccountTabTable({
         r.account_id.toLowerCase().includes(q) ||
         r.account_name.toLowerCase().includes(q) ||
         r.currency.toLowerCase().includes(q) ||
-        r.timezone.toLowerCase().includes(q),
+        r.timezone.toLowerCase().includes(q)
     );
   }, [data, search]);
 
   // Client-side pagination over filtered data
   const totalItems = filtered.length;
-  const totalPages = Math.max(
-    1,
-    Math.ceil(totalItems / (paginationFilter.perPage ?? 10)),
-  );
-  const pageStart =
-    (paginationFilter.page - 1) * (paginationFilter.perPage ?? 10);
-  const pageData = filtered.slice(
-    pageStart,
-    pageStart + (paginationFilter.perPage ?? 10),
-  );
+  const limit = paginationFilter.limit ?? 10;
+  const offset = paginationFilter.offset ?? 0;
+  const totalPages = Math.max(1, Math.ceil(totalItems / limit));
+  const pageStart = offset;
+  const pageData = filtered.slice(pageStart, pageStart + limit);
 
   const paginationDto: PaginationDto = {
     total: totalItems,
     total_pages: totalPages,
-    current_page: paginationFilter.page,
-    per_page: paginationFilter.perPage ?? 10,
+    current_page: Math.floor(offset / limit) + 1,
+    per_page: limit
   };
 
   return (
@@ -162,7 +157,7 @@ function AdAccountTabTable({
             onChange={(e) => {
               setSearch(e.target.value);
               // reset to page 1 on new search
-              setPaginationFilter((p) => ({ ...p, page: 1 }));
+              setPaginationFilter((p) => ({ ...p, offset: 0 }));
             }}
             className="pl-9 h-9 text-sm bg-white border-gray-200"
           />
@@ -187,13 +182,13 @@ function AdAccountTabTable({
         rowSelection={{
           selectedRowKeys,
           onChange: (keys) => setSelectedRowKeys(keys),
-          getRowKey: (row) => row.id,
+          getRowKey: (row) => row.id
         }}
         pagination={{
           paginationDto,
           paginationFilter,
           setPaginationFilter,
-          setSelectedRowKeys,
+          setSelectedRowKeys
         }}
       />
 
@@ -220,7 +215,7 @@ export function AdAccountsTable({
   onSyncGoogle,
   onSyncMeta,
   isSyncingGoogle = false,
-  isSyncingMeta = false,
+  isSyncingMeta = false
 }: AdAccountsTableProps) {
   return (
     <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 space-y-4">

@@ -5,12 +5,12 @@ import {
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
+  SelectValue
 } from "../ui/select";
 
 export default function PerPageSelector({
   filter,
-  setFilter,
+  setFilter
 }: {
   filter: PaginationFilter;
   setFilter: React.Dispatch<SetStateAction<PaginationFilter>>;
@@ -22,7 +22,7 @@ export default function PerPageSelector({
         setFilter((prev) => ({
           ...prev,
           limit: Number(value),
-          page: 1,
+          offset: 0
         }))
       }
     >

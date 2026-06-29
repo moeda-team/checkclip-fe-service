@@ -10,12 +10,12 @@ import {
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
+  SelectValue
 } from "@/components/ui/select";
 import {
   Popover,
   PopoverContent,
-  PopoverTrigger,
+  PopoverTrigger
 } from "@/components/ui/popover";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
@@ -66,7 +66,7 @@ const DEFAULT_VISIBLE: ColumnKey[] = [
   "gender",
   "companyName",
   "jobTitle",
-  "email",
+  "email"
 ];
 
 // ── Props ─────────────────────────────────────────────────────────────────────
@@ -86,8 +86,8 @@ interface CustomerDataTableProps {
   onRowsPerPageChange: (val: number) => void;
   pagination: {
     paginationDto: { total: number; total_pages: number };
-    paginationFilter: { page: number; perPage: number };
-    setPaginationFilter: (f: { page: number; perPage: number }) => void;
+    paginationFilter: { offset: number; limit: number };
+    setPaginationFilter: (f: { offset: number; limit: number }) => void;
   };
 }
 
@@ -106,7 +106,7 @@ export function CustomerDataTable({
   onStatusFilterChange,
   rowsPerPage,
   onRowsPerPageChange,
-  pagination,
+  pagination
 }: CustomerDataTableProps) {
   const [visibleColumns, setVisibleColumns] =
     useState<ColumnKey[]>(DEFAULT_VISIBLE);
@@ -158,7 +158,7 @@ export function CustomerDataTable({
     return {
       accessorKey: key,
       header: COLUMN_LABELS[key],
-      enableSorting: true,
+      enableSorting: true
     };
   });
 
@@ -269,7 +269,7 @@ export function CustomerDataTable({
         rowSelection={{
           selectedRowKeys,
           onChange: (keys) => onSelectionChange(keys),
-          getRowKey: (row) => row.id,
+          getRowKey: (row) => row.id
         }}
         // pagination={pagination}
       />

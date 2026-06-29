@@ -55,10 +55,10 @@ export const useGetCampaignsInfinite = (search: string) =>
     AxiosError<ApiResponseError>
   >({
     queryKey: queryKeys.campaign.infinite(search),
-    queryFn: async ({ pageParam = 1 }) => {
+    queryFn: async ({ pageParam = 0 }) => {
       const response = await axios.get<ApiResponsePagination<CampaignDto[]>>(
         CAMPAIGN_URL,
-        { params: { page: pageParam, perPage: 10, search } }
+        { params: { offset: pageParam, limit: 10, search } }
       );
       return response.data;
     },
@@ -66,7 +66,7 @@ export const useGetCampaignsInfinite = (search: string) =>
       const nextOffset = lastPage.offset + lastPage.limit;
       return nextOffset < lastPage.total ? nextOffset : undefined;
     },
-    initialPageParam: 1,
+    initialPageParam: 0,
     meta: { errorMessage: "Failed to fetch campaigns" },
   });
 

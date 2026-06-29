@@ -40,9 +40,8 @@ export interface PaginationDto {
 
 /** Standard filter params for paginated list endpoints */
 export interface PaginationFilter {
-  perPage?: number;
-  page: number;
   limit?: number;
+  offset?: number;
   search?: string;
   sortOrder?: "desc" | "asc";
   sortBy?: string;
