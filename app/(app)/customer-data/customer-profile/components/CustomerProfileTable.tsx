@@ -45,34 +45,34 @@ type StaticColumn = {
 };
 
 const STATIC_COLUMNS: StaticColumn[] = [
-  {
-    id: "id",
-    label: "Customer id",
-    type: "text",
-    editable: false,
-    accessor: (r) => r.id
-  },
-  {
-    id: "full_name",
-    label: "Full Name",
-    type: "text",
-    accessor: (r) => r.full_name
-  },
-  { id: "age", label: "Age", type: "number", accessor: (r) => r.age },
-  { id: "gender", label: "Gender", type: "text", accessor: (r) => r.gender },
-  {
-    id: "company_name",
-    label: "Company Name",
-    type: "text",
-    accessor: (r) => r.company_name
-  },
-  {
-    id: "job_title",
-    label: "Job Title",
-    type: "text",
-    accessor: (r) => r.job_title
-  },
-  { id: "email", label: "Email", type: "text", accessor: (r) => r.email }
+  // {
+  //   id: "id",
+  //   label: "Customer id",
+  //   type: "text",
+  //   editable: false,
+  //   accessor: (r) => r.id
+  // },
+  // {
+  //   id: "full_name",
+  //   label: "Full Name",
+  //   type: "text",
+  //   accessor: (r) => r.full_name
+  // },
+  // { id: "age", label: "Age", type: "number", accessor: (r) => r.age },
+  // { id: "gender", label: "Gender", type: "text", accessor: (r) => r.gender },
+  // {
+  //   id: "company_name",
+  //   label: "Company Name",
+  //   type: "text",
+  //   accessor: (r) => r.company_name
+  // },
+  // {
+  //   id: "job_title",
+  //   label: "Job Title",
+  //   type: "text",
+  //   accessor: (r) => r.job_title
+  // },
+  // { id: "email", label: "Email", type: "text", accessor: (r) => r.email }
 ];
 
 // Customer IDs rendered on the frontend (not provided by the API).
@@ -148,17 +148,17 @@ export function CustomerProfileTable() {
 
   // Sync order/visibility with the fetched custom fields.
   useEffect(() => {
-    const staticIds = [
-      "customer_id",
-      "full_name",
-      "age",
-      "gender",
-      "company_name",
-      "job_title",
-      "email"
-    ];
+    // const staticIds = [
+    //   "customer_id",
+    //   "full_name",
+    //   "age",
+    //   "gender",
+    //   "company_name",
+    //   "job_title",
+    //   "email"
+    // ];
     const customIds = customFields.map((f) => f.field_key);
-    const allIds = [...staticIds, ...customIds];
+    const allIds = [...customIds];
 
     setColumnOrder((prev) => {
       const ordered = prev.filter((id) => allIds.includes(id));
@@ -260,17 +260,17 @@ export function CustomerProfileTable() {
 
   // ─── Column builders ────────────────────────────────────────────────────────
 
-  const idColumn: ColumnDef<CustomerDto, unknown> = useMemo(
-    () => ({
-      id: "customer_id",
-      header: "Customer id",
-      enableSorting: false,
-      cell: ({ row }) => (
-        <span className="font-medium">{getStaticCustomerId(row.index)}</span>
-      )
-    }),
-    []
-  );
+  // const idColumn: ColumnDef<CustomerDto, unknown> = useMemo(
+  //   () => ({
+  //     id: "customer_id",
+  //     header: "Customer id",
+  //     enableSorting: false,
+  //     cell: ({ row }) => (
+  //       <span className="font-medium">{getStaticCustomerId(row.index)}</span>
+  //     )
+  //   }),
+  //   []
+  // );
 
   const buildStaticColumn = (
     col: StaticColumn
@@ -311,17 +311,17 @@ export function CustomerProfileTable() {
   // Reorderable metadata for all columns (static + custom). Used by the
   // TableSettings popover for drag-and-drop and visibility toggles.
   const columnItems = useMemo(() => {
-    const staticItems = STATIC_COLUMNS.filter((c) => c.id !== "id").map(
-      (c) => ({
-        id: c.id,
-        label: c.label,
-        source: "static" as const,
-        staticColumn: c
-      })
-    );
-    const staticIds = new Set(STATIC_COLUMNS.map((c) => c.id));
+    // const staticItems = STATIC_COLUMNS.filter((c) => c.id !== "id").map(
+    //   (c) => ({
+    //     id: c.id,
+    //     label: c.label,
+    //     source: "static" as const,
+    //     staticColumn: c
+    //   })
+    // );
+    // const staticIds = new Set(STATIC_COLUMNS.map((c) => c.id));
     const customItems = customFields
-      .filter((f) => !staticIds.has(f.field_key))
+      // .filter((f) => !staticIds.has(f.field_key))
       .map((f) => ({
         id: f.field_key,
         label: f.field_label,
@@ -329,8 +329,8 @@ export function CustomerProfileTable() {
         field: f
       }));
     return [
-      { id: "customer_id", label: "Customer id", source: "id" as const },
-      ...staticItems,
+      // { id: "customer_id", label: "Customer id", source: "id" as const },
+      // ...staticItems,
       ...customItems
     ];
   }, [customFields]);
@@ -351,13 +351,13 @@ export function CustomerProfileTable() {
       orderedItems
         .filter((item) => visibleColumnIds.includes(item.id))
         .map((item) => {
-          if (item.source === "id") return idColumn;
-          if (item.source === "static")
-            return buildStaticColumn(item.staticColumn);
+          // if (item.source === "id") return idColumn;
+          // if (item.source === "static")
+          //   return buildStaticColumn(item.staticColumn);
           return buildCustomColumn(item.field);
         }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [orderedItems, visibleColumnIds, idColumn]
+    [orderedItems, visibleColumnIds]
   );
 
   // Reorder handler: update local order and persist custom-field positions.

@@ -13,9 +13,6 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "lh3.googleusercontent.com" }
     ],
   },
-  env: {
-    NEXTAUTH_URL: process.env.NEXTAUTH_URL,
-  },
   poweredByHeader: false,
 };
 
