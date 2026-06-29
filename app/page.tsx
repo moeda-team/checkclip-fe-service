@@ -35,6 +35,7 @@ const t = {
       services: "Services",
       portfolio: "Portfolio",
       privacy: "Privacy Policy",
+      terms: "Terms of Service",
       pricing: "Pricing",
       cta: "Let's Talk"
     },
@@ -192,12 +193,15 @@ const t = {
         "Research",
         "Careers",
         "Press",
-        "Privacy Policy"
+        "Privacy Policy",
+        "Terms of Service"
       ]
     },
     links: {
       "Privacy Policy": "privacy-policy",
-      プライバシーポリシー: "privacy-policy"
+      プライバシーポリシー: "privacy-policy",
+      "Terms of Service": "terms-service",
+      利用規約: "terms-service"
     } as Record<string, string>
   },
   ja: {
@@ -207,6 +211,7 @@ const t = {
       services: "サービス",
       portfolio: "実績",
       privacy: "プライバシーポリシー",
+      terms: "利用規約",
       pricing: "料金",
       cta: "お問い合わせ"
     },
@@ -364,12 +369,15 @@ const t = {
         "研究",
         "採用",
         "プレス",
-        "プライバシーポリシー"
+        "プライバシーポリシー",
+        "利用規約"
       ]
     },
     links: {
       "Privacy Policy": "privacy-policy",
-      プライバシーポリシー: "privacy-policy"
+      プライバシーポリシー: "privacy-policy",
+      "Terms of Service": "terms-service",
+      利用規約: "terms-service"
     } as Record<string, string>
   }
 } as const;
@@ -760,7 +768,7 @@ export default function LandingPage() {
       <header
         className={`sticky top-0 z-50 flex justify-center px-4 transition-all duration-200 ${scrolled ? "py-2 bg-[#eef2f9]/90 backdrop-blur-md shadow-sm" : "py-4 bg-transparent"}`}
       >
-        <nav className="bg-white/95 backdrop-blur-md rounded-full px-6 py-2.5 flex items-center justify-between gap-8 shadow-sm border border-gray-200/60 w-full max-w-5xl">
+        <nav className="bg-white/95 backdrop-blur-md rounded-full px-6 py-2.5 flex items-center justify-between gap-8 shadow-sm border border-gray-200/60 w-full max-w-6xl">
           {/* Logo */}
           <span className="shrink-0">
             <img src="/logo.svg" className="h-7 w-auto" />
@@ -788,6 +796,12 @@ export default function LandingPage() {
               className="hover:text-gray-900 transition-colors"
             >
               {tx.nav.privacy}
+            </a>
+            <a
+              href={tx.links[tx.nav.terms] ?? "#"}
+              className="hover:text-gray-900 transition-colors"
+            >
+              {tx.nav.terms}
             </a>
           </div>
 
