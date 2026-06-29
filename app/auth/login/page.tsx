@@ -12,7 +12,7 @@ import {
   Shield,
   Database,
   Zap,
-  LogIn
+  LogIn,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -26,7 +26,7 @@ import {
   AlertDialogTitle,
   AlertDialogDescription,
   AlertDialogAction,
-  AlertDialogCancel
+  AlertDialogCancel,
 } from "@/components/ui/alert-dialog";
 import { getGoogleOAuthUrl, getYahooOAuthUrl } from "@/lib/oauth";
 
@@ -93,9 +93,10 @@ function LoginPageInner() {
       // NextAuth encodes the thrown Error message into result.error
       // Strip the "CredentialsSignin" fallback and show the actual BE message
       const raw = result?.error ?? "";
-      const msg = raw === "CredentialsSignin" || raw === ""
-        ? "Invalid email or password."
-        : raw;
+      const msg =
+        raw === "CredentialsSignin" || raw === ""
+          ? "Invalid email or password."
+          : raw;
       setErrorMsg(msg);
       return;
     }
@@ -341,7 +342,7 @@ function LoginPageInner() {
                 <Button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full h-12 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full h-12 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-semibold cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {isSubmitting ? (
                     "Signing in..."
@@ -372,7 +373,7 @@ function LoginPageInner() {
                 <Button
                   type="button"
                   variant="outline"
-                  className="w-full h-11 rounded-xl border-gray-200 text-sm font-medium text-gray-700 hover:text-white hover:bg-purple-500 flex items-center justify-center gap-2 transition-colors"
+                  className="w-full h-11 rounded-xl border-gray-200 text-sm font-medium text-gray-700 hover:text-white hover:bg-purple-500 flex items-center justify-center gap-2 transition-colors cursor-pointer"
                   onClick={() =>
                     runWithAgreement(() => {
                       window.location.href = getGoogleOAuthUrl(true);
@@ -404,7 +405,7 @@ function LoginPageInner() {
                 <Button
                   type="button"
                   variant="outline"
-                  className="w-full h-11 rounded-xl border-gray-200 text-sm font-medium text-gray-700 hover:text-white hover:bg-purple-500 flex items-center justify-center gap-2 transition-colors"
+                  className="w-full h-11 rounded-xl border-gray-200 text-sm font-medium text-gray-700 hover:text-white hover:bg-purple-500 flex items-center justify-center gap-2 transition-colors cursor-pointer"
                   onClick={() =>
                     runWithAgreement(() => {
                       window.location.href = getYahooOAuthUrl();

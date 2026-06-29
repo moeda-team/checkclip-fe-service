@@ -9,7 +9,7 @@ import {
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
-  AlertDialogTitle
+  AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import {
   Calendar,
@@ -20,7 +20,7 @@ import {
   TrendingUp,
   Zap,
   FileText,
-  Check
+  Check,
 } from "lucide-react";
 import { FcGoogle } from "react-icons/fc";
 import { SiLine, SiMeta } from "react-icons/si";
@@ -28,7 +28,7 @@ import { useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import {
   useGetStrategyPlanner,
-  usePostGenerateBrief
+  usePostGenerateBrief,
 } from "@/app/(app)/strategy-planner/hooks/useStrategyPlanner";
 import type { GenerateBriefScenario } from "@/app/(app)/strategy-planner/types";
 
@@ -59,14 +59,14 @@ interface CampaignStrategiesProps {
 function isStrategyAccepted(
   briefHistories: any[] | undefined,
   platform: string,
-  scenario: string
+  scenario: string,
 ): { isAccepted: boolean; briefId?: string } {
   if (!briefHistories || !Array.isArray(briefHistories)) {
     return { isAccepted: false };
   }
 
   const match = briefHistories.find(
-    (h) => h.platform === platform && h.scenario === scenario
+    (h) => h.platform === platform && h.scenario === scenario,
   );
 
   if (match) {
@@ -99,10 +99,10 @@ function transformApiData(data: any): CampaignStrategy[] {
       {
         key: "conservative",
         data: result.conservative || {},
-        label: "Conservative"
+        label: "Conservative",
       },
       { key: "base", data: result.base_case || {}, label: "Base Case" },
-      { key: "aggressive", data: result.aggressive || {}, label: "Aggressive" }
+      { key: "aggressive", data: result.aggressive || {}, label: "Aggressive" },
     ];
 
     scenarioEntries.forEach(({ key, data: scenarioData, label }) => {
@@ -135,7 +135,7 @@ function transformApiData(data: any): CampaignStrategy[] {
       const { isAccepted, briefId } = isStrategyAccepted(
         briefHistories,
         platform,
-        key
+        key,
       );
 
       strategies.push({
@@ -152,10 +152,10 @@ function transformApiData(data: any): CampaignStrategy[] {
           reach: estClicks > 0 ? estClicks.toLocaleString() : "N/A",
           impressions:
             estImpressions > 0 ? estImpressions.toLocaleString() : "N/A",
-          cpm: cpm !== "N/A" ? `$${cpm}` : "N/A"
+          cpm: cpm !== "N/A" ? `$${cpm}` : "N/A",
         },
         isAccepted,
-        briefId
+        briefId,
       });
     });
   });
@@ -203,7 +203,7 @@ function ScenarioBadge({
   scenario,
   count,
   selected,
-  onClick
+  onClick,
 }: {
   scenario: string;
   count: number;
@@ -236,7 +236,7 @@ function ScenarioBadge({
 // Scenario icon component
 function ScenarioIcon({
   scenario,
-  className
+  className,
 }: {
   scenario: string;
   className?: string;
@@ -253,7 +253,7 @@ function ScenarioIcon({
 function CampaignStrategyCard({
   strategy,
   onAccept,
-  isAccepting
+  isAccepting,
 }: {
   strategy: CampaignStrategy;
   onAccept: () => void;
@@ -266,7 +266,7 @@ function CampaignStrategyCard({
   > = {
     conservative: { bg: "#0ea5e9", text: "#0284c7", lightBg: "#e0f2fe" },
     base: { bg: "#8b5cf6", text: "#7c3aed", lightBg: "#ede9fe" },
-    aggressive: { bg: "#f97316", text: "#ea580c", lightBg: "#ffedd5" }
+    aggressive: { bg: "#f97316", text: "#ea580c", lightBg: "#ffedd5" },
   };
   const color = scenarioColors[strategy.scenario];
 
@@ -307,7 +307,7 @@ function CampaignStrategyCard({
             className="inline-flex items-center gap-1 mt-1.5 px-2.5 py-0.5 text-xs rounded-full"
             style={{
               backgroundColor: color.lightBg,
-              color: color.text
+              color: color.text,
             }}
           >
             <ScenarioIcon scenario={strategy.scenario} className="w-3 h-3" />
@@ -426,7 +426,7 @@ const SCENARIO_TO_API: Record<
 > = {
   conservative: "conservative",
   base: "base_case",
-  aggressive: "aggressive"
+  aggressive: "aggressive",
 };
 
 export function CampaignStrategies({ id }: CampaignStrategiesProps) {
@@ -443,7 +443,7 @@ export function CampaignStrategies({ id }: CampaignStrategiesProps) {
     const result = await generateBrief({
       planner_id: id,
       platform: pendingStrategy.platforms[0],
-      scenario: SCENARIO_TO_API[pendingStrategy.scenario]
+      scenario: SCENARIO_TO_API[pendingStrategy.scenario],
     });
     setPendingStrategy(null);
     const briefId = result?.data?.id;
@@ -464,11 +464,11 @@ export function CampaignStrategies({ id }: CampaignStrategiesProps) {
   const scenarioCounts = useMemo(() => {
     return {
       conservative: campaignStrategies.filter(
-        (s) => s.scenario === "conservative"
+        (s) => s.scenario === "conservative",
       ).length,
       base: campaignStrategies.filter((s) => s.scenario === "base").length,
       aggressive: campaignStrategies.filter((s) => s.scenario === "aggressive")
-        .length
+        .length,
     };
   }, [campaignStrategies]);
 

@@ -11,7 +11,7 @@ import {
   Phone,
   Mail,
   FileText,
-  Calendar
+  Calendar,
 } from "lucide-react";
 import {
   CartesianGrid,
@@ -26,7 +26,7 @@ import {
   Tooltip,
   XAxis,
   YAxis,
-  Legend
+  Legend,
 } from "recharts";
 
 // ─── Dummy Data ───────────────────────────────────────────────────────────────
@@ -37,7 +37,7 @@ const revenueData = [
   { month: "Dec", revenue: 3600, target: 3200 },
   { month: "Jan", revenue: 2800, target: 3200 },
   { month: "Feb", revenue: 3200, target: 3400 },
-  { month: "Mar", revenue: 4000, target: 3500 }
+  { month: "Mar", revenue: 4000, target: 3500 },
 ];
 
 const pipelineData = [
@@ -45,7 +45,7 @@ const pipelineData = [
   { stage: "Qualificat.", value: 1200 },
   { stage: "Proposal", value: 3500 },
   { stage: "Closed Won", value: 2600 },
-  { stage: "Closed Lost", value: 400 }
+  { stage: "Closed Lost", value: 400 },
 ];
 
 const leadSourceData = [
@@ -54,7 +54,7 @@ const leadSourceData = [
   { name: "Social Media", value: 156, percent: 18, color: "#F59E0B" },
   { name: "Direct", value: 132, percent: 15, color: "#EC4899" },
   { name: "Referral", value: 89, percent: 10, color: "#06B6D4" },
-  { name: "Email", value: 52, percent: 6, color: "#EF4444" }
+  { name: "Email", value: 52, percent: 6, color: "#EF4444" },
 ];
 
 const recentActivities = [
@@ -63,7 +63,7 @@ const recentActivities = [
     color: "bg-purple-100 text-purple-600",
     title: "Product demo with Aero Dynamics - DX Platform requirements review",
     person: "Suzuki Hana",
-    time: "14:00"
+    time: "14:00",
   },
   {
     icon: Mail,
@@ -71,22 +71,22 @@ const recentActivities = [
     title:
       "Sent proposal document to Crystal Networks for Network Upgrade project",
     person: "Watanabe Riko",
-    time: "11:30"
+    time: "11:30",
   },
   {
     icon: Phone,
     color: "bg-green-100 text-green-600",
     title: "Follow-up call regarding Q2 contract renewal terms",
     person: "Ito Daichi",
-    time: "10:15"
+    time: "10:15",
   },
   {
     icon: Users,
     color: "bg-orange-100 text-orange-600",
     title: "Updated contact preferences - prefers communication via email only",
     person: "Takahashi Mei",
-    time: "09:45"
-  }
+    time: "09:45",
+  },
 ];
 
 const dealsClosingSoon = [
@@ -96,7 +96,7 @@ const dealsClosingSoon = [
     value: "¥18,000,000",
     progress: 90,
     stage: "Negotiation",
-    due: "2026-03-25"
+    due: "2026-03-25",
   },
   {
     name: "Crystal Network Upgrade",
@@ -104,7 +104,7 @@ const dealsClosingSoon = [
     value: "¥8,200,000",
     progress: 85,
     stage: "Negotiation",
-    due: "2026-03-30"
+    due: "2026-03-30",
   },
   {
     name: "Aero DX Platform",
@@ -112,7 +112,7 @@ const dealsClosingSoon = [
     value: "¥12,500,000",
     progress: 75,
     stage: "Proposal",
-    due: "2026-04-15"
+    due: "2026-04-15",
   },
   {
     name: "Jupiter Hosting Deal",
@@ -120,7 +120,7 @@ const dealsClosingSoon = [
     value: "¥7,200,000",
     progress: 55,
     stage: "Proposal",
-    due: "2026-04-20"
+    due: "2026-04-20",
   },
   {
     name: "Delta Cloud Migration",
@@ -128,8 +128,8 @@ const dealsClosingSoon = [
     value: "¥15,000,000",
     progress: 60,
     stage: "Proposal",
-    due: "2026-04-30"
-  }
+    due: "2026-04-30",
+  },
 ];
 
 const teamPerformance = [
@@ -140,7 +140,7 @@ const teamPerformance = [
     revenue: "¥32,200,000",
     deals: 4,
     progress: 80,
-    color: "bg-purple-500"
+    color: "bg-purple-500",
   },
   {
     initials: "SM",
@@ -149,7 +149,7 @@ const teamPerformance = [
     revenue: "¥26,000,000",
     deals: 3,
     progress: 65,
-    color: "bg-blue-500"
+    color: "bg-blue-500",
   },
   {
     initials: "KR",
@@ -158,8 +158,8 @@ const teamPerformance = [
     revenue: "¥32,000,000",
     deals: 3,
     progress: 79,
-    color: "bg-green-500"
-  }
+    color: "bg-green-500",
+  },
 ];
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
@@ -172,7 +172,7 @@ function StatCard({
   changePositive,
   icon: Icon,
   iconBg,
-  iconColor
+  iconColor,
 }: {
   title: string;
   value: string;
@@ -297,7 +297,7 @@ export default function DashboardPage() {
                   contentStyle={{
                     fontSize: 12,
                     borderRadius: 8,
-                    border: "1px solid #E5E7EB"
+                    border: "1px solid #E5E7EB",
                   }}
                 />
                 <Line
@@ -368,7 +368,7 @@ export default function DashboardPage() {
                   contentStyle={{
                     fontSize: 12,
                     borderRadius: 8,
-                    border: "1px solid #E5E7EB"
+                    border: "1px solid #E5E7EB",
                   }}
                 />
                 <Bar
@@ -411,7 +411,7 @@ export default function DashboardPage() {
                     contentStyle={{
                       fontSize: 11,
                       borderRadius: 8,
-                      border: "1px solid #E5E7EB"
+                      border: "1px solid #E5E7EB",
                     }}
                     formatter={(value, name) => [`${value}`, name]}
                   />

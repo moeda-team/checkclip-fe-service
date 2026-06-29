@@ -3,7 +3,8 @@ import {
   FileText,
   Megaphone,
   Sparkles,
-  Settings
+  Settings,
+  ShoppingBag,
 } from "lucide-react";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -31,9 +32,9 @@ export const navigationItems: NavSection[] = [
       {
         title: "Dashboard",
         href: "/dashboard",
-        icon: LayoutDashboard
-      }
-    ]
+        icon: LayoutDashboard,
+      },
+    ],
   },
   {
     title: "CRM",
@@ -44,11 +45,11 @@ export const navigationItems: NavSection[] = [
         children: [
           {
             title: "Customer Profile",
-            href: "/customer-data/customer-profile"
-          }
-        ]
-      }
-    ]
+            href: "/customer-data/customer-profile",
+          },
+        ],
+      },
+    ],
   },
   {
     title: "Campaigns",
@@ -56,19 +57,19 @@ export const navigationItems: NavSection[] = [
       {
         title: "Campaign",
         href: "/campaigns",
-        icon: Megaphone
+        icon: Megaphone,
       },
       {
         title: "Campaign Briefs",
         href: "/campaign-brief",
-        icon: FileText
+        icon: FileText,
       },
       {
         title: "Strategy Planner",
         href: "/strategy-planner",
-        icon: Sparkles
-      }
-    ]
+        icon: Sparkles,
+      },
+    ],
   },
   {
     title: "Settings",
@@ -76,17 +77,39 @@ export const navigationItems: NavSection[] = [
       {
         title: "Settings",
         href: "/setting",
-        icon: Settings
-      }
-    ]
-  }
+        icon: Settings,
+      },
+    ],
+  },
+  {
+    title: "Product",
+    items: [
+      {
+        title: "Product Management",
+        icon: ShoppingBag,
+        children: [
+          {
+            title: "Product List",
+            href: "/product-management/product-list",
+          },
+          {
+            title: "Import Product",
+            href: "/product-management/import-product",
+          },
+        ],
+      },
+    ],
+  },
 ];
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
 // Returns true if this node (or any descendant) matches the current path.
 export function nodeContainsActive(node: NavNode, pathname: string): boolean {
-  if (node.href && (pathname === node.href || pathname.startsWith(node.href + "/"))) {
+  if (
+    node.href &&
+    (pathname === node.href || pathname.startsWith(node.href + "/"))
+  ) {
     return true;
   }
   return node.children?.some((c) => nodeContainsActive(c, pathname)) ?? false;

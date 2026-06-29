@@ -10,7 +10,7 @@ import { useSidebar } from "./ResponsiveSidebarProvider";
 import {
   navigationItems,
   nodeContainsActive,
-  type NavNode
+  type NavNode,
 } from "./navigation";
 
 // ─── Component ───────────────────────────────────────────────────────────────
@@ -67,7 +67,7 @@ export function Sidebar() {
               collapsed ? "justify-center" : "justify-between",
               isActive
                 ? "bg-primary-50 text-primary-700 font-semibold"
-                : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+                : "text-gray-600 hover:bg-gray-100 hover:text-gray-900",
             )}
           >
             <span className={cn("flex items-center", collapsed ? "" : "gap-3")}>
@@ -75,7 +75,7 @@ export function Sidebar() {
                 <Icon
                   className={cn(
                     "w-4 h-4 shrink-0",
-                    isActive && "text-primary-600"
+                    isActive && "text-primary-600",
                   )}
                 />
               )}
@@ -86,7 +86,7 @@ export function Sidebar() {
                 className={cn(
                   "w-4 h-4 transition-transform duration-200 shrink-0",
                   isActive ? "text-primary-600" : "text-gray-400",
-                  isOpen && "rotate-90"
+                  isOpen && "rotate-90",
                 )}
               />
             )}
@@ -102,14 +102,14 @@ export function Sidebar() {
               collapsed ? "justify-center" : "gap-3",
               isActive
                 ? "bg-primary-50 text-primary-700 font-semibold"
-                : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+                : "text-gray-600 hover:bg-gray-100 hover:text-gray-900",
             )}
           >
             {Icon && (
               <Icon
                 className={cn(
                   "w-4 h-4 shrink-0",
-                  isActive && "text-primary-600"
+                  isActive && "text-primary-600",
                 )}
               />
             )}
@@ -122,7 +122,7 @@ export function Sidebar() {
           <ul
             className={cn(
               "mt-0.5 space-y-0.5 border-l border-gray-100 pl-3",
-              depth === 0 ? "ml-4" : "ml-3"
+              depth === 0 ? "ml-4" : "ml-3",
             )}
           >
             {node.children!.map((child) => renderNode(child, key, depth + 1))}
@@ -136,7 +136,7 @@ export function Sidebar() {
     <div
       className={cn(
         "flex flex-col h-screen bg-white border-r border-gray-200 text-gray-900 transition-all duration-300 ease-in-out",
-        collapsed ? "w-16" : "w-64"
+        collapsed ? "w-16" : "w-64",
       )}
       data-sidebar="sidebar"
     >
@@ -146,7 +146,7 @@ export function Sidebar() {
         <div
           className={cn(
             "flex items-center gap-2 overflow-hidden transition-all duration-300",
-            collapsed ? "w-0 opacity-0" : "w-auto opacity-100"
+            collapsed ? "w-0 opacity-0" : "w-auto opacity-100",
           )}
         >
           <div className="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center shrink-0">
@@ -244,13 +244,13 @@ export function Sidebar() {
       <div
         className={cn(
           "border-t border-gray-200 shrink-0",
-          collapsed ? "px-2 py-3" : "px-4 py-3"
+          collapsed ? "px-2 py-3" : "px-4 py-3",
         )}
       >
         <div
           className={cn(
             "flex items-center",
-            collapsed ? "justify-center" : "gap-3"
+            collapsed ? "justify-center" : "gap-3",
           )}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}

@@ -40,8 +40,9 @@ export interface PaginationDto {
 
 /** Standard filter params for paginated list endpoints */
 export interface PaginationFilter {
-  perPage: number;
+  perPage?: number;
   page: number;
+  limit?: number;
   search?: string;
   sortOrder?: "desc" | "asc";
   sortBy?: string;
@@ -78,6 +79,12 @@ export const queryKeys = {
   customerField: {
     all: () => ["getCustomerField"] as const,
     detail: (id: string) => ["getOneCustomerField", id] as const,
+  },
+  product: {
+    all: () => ["getProducts"] as const,
+    list: (filter: PaginationFilter) => ["getProducts", filter] as const,
+    categoryList: (search: string) => ["getProductsCategory", search] as const,
+    industryList: (search: string) => ["getProductsIndustry", search] as const,
   },
 } as const;
 
