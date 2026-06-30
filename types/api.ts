@@ -1,36 +1,45 @@
 // types/api.ts
 // Shared API types used across the entire application.
-// WHY: Strongly typed API responses prevent runtime errors and make
-// the contract between frontend and backend explicit and auditable.
+// Mirrors response shapes from backend: src/util/response.rs
+//
+// Backend structs:
+//   ApiResponse<T>          → { message, status_code, data: T | null }
+//   ApiResponseError<T>     → { message, status_code, error: T | null }
+//   ApiResponsePaginate<T>  → { message, status_code, data: T | null, total, limit, offset }
 
-/** Standard API envelope */
-export interface ApiResponse<T, U = undefined> {
-  status: boolean;
-  code: number;
+// ─── Success response ─────────────────────────────────────────────────────────
+
+/** Standard success envelope — maps to ApiResponse<T> in response.rs */
+export interface ApiResponse<T> {
   message: string;
-  additional?: U;
-  data: T;
+  status_code: number;
+  data: T | null;
 }
 
-/** Error response from the backend */
-export interface ApiResponseError {
-  statusCode: string;
-  message: string | string[];
+// ─── Error response ───────────────────────────────────────────────────────────
+
+/** Error envelope — maps to ApiResponseError<T> in response.rs */
+export interface ApiResponseError<T = unknown> {
+  message: string;
+  status_code: number;
+  error: T | null;
 }
 
-/** Paginated list response */
-export interface ApiResponsePagination<T, U = undefined> {
-  status: boolean;
-  code: number;
+// ─── Paginated response ───────────────────────────────────────────────────────
+
+/** Paginated success envelope — maps to ApiResponsePaginate<T> in response.rs */
+export interface ApiResponsePagination<T> {
   message: string;
-  data: T;
+  status_code: number;
+  data: T | null;
   total: number;
   limit: number;
   offset: number;
-  additional?: U;
 }
 
-/** Pagination metadata returned by the backend */
+// ─── Pagination helpers ───────────────────────────────────────────────────────
+
+/** Pagination metadata for UI components */
 export interface PaginationDto {
   total: number;
   total_pages: number;
@@ -45,50 +54,26 @@ export interface PaginationFilter {
   search?: string;
   sortOrder?: "desc" | "asc";
   sortBy?: string;
-  isArchived?: string;
 }
+
+// ─── Common payloads ──────────────────────────────────────────────────────────
 
 /** Bulk delete payload */
 export interface DeleteBulkDto {
   ids: string[];
 }
 
-/** Query key factory.
- * WHY: String-based query keys cause duplicate requests and make
- * invalidation fragile. A factory ensures consistent, unique keys.
- * Convention: ["get{Entity}", filter], ["getOne{Entity}", id], ["get{Entity}Infinite", search]
- */
+// ─── Query key factory ────────────────────────────────────────────────────────
+
 export const queryKeys = {
   user: {
     all: () => ["getUser"] as const,
     me: () => ["getUserMe"] as const,
   },
-  campaign: {
-    all: () => ["getCampaign"] as const,
-    list: (filter: PaginationFilter) => ["getCampaign", filter] as const,
-    infinite: (search: string) => ["getCampaignInfinite", search] as const,
-    detail: (id: string) => ["getOneCampaign", id] as const,
-  },
-  customer: {
-    all: () => ["getCustomer"] as const,
-    list: (filter: PaginationFilter) => ["getCustomer", filter] as const,
-    infinite: (search: string) => ["getCustomerInfinite", search] as const,
-    detail: (id: string) => ["getOneCustomer", id] as const,
-  },
-  customerField: {
-    all: () => ["getCustomerField"] as const,
-    detail: (id: string) => ["getOneCustomerField", id] as const,
-  },
-  product: {
-    all: () => ["getProducts"] as const,
-    list: (filter: PaginationFilter) => ["getProducts", filter] as const,
-    categoryList: (search: string) => ["getProductsCategory", search] as const,
-    industryList: (search: string) => ["getProductsIndustry", search] as const,
-  },
 } as const;
 
-/** Meta type for query/mutation error/success messages.
- * Used by AppQueryProvider's centralized cache handlers. */
+// ─── TanStack Query meta types ────────────────────────────────────────────────
+
 export type ErrorMeta = { errorMessage?: string };
 export type SuccessMeta = { successMessage?: string };
 export type QueryMeta = ErrorMeta;

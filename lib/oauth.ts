@@ -16,8 +16,8 @@ export function getGoogleOAuthUrl(forceSelectAccount = false): string {
   }
 
   const params = new URLSearchParams({
-    client_id: env.googleClientId,
-    redirect_uri: env.googleRedirectUri,
+    client_id: env.googleClientId!,
+    redirect_uri: env.googleRedirectUri!,
     response_type: "code",
     scope: [
       "openid",
@@ -36,23 +36,4 @@ export function getGoogleAccountChooserUrl(): string {
   // Opens Google's account chooser first, then returns to our login
   const returnUrl = encodeURIComponent(getGoogleOAuthUrl(true));
   return `https://accounts.google.com/AccountChooser?continue=${returnUrl}`;
-}
-
-// ─── Yahoo OAuth ──────────────────────────────────────────────────────────────
-
-const YAHOO_AUTH_URL = "https://api.login.yahoo.com/oauth2/request_auth";
-
-export function getYahooOAuthUrl(): string {
-  if (!env.yahooClientId) {
-    throw new Error("NEXT_PUBLIC_YAHOO_CLIENT_ID is not set");
-  }
-
-  const params = new URLSearchParams({
-    client_id: env.yahooClientId,
-    redirect_uri: env.yahooRedirectUri,
-    response_type: "code",
-    scope: "openid email profile",
-  });
-
-  return `${YAHOO_AUTH_URL}?${params.toString()}`;
 }

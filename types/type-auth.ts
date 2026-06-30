@@ -1,61 +1,60 @@
 // types/type-auth.ts
-// Auth domain DTOs — mirrors the backend auth response shapes.
+// Auth domain DTOs — mirrors backend response shapes from checklip.
+//
+// Backend ApiResponse shape (util/response.rs):
+// { message: string, status_code: number, data: T | null }
 
-/** Auth tokens returned from login/oauth callbacks */
+import type { UserRole } from "@/types/next-auth";
+
+// ─── Token responses ──────────────────────────────────────────────────────────
+
+/** Raw tokens returned from POST /auth/login or POST /auth/refresh-token */
 export type AuthTokens = {
   access_token: string;
   refresh_token: string;
 };
 
-/** Login/OAuth callback response */
+/** Wrapped login/refresh-token response */
 export type AuthResponseDto = {
-  status: boolean;
-  code: number;
   message: string;
-  data: AuthTokens;
+  status_code: number;
+  data: AuthTokens | null;
 };
 
-/** User profile from /auth/me */
+// ─── User profile ─────────────────────────────────────────────────────────────
+
+/**
+ * GET /user/profile response data.
+ * Mirrors ProfileResponse from backend (module/user/dto/profile_response.rs).
+ */
 export type UserProfileDto = {
   id: string;
   full_name: string;
   email: string;
+  role: UserRole;
+  job_title: string;
+  department_unit: string;
   phone_number: string | null;
+  address: string | null;
   profile_picture_url: string | null;
-  role: string;
-  tenant: string | null;
 };
 
-/** Me endpoint response */
-export type MeResponseDto = {
-  status: boolean;
-  code: number;
+/** Wrapped /user/profile response */
+export type ProfileResponseDto = {
   message: string;
-  data: UserProfileDto;
+  status_code: number;
+  data: UserProfileDto | null;
 };
 
-/** Login form payload */
+// ─── Form payloads ────────────────────────────────────────────────────────────
+
+/** Login form payload — POST /auth/login */
 export type LoginFormDto = {
   email: string;
   password: string;
 };
 
-/** Google OAuth callback params */
-export type GoogleCallbackParams = {
-  code: string;
-  scope?: string;
-  authuser?: string;
-  prompt?: string;
-  iss?: string;
-};
-
-/** Yahoo OAuth callback params */
-export type YahooCallbackParams = {
-  code: string;
-  state?: string;
-};
-
-/** Refresh token payload */
+/** Refresh token payload — POST /auth/refresh-token */
 export type RefreshTokenDto = {
   refresh_token: string;
 };

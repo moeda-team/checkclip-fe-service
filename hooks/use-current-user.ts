@@ -1,33 +1,27 @@
 // hooks/use-current-user.ts
 // React Query hook for fetching the current authenticated user profile.
 //
-// PATTERN: Module-level axios instance + meta.errorMessage for centralized error handling.
+// PATTERN: Module-level fetch instance + meta.errorMessage for centralized error handling.
 // The AppQueryProvider's QueryCache.onError reads meta.errorMessage as fallback.
 
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
-import { axiosConfig } from "@/lib/axios";
+import { fetchConfig } from "@/lib/fetch";
 import { env } from "@/lib/env";
 import { queryKeys } from "@/types/api";
-import type { ApiResponse, ApiResponseError } from "@/types/api";
+import type { ApiResponse } from "@/types/api";
 import type { UserProfileDto } from "@/types/type-auth";
-import type { AxiosError } from "axios";
 
-const axios = axiosConfig(env.apiBaseUrl);
+const client = fetchConfig(env.apiBaseUrl);
 
 export const useGetCurrentUser = () => {
   const { status } = useSession();
 
-  return useQuery<ApiResponse<UserProfileDto>, AxiosError<ApiResponseError>>({
+  return useQuery<ApiResponse<UserProfileDto>>({
     queryKey: queryKeys.user.me(),
-    queryFn: async () => {
-      const response = await axios.get<ApiResponse<UserProfileDto>>(
-        "/auth/me"
-      );
-      return response.data;
-    },
+    queryFn: () => client.get<ApiResponse<UserProfileDto>>("/auth/me"),
     enabled: status === "authenticated",
     staleTime: 2 * 60 * 1000, // 2 min — user profile rarely changes
     meta: { errorMessage: "Failed to fetch user profile" },

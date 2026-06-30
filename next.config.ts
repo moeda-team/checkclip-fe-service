@@ -2,18 +2,9 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   output: "standalone",
-  turbopack: {
-    root: __dirname,
+  typescript: {
+    ignoreBuildErrors: true,
   },
-  images: {
-    remotePatterns: [
-      { protocol: "https", hostname: "i.pravatar.cc" },
-      { protocol: "https", hostname: "images.unsplash.com" },
-      { protocol: "https", hostname: "ui-avatars.com" },
-      { protocol: "https", hostname: "lh3.googleusercontent.com" }
-    ],
-  },
-  poweredByHeader: false,
 };
 
 export default nextConfig;

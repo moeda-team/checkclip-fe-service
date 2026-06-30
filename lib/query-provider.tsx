@@ -8,10 +8,10 @@
 // - Hooks stay thin — they declare intent via meta, provider handles the rest
 //
 // ERROR PARSING STRATEGY:
-// 1. Try AxiosError<ApiResponseError>.response.data.message (backend message)
+// 1. Try ApiError.data.message (backend message from non-2xx response)
 // 2. If message is string[], join with ", " (backend sometimes returns array)
 // 3. Fall back to query.meta.errorMessage or mutation.meta.errorMessage
-// 4. Fall back to axiosError.message
+// 4. Fall back to error.message
 // 5. Fall back to "Something went wrong"
 
 "use client";
@@ -24,9 +24,9 @@ import {
   MutationCache,
 } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { AxiosError } from "axios";
+import { ApiError } from "@/lib/fetch";
 import { useNotification } from "@/hooks/useNotification";
-import type { ApiResponseError, ErrorMeta, MutationMeta } from "@/types/api";
+import type { ErrorMeta, MutationMeta } from "@/types/api";
 
 export const AppQueryProvider: React.FC<{ children: ReactNode }> = ({
   children,
@@ -38,15 +38,13 @@ export const AppQueryProvider: React.FC<{ children: ReactNode }> = ({
       new QueryClient({
         queryCache: new QueryCache({
           onError: (error, query) => {
-            const axiosError = error as AxiosError<ApiResponseError>;
-            const apiMessage = axiosError.response?.data?.message;
-            const parsedMessage = Array.isArray(apiMessage)
-              ? apiMessage.join(", ")
-              : apiMessage;
+            const apiError = error instanceof ApiError ? error : null;
+            const raw = apiError?.data?.message;
+            const parsedMessage = Array.isArray(raw) ? raw.join(", ") : raw;
             const message =
               parsedMessage ??
               (query.meta as ErrorMeta)?.errorMessage ??
-              axiosError.message ??
+              error.message ??
               "Something went wrong";
             showNotification("error", "Error", message);
           },
@@ -58,15 +56,13 @@ export const AppQueryProvider: React.FC<{ children: ReactNode }> = ({
             if (msg) showNotification("success", "Success", msg);
           },
           onError: (error, _variables, _context, mutation) => {
-            const axiosError = error as AxiosError<ApiResponseError>;
-            const apiMessage = axiosError.response?.data?.message;
-            const parsedMessage = Array.isArray(apiMessage)
-              ? apiMessage.join(", ")
-              : apiMessage;
+            const apiError = error instanceof ApiError ? error : null;
+            const raw = apiError?.data?.message;
+            const parsedMessage = Array.isArray(raw) ? raw.join(", ") : raw;
             const message =
               parsedMessage ??
               (mutation.options.meta as ErrorMeta)?.errorMessage ??
-              axiosError.message ??
+              error.message ??
               "Something went wrong";
             showNotification("error", "Error", message);
           },

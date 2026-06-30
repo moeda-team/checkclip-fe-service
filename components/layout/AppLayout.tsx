@@ -14,6 +14,7 @@ import {
   LogOut,
   Menu,
   LayoutGrid,
+  CircleQuestionMark,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -25,13 +26,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
-import { Sidebar } from "./dasbhoard/Sidebar";
-import {
-  SidebarProvider,
-  useSidebar,
-} from "./dasbhoard/ResponsiveSidebarProvider";
 import { cn } from "@/lib/utils";
 import { useAutoSignOut } from "@/hooks/useAutoSignOut";
+import { SidebarProvider, useSidebar } from "./dashboard/ResponsiveSidebarProvider";
+import { Sidebar } from "./dashboard/Sidebar";
 
 // Map pathname segments to readable labels
 const segmentLabels: Record<string, string> = {
@@ -162,7 +160,25 @@ function AppHeader() {
 
         {/* Right — user, settings, bell */}
         <div className="flex items-center gap-1">
-          {/* User avatar dropdown */}
+          {/* Bell */}
+          <Button variant="ghost" size="icon" className="relative">
+            <Bell className="w-5 h-5 text-gray-600" />
+            <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-red-500 rounded-full" />
+          </Button>
+
+          {/* Settings icon */}
+          <Button variant="ghost" size="icon" className="hidden sm:flex">
+            <Settings className="w-5 h-5 text-gray-600" />
+          </Button>
+
+
+          {/* Question icon */}
+          <Button variant="ghost" size="icon" className="hidden sm:flex">
+            <CircleQuestionMark className="w-5 h-5 text-gray-600" />
+          </Button>
+
+
+                    {/* User avatar dropdown */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="icon" className="rounded-full">
@@ -230,17 +246,6 @@ function AppHeader() {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-
-          {/* Settings icon */}
-          <Button variant="ghost" size="icon" className="hidden sm:flex">
-            <Settings className="w-5 h-5 text-gray-600" />
-          </Button>
-
-          {/* Bell */}
-          <Button variant="ghost" size="icon" className="relative">
-            <Bell className="w-5 h-5 text-gray-600" />
-            <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-red-500 rounded-full" />
-          </Button>
         </div>
       </div>
     </header>

@@ -1,7 +1,15 @@
 // types/next-auth.d.ts
 import { DefaultSession, DefaultUser } from "next-auth";
 
-export type UserRole = "super_admin" | "admin" | "teacher" | "student";
+// Mirrors SystemRole enum from backend (common/enums.rs)
+export type UserRole =
+  | "employee"
+  | "supervisor"
+  | "human_resource"
+  | "payroll"
+  | "finance"
+  | "manager"
+  | "admin";
 
 declare module "next-auth" {
   interface Session {

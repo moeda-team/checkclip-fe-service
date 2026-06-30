@@ -10,10 +10,10 @@
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { signOut } from "next-auth/react";
-import { axiosConfig } from "@/lib/axios";
+import { fetchConfig } from "@/lib/fetch";
 import { env } from "@/lib/env";
 
-const axios = axiosConfig(env.apiBaseUrl);
+const client = fetchConfig(env.apiBaseUrl);
 
 export const useLogout = () => {
   const queryClient = useQueryClient();
@@ -22,7 +22,7 @@ export const useLogout = () => {
     mutationFn: async () => {
       // Notify backend (best-effort)
       try {
-        await axios.post("/auth/logout");
+        await client.post("/auth/logout");
       } catch {
         // Backend logout failure should not block client cleanup
       }

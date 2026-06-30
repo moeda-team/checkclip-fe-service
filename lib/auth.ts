@@ -11,19 +11,17 @@ const ACCESS_TOKEN_TTL_MS = 60 * 60 * 1000;
 const REFRESH_BUFFER_MS = 60 * 1000;
 
 type LoginApiResponse = {
-  status: boolean;
-  code: number;
   message: string;
+  status_code: number;
   data: {
     access_token: string;
     refresh_token: string;
-  };
+  } | null;
 };
 
 type MeApiResponse = {
-  status: boolean;
-  code: number;
   message: string;
+  status_code: number;
   data: {
     id: string;
     full_name: string;
@@ -31,8 +29,10 @@ type MeApiResponse = {
     phone_number: string | null;
     profile_picture_url: string | null;
     role: string;
-    tenant: string | null;
-  };
+    job_title: string;
+    department_unit: string;
+    address: string | null;
+  } | null;
 };
 
 type AppUser = User & {
@@ -60,7 +60,7 @@ async function refreshAccessToken(token: JWT): Promise<JWT> {
     if (!res.ok) throw new Error(`Refresh failed: ${res.status}`);
 
     const json: LoginApiResponse = await res.json();
-    if (!json.status || !json.data?.access_token) throw new Error("Invalid refresh response");
+    if (!res.ok || !json.data?.access_token) throw new Error("Invalid refresh response");
 
     return {
       ...token,
@@ -106,19 +106,18 @@ export const authOptions: NextAuthOptions = {
           // console.log("[AUTH] login response status:", loginRes.status, loginRes.statusText);
 
           const loginJson: LoginApiResponse = await loginRes.json();
-          // console.log("[AUTH] login response body:", JSON.stringify(loginJson));
 
-          if (!loginRes.ok || !loginJson.status) {
+          if (!loginRes.ok || loginJson.status_code !== 200 || !loginJson.data) {
             throw new Error(loginJson.message ?? "Login failed");
           }
 
           const { access_token, refresh_token } = loginJson.data;
 
-          const meRes = await fetch(`${env.apiBaseUrl}/auth/me`, {
+          const meRes = await fetch(`${env.apiBaseUrl}/user/profile`, {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
-              Authorization: access_token,
+              Authorization: `Bearer ${access_token}`,
             },
           });
 
@@ -127,7 +126,7 @@ export const authOptions: NextAuthOptions = {
           if (!meRes.ok) throw new Error("Failed to fetch user profile");
 
           const meJson: MeApiResponse = await meRes.json();
-          if (!meJson.status || !meJson.data) throw new Error("Invalid user data");
+          if (!meRes.ok || !meJson.data) throw new Error("Invalid user data");
 
           const user = meJson.data;
 
@@ -148,123 +147,6 @@ export const authOptions: NextAuthOptions = {
       },
     }),
 
-    CredentialsProvider({
-      id: "google-oauth",
-      name: "Google",
-      credentials: {
-        code: { label: "Code", type: "text" },
-        scope: { label: "Scope", type: "text" },
-        authuser: { label: "AuthUser", type: "text" },
-        prompt: { label: "Prompt", type: "text" },
-        iss: { label: "Iss", type: "text" },
-      },
-      async authorize(credentials): Promise<AppUser | null> {
-        if (!credentials?.code) return null;
-
-        try {
-          const params = new URLSearchParams({
-            code: credentials.code,
-            scope: credentials.scope ?? "",
-            authuser: credentials.authuser ?? "",
-            prompt: credentials.prompt ?? "",
-            iss: credentials.iss ?? "",
-          });
-
-          const callbackRes = await fetch(
-            `${env.apiBaseUrl}/auth/google/callback?${params.toString()}`,
-            { method: "GET" }
-          );
-
-          if (!callbackRes.ok) return null;
-
-          const callbackJson: LoginApiResponse = await callbackRes.json();
-          if (!callbackJson.status || !callbackJson.data?.access_token) return null;
-
-          const { access_token, refresh_token } = callbackJson.data;
-
-          const meRes = await fetch(`${env.apiBaseUrl}/auth/me`, {
-            method: "GET",
-            headers: { Authorization: access_token },
-          });
-
-          if (!meRes.ok) return null;
-
-          const meJson: MeApiResponse = await meRes.json();
-          if (!meJson.status || !meJson.data) return null;
-
-          const user = meJson.data;
-
-          return {
-            id: user.id,
-            name: user.full_name,
-            email: user.email,
-            role: user.role as UserRole,
-            accessToken: access_token,
-            refreshToken: refresh_token,
-            phoneNumber: user.phone_number,
-            profilePictureUrl: user.profile_picture_url,
-          };
-        } catch {
-          return null;
-        }
-      },
-    }),
-
-    CredentialsProvider({
-      id: "yahoo-oauth",
-      name: "Yahoo",
-      credentials: {
-        code: { label: "Code", type: "text" },
-        state: { label: "State", type: "text" },
-      },
-      async authorize(credentials): Promise<AppUser | null> {
-        if (!credentials?.code) return null;
-
-        try {
-          const params = new URLSearchParams({
-            code: credentials.code,
-            state: credentials.state ?? "",
-          });
-
-          const callbackRes = await fetch(
-            `${env.apiBaseUrl}/auth/yahoo/callback?${params.toString()}`,
-            { method: "GET" }
-          );
-
-          if (!callbackRes.ok) return null;
-
-          const callbackJson: LoginApiResponse = await callbackRes.json();
-          if (!callbackJson.status || !callbackJson.data?.access_token) return null;
-
-          const { access_token, refresh_token } = callbackJson.data;
-
-          const meRes = await fetch(`${env.apiBaseUrl}/auth/me`, {
-            method: "GET",
-            headers: { Authorization: access_token },
-          });
-
-          if (!meRes.ok) return null;
-
-          const meJson: MeApiResponse = await meRes.json();
-          if (!meJson.status || !meJson.data) return null;
-
-          const user = meJson.data;
-
-          return {
-            id: user.id,
-            name: user.full_name,
-            email: user.email,
-            role: user.role as UserRole,
-            accessToken: access_token,
-            refreshToken: refresh_token,
-            phoneNumber: user.phone_number,
-            profilePictureUrl: user.profile_picture_url,
-          };
-        } catch {
-          return null;
-        }
-      },
-    }),
   ],
 
   pages: {
