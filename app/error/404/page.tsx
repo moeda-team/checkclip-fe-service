@@ -41,8 +41,8 @@ export default function NotFound() {
 
         {/* Right: Decorative */}
 
-        <div className="hidden lg:flex relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#0a0a0a] via-[#0f0f1e] to-[#0a0a0a] h-72">
-          <div className="absolute -top-10 -right-10 w-56 h-56 rounded-full bg-gradient-to-b from-primary-600 via-primary-500 to-blue-500 opacity-80 blur-3xl" />
+        <div className="hidden lg:flex relative overflow-hidden rounded-3xl bg-linear-to-br from-[#0a0a0a] via-[#0f0f1e] to-[#0a0a0a] h-72">
+          <div className="absolute -top-10 -right-10 w-56 h-56 rounded-full bg-linear-to-b from-primary-600 via-primary-500 to-blue-500 opacity-80 blur-3xl" />
 
           <div className="absolute bottom-0 left-8 text-[6rem] leading-none text-white/10 font-semibold">
             404

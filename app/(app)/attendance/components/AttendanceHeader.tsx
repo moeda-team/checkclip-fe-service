@@ -5,20 +5,22 @@
 
 import { Calendar, Clock, RotateCcw, CheckCircle2 } from "lucide-react";
 import { useSession } from "next-auth/react";
-
+import { useGetAttendanceToday } from "../hooks/use-attendance";
+import { format } from "date-fns";
+import { formatInTimeZone } from "date-fns-tz";
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 export type AttendanceStatus = "not_started" | "checked_in" | "checked_out";
 
 export type AttendanceHeaderProps = {
   status: AttendanceStatus;
-  checkInTime?: string;   // e.g. "08:03 AM"
-  checkOutTime?: string;  // e.g. "05:12 PM"
-  workDuration?: string;  // e.g. "8h 9m"
-  shiftName?: string;     // e.g. "Morning Shift"
-  shiftStart?: string;    // e.g. "08:00 AM"
-  shiftEnd?: string;      // e.g. "05:00 PM"
-  shiftTarget?: string;   // e.g. "8h 0m target"
+  checkInTime?: string | null; 
+  checkOutTime?: string | null; 
+  workDuration?: string; 
+  shiftName?: string; 
+  shiftStart?: string; 
+  shiftEnd?: string; 
+  shiftTarget?: string; 
   onViewShiftSchedule?: () => void;
 };
 
@@ -51,12 +53,16 @@ type StatCardProps = {
 function StatCard({ label, value, sub, icon, iconBg }: StatCardProps) {
   return (
     <div className="flex items-center gap-4 bg-white rounded-2xl border border-gray-100 shadow-sm px-5 py-4 flex-1 min-w-[160px]">
-      <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${iconBg}`}>
+      <div
+        className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${iconBg}`}
+      >
         {icon}
       </div>
       <div>
         <p className="text-xs text-gray-400 mb-0.5">{label}</p>
-        <p className="text-base font-bold text-gray-900 leading-tight">{value}</p>
+        <p className="text-base font-bold text-gray-900 leading-tight">
+          {value}
+        </p>
         <p className="text-xs text-gray-400 mt-0.5">{sub}</p>
       </div>
     </div>
@@ -66,9 +72,8 @@ function StatCard({ label, value, sub, icon, iconBg }: StatCardProps) {
 // ─── Main component ───────────────────────────────────────────────────────────
 
 export function AttendanceHeader({
-  status = "not_started",
-  checkInTime,
-  checkOutTime,
+  checkInTime = null,
+  checkOutTime= null,
   workDuration = "0h 00m",
   shiftName = "Morning Shift",
   shiftStart = "08:00 AM",
@@ -77,21 +82,20 @@ export function AttendanceHeader({
   onViewShiftSchedule,
 }: AttendanceHeaderProps) {
   const { data: session } = useSession();
+  const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   const firstName = session?.user?.name?.split(" ")[0] ?? "there";
-
-  const statusLabel =
-    status === "not_started"
-      ? "Not Started"
-      : status === "checked_in"
-      ? "On Duty"
-      : "Completed";
-
-  const statusSub =
-    status === "not_started"
-      ? "Shift has not started"
-      : status === "checked_in"
-      ? "Currently working"
-      : "Shift completed";
+  let statusLabel = "Not Started";
+  let statusSub = "Shift has not started";
+  if (!checkInTime && !checkOutTime) {
+    statusLabel = "Not Started";
+    statusSub = "Shift has not started"
+  } else if (checkInTime != null && checkOutTime == null) {
+    statusLabel = "On Duty";
+    statusSub = "Currently working"
+  } else if (checkInTime && checkOutTime) {
+    statusLabel = "Completed";
+    statusSub = "Shift completed"
+  }
 
   return (
     <div className="space-y-4">
@@ -103,7 +107,8 @@ export function AttendanceHeader({
             {getGreeting()}, {firstName}! {getGreetingEmoji()}
           </h2>
           <p className="text-sm text-gray-500 mt-0.5">
-            Let&apos;s make today productive. Don&apos;t forget to check-in for your assigned shift.
+            Let&apos;s make today productive. Don&apos;t forget to check-in for
+            your assigned shift.
           </p>
         </div>
 
@@ -150,8 +155,20 @@ export function AttendanceHeader({
         {/* Check In */}
         <StatCard
           label="Check In"
-          value={checkInTime ?? "Not Started"}
-          sub={checkInTime ? `Checked in at ${checkInTime}` : "Please check-in to start your day"}
+          value={
+            checkInTime
+              ? formatInTimeZone(
+                  new Date(checkInTime),
+                  userTimeZone,
+                  "HH:mm:ss",
+                ).toString()
+              : "Not Started"
+          }
+          sub={
+            checkInTime
+              ? `Checked in at ${formatInTimeZone(new Date(checkInTime), userTimeZone, "HH:mm:ss")}`
+              : "Please check-in to start your day"
+          }
           icon={<Clock className="w-5 h-5 text-teal-500" />}
           iconBg="bg-teal-50"
         />
@@ -159,8 +176,20 @@ export function AttendanceHeader({
         {/* Check Out */}
         <StatCard
           label="Check Out"
-          value={checkOutTime ?? "--:--"}
-          sub={checkOutTime ? `Checked out at ${checkOutTime}` : "Not available yet"}
+          value={
+            checkOutTime
+              ? formatInTimeZone(
+                  new Date(checkOutTime),
+                  userTimeZone,
+                  "HH:mm:ss",
+                ).toString()
+              : "--:--"
+          }
+          sub={
+            checkOutTime
+              ? `Checked out at ${formatInTimeZone(new Date(checkOutTime), userTimeZone, "HH:mm:ss")}`
+              : "Not available yet"
+          }
           icon={<RotateCcw className="w-5 h-5 text-purple-500" />}
           iconBg="bg-purple-50"
         />
@@ -182,20 +211,20 @@ export function AttendanceHeader({
           icon={
             <CheckCircle2
               className={`w-5 h-5 ${
-                status === "checked_out"
+                statusSub === "Shift completed"
                   ? "text-emerald-500"
-                  : status === "checked_in"
-                  ? "text-blue-500"
-                  : "text-gray-400"
+                  : statusSub === "Currently working"
+                    ? "text-blue-500"
+                    : "text-gray-400"
               }`}
             />
           }
           iconBg={
-            status === "checked_out"
+            statusSub === "Shift completed"
               ? "bg-emerald-50"
-              : status === "checked_in"
-              ? "bg-blue-50"
-              : "bg-gray-50"
+              : statusSub === "Currently working"
+                ? "bg-blue-50"
+                : "bg-gray-50"
           }
         />
       </div>

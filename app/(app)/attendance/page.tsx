@@ -1,47 +1,159 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo } from "react";
+import { toast } from "sonner";
 import { AttendanceHeader, type AttendanceStatus } from "./components/AttendanceHeader";
 import { AttendanceAction } from "./components/AttendanceAction";
+import {
+  useGetAttendanceToday,
+  useUploadAttendanceImage,
+  useCheckIn,
+  useCheckOut,
+} from "./hooks/use-attendance";
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
+function formatTime(iso: string | null | undefined): string | undefined {
+  if (!iso) return undefined;
+  // Backend returns NaiveDateTime without timezone — treat as local
+  return iso + "z"
+
+}
+
+function calcDuration(
+  checkInIso: string | null | undefined,
+  checkOutIso: string | null | undefined,
+): string {
+  if (!checkInIso) return "0h 00m";
+  const start = new Date(`${checkInIso}Z`).getTime();
+  const end = checkOutIso ? new Date(`${checkOutIso}Z`).getTime() : Date.now();
+  const diffMin = Math.max(0, Math.floor((end - start) / 60_000));
+  const h = Math.floor(diffMin / 60);
+  const m = diffMin % 60;
+  return `${h}h ${String(m).padStart(2, "0")}m`;
+}
+
+// ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function AttendancePage() {
-  // Placeholder state — will be driven by API later
-  const [status, setStatus] = useState<AttendanceStatus>("not_started");
-  const [checkInTime, setCheckInTime] = useState<string | undefined>();
-  const [checkOutTime, setCheckOutTime] = useState<string | undefined>();
-  const [isLoading, setIsLoading] = useState(false);
+  const { data: todayData, isLoading: isFetchingToday } = useGetAttendanceToday();
+  const uploadImage = useUploadAttendanceImage();
+  const checkInMutation = useCheckIn();
+  const checkOutMutation = useCheckOut();
 
-  const formatTime = () =>
-    new Date().toLocaleTimeString("en-US", {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: true,
+  const today = todayData?.data ?? null;
+
+  // Derive status from server data
+  const status: AttendanceStatus = useMemo(() => {
+    if (!today) return "not_started";
+    if (today.check_out_at) return "checked_out";
+    if (today.check_in_at) return "checked_in";
+    return "not_started";
+  }, [today]);
+
+  const isLoading =
+    isFetchingToday ||
+    uploadImage.isPending ||
+    checkInMutation.isPending ||
+    checkOutMutation.isPending;
+
+  // ── Get geolocation ────────────────────────────────────────────────────────
+
+  const getLocation = (): Promise<{ latitude: string; longitude: string }> =>
+    new Promise((resolve, reject) => {
+      if (!navigator.geolocation) {
+        reject(new Error("Geolocation is not supported by your browser"));
+        return;
+      }
+      navigator.geolocation.getCurrentPosition(
+        (pos) =>
+          resolve({
+            latitude: String(pos.coords.latitude),
+            longitude: String(pos.coords.longitude),
+          }),
+        () => reject(new Error("Unable to retrieve your location")),
+        { timeout: 10_000 },
+      );
     });
 
-  const handleCheckIn = () => {
-    setIsLoading(true);
-    setTimeout(() => {
-      setCheckInTime(formatTime());
-      setStatus("checked_in");
-      setIsLoading(false);
-    }, 800);
+  // ── Check-in handler ───────────────────────────────────────────────────────
+
+  const handleCheckIn = async (opts: {
+    faceVerification: boolean;
+    photoCapture: boolean;
+    photoDataUrl?: string;
+  }) => {
+    try {
+      // 1. Get geolocation
+      let coords: { latitude: string; longitude: string };
+      try {
+        coords = await getLocation();
+      } catch {
+        // Fallback: use 0,0 if location denied — backend still accepts it
+        coords = { latitude: "0", longitude: "0" };
+        toast.warning("Location unavailable — using default coordinates.");
+      }
+
+      // 2. Upload image if provided
+      let imageIds: string[] = [];
+      if (opts.photoDataUrl) {
+        const uploaded = await uploadImage.mutateAsync({
+          dataUrl: opts.photoDataUrl,
+          filename: `checkin_${Date.now()}.jpg`,
+        });
+        imageIds = uploaded.data?.image_id ?? [];
+      }
+
+      // 3. Check-in
+      await checkInMutation.mutateAsync({
+        latitude: coords.latitude,
+        longitude: coords.longitude,
+        image_ids: imageIds,
+      });
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "Check-in failed";
+      toast.error(msg);
+    }
   };
 
-  const handleCheckOut = () => {
-    setIsLoading(true);
-    setTimeout(() => {
-      setCheckOutTime(formatTime());
-      setStatus("checked_out");
-      setIsLoading(false);
-    }, 800);
+  // ── Check-out handler ──────────────────────────────────────────────────────
+
+  const handleCheckOut = async (opts: {
+    faceVerification: boolean;
+    photoCapture: boolean;
+    photoDataUrl?: string;
+  }) => {
+    if (!today?.id) {
+      toast.error("No active attendance session found.");
+      return;
+    }
+
+    try {
+      // Upload check-out photo if provided
+      if (opts.photoDataUrl) {
+        await uploadImage.mutateAsync({
+          dataUrl: opts.photoDataUrl,
+          filename: `checkout_${Date.now()}.jpg`,
+        });
+      }
+
+      await checkOutMutation.mutateAsync(today.id);
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "Check-out failed";
+      toast.error(msg);
+    }
   };
 
   return (
     <div className="p-6 space-y-6">
       <AttendanceHeader
         status={status}
-        checkInTime={checkInTime}
-        checkOutTime={checkOutTime}
+        checkInTime={formatTime(today?.check_in_at?.toString())}
+        checkOutTime={formatTime(today?.check_out_at?.toString())}
+        workDuration={calcDuration(
+          today?.check_in_at?.toString(),
+          today?.check_out_at?.toString(),
+        )}
         shiftName="Morning Shift"
         shiftStart="08:00 AM"
         shiftEnd="05:00 PM"
@@ -49,7 +161,6 @@ export default function AttendancePage() {
       />
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Action panel — takes 1/3 width on large screens */}
         <div className="lg:col-span-1">
           <AttendanceAction
             status={status}
@@ -59,12 +170,12 @@ export default function AttendancePage() {
           />
         </div>
 
-        {/* Placeholder for future content (attendance log table, map, etc.) */}
-        {/* <div className="lg:col-span-2">
+        {/* Placeholder for attendance log / map */}
+        <div className="lg:col-span-1">
           <div className="h-full min-h-[300px] rounded-2xl border border-dashed border-gray-200 bg-gray-50 flex items-center justify-center">
             <p className="text-sm text-gray-400">Attendance log — coming soon</p>
           </div>
-        </div> */}
+        </div>
       </div>
     </div>
   );
