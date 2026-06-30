@@ -1,242 +1,230 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense } from "react";
 import { useRouter } from "next/navigation";
-import {
-  ArrowLeft,
-  Mail,
-  CheckCircle,
-  Shield,
-  Database,
-  Zap,
-  ChevronLeft,
-} from "lucide-react";
+import { Mail, ArrowLeft, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import Link from "next/link";
+import { useForgotPassword } from "@/app/auth/forgot-password/hooks/use-forgot-password";
 
-export default function ForgotPasswordPage() {
-  const router = useRouter();
+// ─── Left panel — identical to login page ─────────────────────────────────────
+const FEATURES = [
+  "PPh 21 & BPJS compliance calculators",
+  "Modern interactive kanban tasks",
+  "Beautiful high-fidelity printable payslips",
+];
 
-  const [email, setEmail] = useState("");
-  const [isSubmitted, setIsSubmitted] = useState(false);
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    // TODO: call API /api/forgot-password here later
-    console.log("Password reset requested for:", email);
-    setIsSubmitted(true);
-  };
-
-  const handleBackToLogin = () => {
-    router.push("/auth/login");
-  };
-
+function CheckIcon() {
   return (
-    <div className="min-h-screen bg-[#2A0A52] overflow-hidden">
-      <div className="grid lg:grid-cols-2 min-h-screen">
-        {/* ── LEFT SIDE ── */}
-        <div className="relative hidden lg:flex items-center justify-center px-16">
-          {/* Glow */}
-          <div className="absolute inset-0">
-            <div className="absolute top-[-200px] left-[-100px] w-[500px] h-[500px] bg-purple-500/40 blur-3xl rounded-full" />
-            <div className="absolute bottom-[-200px] right-[-100px] w-[500px] h-[500px] bg-fuchsia-500/30 blur-3xl rounded-full" />
-          </div>
+    <svg viewBox="0 0 20 20" fill="none" className="w-5 h-5 shrink-0" aria-hidden="true">
+      <circle cx="10" cy="10" r="10" fill="#2DD4BF" fillOpacity="0.15" />
+      <path
+        d="M6 10.5l2.5 2.5 5-5"
+        stroke="#2DD4BF"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
 
-          {/* Content */}
-          <div className="relative z-10 max-w-md text-white">
-            <h1 className="text-4xl font-semibold leading-tight">
-              Your dedicated
-              <br />
-              workspace awaits
-            </h1>
-
-            <p className="mt-6 text-white/80 text-lg font-medium leading-8">
-              Access your organization&apos;s CRM, campaigns, analytics, and
-              AI-powered insights — all within a secure, isolated environment
-              built for your team.
-            </p>
-
-            <div className="mt-12 space-y-6">
-              <div className="flex items-start gap-4">
-                <div className="w-14 h-14 rounded-2xl bg-white/10 border border-white/10 flex items-center justify-center backdrop-blur-md">
-                  <Shield className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-lg">
-                    Isolated Data Environment
-                  </h3>
-                  <p className="text-white/70 text-sm mt-1">
-                    Your data is fully separated and encrypted
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-4">
-                <div className="w-14 h-14 rounded-2xl bg-white/10 border border-white/10 flex items-center justify-center backdrop-blur-md">
-                  <Database className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-lg">
-                    Dedicated Infrastructure
-                  </h3>
-                  <p className="text-white/70 text-sm mt-1">
-                    Enterprise-grade single-tenant architecture
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-4">
-                <div className="w-14 h-14 rounded-2xl bg-white/10 border border-white/10 flex items-center justify-center backdrop-blur-md">
-                  <Zap className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-lg">
-                    Real-time Intelligence
-                  </h3>
-                  <p className="text-white/70 text-sm mt-1">
-                    AI-powered CRM insights and campaign optimization
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
+function LeftPanel() {
+  return (
+    <aside className="hidden lg:flex lg:w-[380px] xl:w-[420px] shrink-0 flex-col bg-[#0F2132] text-white p-10 justify-between">
+      <div className="flex items-center gap-3">
+        <div className="w-9 h-9 rounded-lg bg-[#2DD4BF] flex items-center justify-center">
+          <svg viewBox="0 0 24 24" fill="none" className="w-5 h-5" aria-hidden="true">
+            <path
+              d="M9 12l2 2 4-4M7.5 4.5h9A2.5 2.5 0 0119 7v10a2.5 2.5 0 01-2.5 2.5h-9A2.5 2.5 0 015 17V7A2.5 2.5 0 017.5 4.5z"
+              stroke="white"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
         </div>
-
-        {/* ── RIGHT SIDE ── */}
-        <div className="relative flex items-center justify-center p-6 lg:p-12">
-          {/* Background card */}
-          <div className="absolute inset-6 rounded-[40px] bg-linear-to-b from-[#4C1D95] to-[#6D28D9] shadow-2xl border border-white/10 opacity-15" />
-
-          {/* Glow */}
-          <div className="absolute top-10 right-10 w-72 h-72 bg-purple-400/20 blur-3xl rounded-full" />
-
-          {/* CARD */}
-          <div className="relative z-5 w-full max-w-md">
-            {!isSubmitted ? (
-              <>
-                {/* Header */}
-                <div className="mb-8 text-white">
-                  <Link
-                    href="/auth/login"
-                    className="inline-flex items-center gap-1 text-sm text-white/80 hover:text-white transition-colors"
-                  >
-                    <ChevronLeft className="w-4 h-4" />
-                    Go back
-                  </Link>
-
-                  <h1 className="mt-2 text-2xl font-bold tracking-tight">
-                    Forgot your password?
-                  </h1>
-
-                  <p className="mt-2 text-base text-white/80">
-                    Enter your email to get OTP code.
-                  </p>
-                </div>
-
-                {/* FORM CARD */}
-                <div className="bg-white rounded-3xl shadow-2xl p-8 space-y-6">
-
-
-                  <form onSubmit={handleSubmit} className="space-y-3">
-                    <div className="space-y-1">
-                      <Label
-                        htmlFor="forgot-email"
-                        className="text-sm font-medium text-gray-700"
-                      >
-                        Email Address
-                      </Label>
-                      <div className="relative">
-                        <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                        <Input
-                          id="forgot-email"
-                          type="email"
-                          placeholder="altimeda@example.com"
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
-                          required
-                          className="pl-10 h-12 rounded-xl border-gray-200"
-                        />
-                      </div>
-                    </div>
-
-                    <Button
-                      type="submit"
-                      className="w-full h-12 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-semibold"
-                    >
-                      Send Email
-                    </Button>
-                  </form>
-                </div>
-              </>
-            ) : (
-              <>
-                {/* Header */}
-                <div className="mb-8 text-white">
-                  <h1 className="text-4xl font-normal">Check Your Email</h1>
-                  <p className="mt-2 text-white/70 text-sm">
-                    We&apos;ve sent reset instructions to your inbox
-                  </p>
-                </div>
-
-                {/* SUCCESS CARD */}
-                <div className="bg-white rounded-3xl shadow-2xl p-8 space-y-6 text-center">
-                  {/* Icon */}
-                  <div className="flex justify-center">
-                    <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center">
-                      <CheckCircle className="w-7 h-7 text-green-600" />
-                    </div>
-                  </div>
-
-                  <div className="space-y-1">
-                    <p className="text-gray-500 text-sm">
-                      We&apos;ve sent a password reset link to
-                    </p>
-                    <p className="text-gray-900 font-semibold">{email}</p>
-                  </div>
-
-                  <div className="bg-purple-50 border border-purple-100 rounded-xl p-4 text-left">
-                    <p className="text-sm text-gray-600">
-                      Didn&apos;t receive the email? Check your spam folder or{" "}
-                      <button
-                        type="button"
-                        onClick={() => setIsSubmitted(false)}
-                        className="text-purple-600 font-semibold hover:underline"
-                      >
-                        try another email address
-                      </button>
-                    </p>
-                  </div>
-
-                  <Button
-                    type="button"
-                    onClick={handleBackToLogin}
-                    className="w-full h-12 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-semibold flex items-center justify-center gap-2"
-                  >
-                    <ArrowLeft className="w-4 h-4" />
-                    Back to Login
-                  </Button>
-                </div>
-              </>
-            )}
-
-            {/* FOOTER */}
-            <div className="mt-8 text-center text-xs text-white/60">
-              <div className="flex justify-center gap-5">
-                <span className="hover:text-white cursor-pointer">
-                  Terms of Service
-                </span>
-                <span className="hover:text-white cursor-pointer">
-                  Privacy Policy
-                </span>
-                <span className="hover:text-white cursor-pointer">Support</span>
-              </div>
-              <p className="mt-3">© 2026 Altimeda Cipta Visitama</p>
-            </div>
-          </div>
+        <div>
+          <p className="font-bold text-base leading-none tracking-wide">CheckClip</p>
+          <p className="text-[10px] text-[#2DD4BF] tracking-widest uppercase mt-0.5">
+            HR Intelligence
+          </p>
         </div>
       </div>
+
+      <div className="space-y-8">
+        <span className="inline-flex items-center px-3 py-1 rounded-full border border-[#2DD4BF]/40 text-[#2DD4BF] text-xs font-medium tracking-wide uppercase">
+          Indonesian HR Compliance
+        </span>
+        <div className="space-y-4">
+          <h2 className="text-2xl font-bold leading-snug">
+            The Dynamic Space for People and Culture Teams.
+          </h2>
+          <p className="text-sm text-white/60 leading-relaxed">
+            Empower your enterprise with seamless tax calculators, real-time-clock logs, local BPJS
+            sync, and active KPI targets.
+          </p>
+        </div>
+        <div className="border-t border-white/10" />
+        <ul className="space-y-3">
+          {FEATURES.map((f) => (
+            <li key={f} className="flex items-center gap-3 text-sm text-white/80">
+              <CheckIcon />
+              {f}
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <p className="text-xs text-white/30">CheckClips Cloud HRIS &nbsp;·&nbsp; Bandung, ID</p>
+    </aside>
+  );
+}
+
+// ─── Main page ────────────────────────────────────────────────────────────────
+function ForgotPasswordInner() {
+  const router = useRouter();
+  const { email, setEmail, isSubmitting, errorMsg, isSuccess, handleSubmit, reset } =
+    useForgotPassword();
+
+  return (
+    <div className="min-h-screen flex">
+      <LeftPanel />
+
+      <main className="flex-1 flex items-center justify-center bg-white px-6 py-12">
+        <div className="w-full max-w-[440px] space-y-8">
+          {/* Mobile logo */}
+          <div className="flex items-center gap-2 lg:hidden">
+            <div className="w-8 h-8 rounded-lg bg-[#0F2132] flex items-center justify-center">
+              <svg viewBox="0 0 24 24" fill="none" className="w-4 h-4" aria-hidden="true">
+                <path
+                  d="M9 12l2 2 4-4M7.5 4.5h9A2.5 2.5 0 0119 7v10a2.5 2.5 0 01-2.5 2.5h-9A2.5 2.5 0 015 17V7A2.5 2.5 0 017.5 4.5z"
+                  stroke="white"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </div>
+            <span className="font-bold text-[#0F2132]">CheckClip</span>
+          </div>
+
+          {/* ── SUCCESS STATE ── */}
+          {isSuccess ? (
+            <div className="space-y-6">
+              <div>
+                <h1 className="text-2xl font-bold text-gray-900">Check Your Email</h1>
+                <p className="mt-1 text-sm text-gray-500">
+                  We&apos;ve sent password reset instructions to your inbox.
+                </p>
+              </div>
+
+              {/* Success alert */}
+              <div className="flex gap-4 p-4 rounded-xl bg-emerald-50 border border-emerald-200">
+                <CheckCircle className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
+                <div className="space-y-1">
+                  <p className="text-sm font-semibold text-emerald-800">
+                    Reset link sent successfully!
+                  </p>
+                  <p className="text-sm text-emerald-700">
+                    A password reset link has been sent to{" "}
+                    <span className="font-semibold">{email}</span>. Please check
+                    your inbox and follow the instructions.
+                  </p>
+                </div>
+              </div>
+
+              {/* Hint */}
+              <div className="rounded-xl bg-gray-50 border border-gray-200 px-4 py-3 text-sm text-gray-500">
+                Didn&apos;t receive the email? Check your spam folder or{" "}
+                <button
+                  type="button"
+                  onClick={reset}
+                  className="text-[#2DD4BF] font-semibold hover:underline"
+                >
+                  try a different email address
+                </button>
+                .
+              </div>
+
+              <Button
+                type="button"
+                onClick={() => router.push("/auth/login")}
+                className="w-full h-11 rounded-lg bg-[#2DD4BF] hover:bg-[#14B8A6] text-[#0F2132] font-semibold text-sm transition-colors flex items-center justify-center gap-2"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                Back to Sign In
+              </Button>
+            </div>
+          ) : (
+            /* ── FORM STATE ── */
+            <div className="space-y-8">
+              <div>
+                <button
+                  type="button"
+                  onClick={() => router.push("/auth/login")}
+                  className="flex items-center gap-1 text-sm text-gray-400 hover:text-gray-700 mb-4 transition-colors"
+                >
+                  <ArrowLeft className="w-4 h-4" />
+                  Back to Sign In
+                </button>
+                <h1 className="text-2xl font-bold text-gray-900">Forgot Password?</h1>
+                <p className="mt-1 text-sm text-gray-500">
+                  Enter your corporate email and we&apos;ll send you a reset link.
+                </p>
+              </div>
+
+              {/* Error */}
+              {errorMsg && (
+                <div
+                  role="alert"
+                  className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-4 py-3"
+                >
+                  {errorMsg}
+                </div>
+              )}
+
+              <form onSubmit={handleSubmit} className="space-y-5">
+                <div className="space-y-1.5">
+                  <Label htmlFor="email" className="text-sm font-medium text-gray-700">
+                    Corporate Email Address
+                  </Label>
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                    <Input
+                      id="email"
+                      type="email"
+                      placeholder="nama@mail.com"
+                      className="pl-10 h-11 rounded-lg border-gray-200 bg-gray-50 focus:bg-white transition-colors"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                      autoComplete="email"
+                    />
+                  </div>
+                </div>
+
+                <Button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="w-full h-11 rounded-lg bg-[#2DD4BF] hover:bg-[#14B8A6] text-[#0F2132] font-semibold text-sm disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                >
+                  {isSubmitting ? "Sending…" : "Send Reset Link →"}
+                </Button>
+              </form>
+            </div>
+          )}
+        </div>
+      </main>
     </div>
+  );
+}
+
+export default function ForgotPasswordPage() {
+  return (
+    <Suspense fallback={null}>
+      <ForgotPasswordInner />
+    </Suspense>
   );
 }

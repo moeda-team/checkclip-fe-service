@@ -7,7 +7,7 @@ import { AppQueryProvider } from "@/lib/query-provider";
 import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
-  title: "Marketing Technology",
+  title: "Check Clip",
   description: "Real-time business overview"
 };
 
