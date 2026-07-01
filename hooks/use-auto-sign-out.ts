@@ -1,6 +1,7 @@
 // hooks/use-auto-sign-out.ts
-// Detects when NextAuth session has a RefreshTokenExpired error
-// and automatically signs the user out with a redirect.
+// Watches the NextAuth session for a RefreshTokenExpired error and
+// automatically signs the user out, redirecting to the login page.
+// Mount once in AppLayout — already wired in AppLayout.tsx.
 
 "use client";
 
@@ -14,5 +15,5 @@ export function useAutoSignOut() {
     if (session?.error === "RefreshTokenExpired") {
       signOut({ callbackUrl: "/auth/login?error=session_expired" });
     }
-  }, [session]);
+  }, [session?.error]);
 }

@@ -1,8 +1,8 @@
 // app/dashboard/layout.tsx
 import type { ReactNode } from "react";
-import { DashboardHeader } from "@/components/layout/dasbhoard/DashboardHeader";
-import { DashboardFooter } from "@/components/layout/dasbhoard/DashboardFooter";
 import { GlobalBreadcrumb } from "@/components/layout/GlobalBreadcrumb";
+import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
+import { DashboardFooter } from "./DashboardFooter";
 
 export default function DashboardLayout({
   children,
@@ -20,7 +20,7 @@ export default function DashboardLayout({
           {children}
         </div>
       </main>
-      <DashboardFooter />
+      <DashboardFooter. />
     </div>
   );
 }

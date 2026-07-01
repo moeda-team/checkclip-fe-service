@@ -6,8 +6,9 @@ import type { JWT } from "next-auth/jwt";
 import type { UserRole } from "@/types/next-auth";
 import { env } from "./env";
 
-// Access token lifetime: 1 hour (in ms), with 60s buffer to refresh early
-const ACCESS_TOKEN_TTL_MS = 60 * 60 * 1000;
+// Access token lifetime mirrors backend JWT_ACCESS_EXPIRY default (20000s).
+// Buffer: refresh 60s before expiry to avoid race conditions.
+const ACCESS_TOKEN_TTL_MS = 20_000 * 1000;
 const REFRESH_BUFFER_MS = 60 * 1000;
 
 type LoginApiResponse = {
@@ -57,10 +58,11 @@ async function refreshAccessToken(token: JWT): Promise<JWT> {
       body: JSON.stringify({ refresh_token: token.refreshToken }),
     });
 
-    if (!res.ok) throw new Error(`Refresh failed: ${res.status}`);
-
     const json: LoginApiResponse = await res.json();
-    if (!res.ok || !json.data?.access_token) throw new Error("Invalid refresh response");
+
+    if (!res.ok || !json.data?.access_token) {
+      throw new Error(json.message ?? `Refresh failed: ${res.status}`);
+    }
 
     return {
       ...token,
