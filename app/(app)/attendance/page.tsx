@@ -13,6 +13,7 @@ import {
 } from "./hooks/use-attendance";
 import { AttendanceHistoryTable } from "./components/AttendanceHistoryTable";
 import { CalculationDuration } from "@/lib/helper";
+import { AttendanceMap } from "./components/AttendanceMap";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -163,11 +164,13 @@ export default function AttendancePage() {
           />
         </div>
 
-        {/* Placeholder for attendance log / map */}
+        {/* Location validation map */}
         <div className="lg:col-span-1">
-          <div className="h-full min-h-[300px] rounded-2xl border border-dashed border-gray-200 bg-gray-50 flex items-center justify-center">
-            <p className="text-sm text-gray-400">Attendance log — coming soon</p>
-          </div>
+          <AttendanceMap
+            latitude={today?.latitude}
+            longitude={today?.longitude}
+            lastUpdated={today?.check_in_at?.toString()}
+          />
         </div>
       </div>
 
