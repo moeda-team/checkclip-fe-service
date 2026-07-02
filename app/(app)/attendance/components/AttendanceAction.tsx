@@ -41,8 +41,16 @@ function FingerprintIcon({ className }: { className?: string }) {
 
 export type AttendanceActionProps = {
   status: AttendanceStatus;
-  onCheckIn?: (opts: { faceVerification: boolean; photoCapture: boolean; photoDataUrl?: string }) => void;
-  onCheckOut?: (opts: { faceVerification: boolean; photoCapture: boolean; photoDataUrl?: string }) => void;
+  onCheckIn?: (opts: {
+    faceVerification: boolean;
+    photoCapture: boolean;
+    photoDataUrl?: string;
+  }) => void;
+  onCheckOut?: (opts: {
+    faceVerification: boolean;
+    photoCapture: boolean;
+    photoDataUrl?: string;
+  }) => void;
   isLoading?: boolean;
 };
 
@@ -78,7 +86,9 @@ function SecurityOption({
           enabled ? "bg-teal-100" : "bg-gray-100",
         )}
       >
-        <Icon className={cn("w-5 h-5", enabled ? "text-teal-600" : "text-gray-400")} />
+        <Icon
+          className={cn("w-5 h-5", enabled ? "text-teal-600" : "text-gray-400")}
+        />
       </div>
       <div className="flex-1 min-w-0">
         <p className="text-sm font-semibold text-gray-900">{title}</p>
@@ -102,6 +112,55 @@ function SecurityOption({
   );
 }
 
+function SecurityRequired({
+  icon: Icon,
+  title,
+  description,
+  enabled,
+  onToggle,
+}: {
+  icon: React.ElementType;
+  title: string;
+  description: string;
+  enabled: boolean;
+  onToggle: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onToggle}
+      className={cn(
+        "flex items-start gap-4 p-4 rounded-xl border text-left transition-all",
+        enabled
+          ? "border-teal-200 bg-teal-50/50"
+          : "border-gray-100 bg-white hover:border-gray-200",
+      )}
+    >
+      <div
+        className={cn(
+          "w-10 h-10 rounded-lg flex items-center justify-center shrink-0 mt-0.5",
+          enabled ? "bg-teal-100" : "bg-gray-100",
+        )}
+      >
+        <Icon
+          className={cn("w-5 h-5", enabled ? "text-teal-600" : "text-gray-400")}
+        />
+      </div>
+      <div className="flex-1 min-w-0">
+        <p className="text-sm font-semibold text-gray-900">{title}</p>
+        <p className="text-xs text-gray-500 mt-0.5">{description}</p>
+        <span
+          className={cn(
+            "inline-flex items-center gap-1 mt-2 text-[11px] font-semibold",
+            enabled ? "text-teal-600" : "text-gray-400",
+          )}
+        >
+        </span>
+      </div>
+    </button>
+  );
+}
+
 // ─── Main component ───────────────────────────────────────────────────────────
 
 export function AttendanceAction({
@@ -111,10 +170,12 @@ export function AttendanceAction({
   isLoading = false,
 }: AttendanceActionProps) {
   const [faceVerification, setFaceVerification] = useState(false);
-  const [photoCapture, setPhotoCapture] = useState(false);
+  const [photoCapture, setPhotoCapture] = useState(true);
   const [showPhotoModal, setShowPhotoModal] = useState(false);
   // Track whether the pending action is check-in or check-out
-  const [pendingAction, setPendingAction] = useState<"check_in" | "check_out">("check_in");
+  const [pendingAction, setPendingAction] = useState<"check_in" | "check_out">(
+    "check_in",
+  );
 
   const isCheckedIn = status === "checked_in";
   const isCheckedOut = status === "checked_out";
@@ -192,7 +253,12 @@ export function AttendanceAction({
 
       {/* ── Status banner ── */}
       <div className="flex flex-col items-center gap-3 py-6 bg-gray-50 rounded-xl">
-        <div className={cn("w-16 h-16 rounded-full flex items-center justify-center", config.iconBg)}>
+        <div
+          className={cn(
+            "w-16 h-16 rounded-full flex items-center justify-center",
+            config.iconBg,
+          )}
+        >
           <Clock className={cn("w-8 h-8", config.iconColor)} />
         </div>
         <div className="text-center">
@@ -223,14 +289,18 @@ export function AttendanceAction({
             <FingerprintIcon className="w-8 h-8 text-white/80" />
             <div className="text-left">
               <p className="text-lg font-bold text-white leading-none">
-                {isLoading ? "Processing…" : isCheckedIn ? "Check Out" : "Check In"}
+                {isLoading
+                  ? "Processing…"
+                  : isCheckedIn
+                    ? "Check Out"
+                    : "Check In"}
               </p>
               <p className="text-sm text-white/70 mt-0.5">
                 {isLoading
                   ? "Please wait"
                   : isCheckedIn
-                  ? "Click to check-out"
-                  : "Click to check-in"}
+                    ? "Click to check-out"
+                    : "Click to check-in"}
               </p>
             </div>
           </div>
@@ -252,13 +322,19 @@ export function AttendanceAction({
         <div className="space-y-3">
           <div className="flex items-center justify-between">
             <p className="text-sm font-semibold text-gray-900">
-              Enhance security{" "}
-              <span className="font-normal text-gray-400">(optional)</span>
+              Enhance security
             </p>
             <p className="text-xs text-gray-400">FR-010, FR-011</p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <SecurityRequired
+              icon={Camera}
+              title="Photo Capture"
+              description="Capture your photo during check-in"
+              enabled={true}
+              onToggle={() => setPhotoCapture((p) => !p)}
+            />
             <SecurityOption
               icon={ScanFace}
               title="Face Verification"
@@ -266,20 +342,14 @@ export function AttendanceAction({
               enabled={faceVerification}
               onToggle={() => setFaceVerification((p) => !p)}
             />
-            <SecurityOption
-              icon={Camera}
-              title="Photo Capture"
-              description="Capture your photo during check-in"
-              enabled={photoCapture}
-              onToggle={() => setPhotoCapture((p) => !p)}
-            />
           </div>
 
           {/* Info note */}
           <div className="flex items-start gap-2 px-4 py-3 rounded-xl bg-blue-50 border border-blue-100">
             <ShieldCheck className="w-4 h-4 text-blue-400 shrink-0 mt-0.5" />
             <p className="text-xs text-blue-600">
-              These verification steps are optional and help maintain accurate attendance records.
+              These verification steps are optional and help maintain accurate
+              attendance records.
             </p>
           </div>
         </div>

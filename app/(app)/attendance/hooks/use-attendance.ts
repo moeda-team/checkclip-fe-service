@@ -13,6 +13,7 @@ import { env } from "@/lib/env";
 import { fetchConfig } from "@/lib/fetch";
 import type { ApiResponse } from "@/types/api";
 import type { AttedanceToday } from "../types/attendance-today";
+import { HistoryTable } from "../types/history-table";
 
 const client = fetchConfig(env.apiBaseUrl);
 const BASE = env.apiBaseUrl!;
@@ -117,3 +118,13 @@ export const useCheckOut = () => {
     },
   });
 };
+
+// ─── GET /attendance/my ────────────────────────────────────────────────────
+
+export const useGetAttendanceHistory = () => {
+  return useQuery({
+    queryKey: ["getAttendanceHistory"],
+    queryFn: () => client.get<ApiResponse<HistoryTable[]>>("/attendance/my?limit=5&offset=0"),
+    meta: { errorMessage: "Failed to fetch history"}
+  })
+}

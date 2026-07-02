@@ -12,6 +12,7 @@ import {
   FileBarChart2,
   Settings,
   Users,
+  CheckCircle2,
 } from "lucide-react";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -46,9 +47,9 @@ export const navigationItems: NavSection[] = [
         icon: Clock,
       },
       {
-        title: "Attendance History",
-        href: "/attendance-history",
-        icon: CalendarDays,
+        title: "Task",
+        href: "/task",
+        icon: CheckCircle2,
       },
       {
         title: "Attendance Summary",

@@ -9,7 +9,10 @@ import {
   useUploadAttendanceImage,
   useCheckIn,
   useCheckOut,
+  useGetAttendanceHistory,
 } from "./hooks/use-attendance";
+import { AttendanceHistoryTable } from "./components/AttendanceHistoryTable";
+import { CalculationDuration } from "@/lib/helper";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -20,23 +23,13 @@ function formatTime(iso: string | null | undefined): string | undefined {
 
 }
 
-function calcDuration(
-  checkInIso: string | null | undefined,
-  checkOutIso: string | null | undefined,
-): string {
-  if (!checkInIso) return "0h 00m";
-  const start = new Date(`${checkInIso}Z`).getTime();
-  const end = checkOutIso ? new Date(`${checkOutIso}Z`).getTime() : Date.now();
-  const diffMin = Math.max(0, Math.floor((end - start) / 60_000));
-  const h = Math.floor(diffMin / 60);
-  const m = diffMin % 60;
-  return `${h}h ${String(m).padStart(2, "0")}m`;
-}
+
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function AttendancePage() {
   const { data: todayData, isLoading: isFetchingToday } = useGetAttendanceToday();
+  const { data: historyTable} = useGetAttendanceHistory();
   const uploadImage = useUploadAttendanceImage();
   const checkInMutation = useCheckIn();
   const checkOutMutation = useCheckOut();
@@ -150,7 +143,7 @@ export default function AttendancePage() {
         status={status}
         checkInTime={formatTime(today?.check_in_at?.toString())}
         checkOutTime={formatTime(today?.check_out_at?.toString())}
-        workDuration={calcDuration(
+        workDuration={CalculationDuration(
           today?.check_in_at?.toString(),
           today?.check_out_at?.toString(),
         )}
@@ -175,6 +168,14 @@ export default function AttendancePage() {
           <div className="h-full min-h-[300px] rounded-2xl border border-dashed border-gray-200 bg-gray-50 flex items-center justify-center">
             <p className="text-sm text-gray-400">Attendance log — coming soon</p>
           </div>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-8 lg:grid-cols-1 gap-8">
+        <div className="lg:col-span-1">
+          <AttendanceHistoryTable 
+            attendanceHistory={historyTable?.data ?? []}
+          />
         </div>
       </div>
     </div>

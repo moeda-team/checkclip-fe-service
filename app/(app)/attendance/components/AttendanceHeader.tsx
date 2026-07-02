@@ -5,9 +5,7 @@
 
 import { Calendar, Clock, RotateCcw, CheckCircle2 } from "lucide-react";
 import { useSession } from "next-auth/react";
-import { useGetAttendanceToday } from "../hooks/use-attendance";
-import { format } from "date-fns";
-import { formatInTimeZone } from "date-fns-tz";
+import { FormatTimeLocal } from "@/lib/helper";
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 export type AttendanceStatus = "not_started" | "checked_in" | "checked_out";
@@ -82,7 +80,6 @@ export function AttendanceHeader({
   onViewShiftSchedule,
 }: AttendanceHeaderProps) {
   const { data: session } = useSession();
-  const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   const firstName = session?.user?.name?.split(" ")[0] ?? "there";
   let statusLabel = "Not Started";
   let statusSub = "Shift has not started";
@@ -157,16 +154,12 @@ export function AttendanceHeader({
           label="Check In"
           value={
             checkInTime
-              ? formatInTimeZone(
-                  new Date(checkInTime),
-                  userTimeZone,
-                  "HH:mm:ss",
-                ).toString()
+              ? FormatTimeLocal(new Date(checkInTime), 'HH:mm:ss')
               : "Not Started"
           }
           sub={
             checkInTime
-              ? `Checked in at ${formatInTimeZone(new Date(checkInTime), userTimeZone, "HH:mm:ss")}`
+              ? `Checked in at ${FormatTimeLocal(new Date(checkInTime), 'HH:mm:ss')}`
               : "Please check-in to start your day"
           }
           icon={<Clock className="w-5 h-5 text-teal-500" />}
@@ -178,16 +171,12 @@ export function AttendanceHeader({
           label="Check Out"
           value={
             checkOutTime
-              ? formatInTimeZone(
-                  new Date(checkOutTime),
-                  userTimeZone,
-                  "HH:mm:ss",
-                ).toString()
+              ? FormatTimeLocal(new Date(checkOutTime), 'HH:mm:ss')
               : "--:--"
           }
           sub={
             checkOutTime
-              ? `Checked out at ${formatInTimeZone(new Date(checkOutTime), userTimeZone, "HH:mm:ss")}`
+              ? `Checked out at ${FormatTimeLocal(new Date(checkOutTime), 'HH:mm:ss')}`
               : "Not available yet"
           }
           icon={<RotateCcw className="w-5 h-5 text-purple-500" />}
