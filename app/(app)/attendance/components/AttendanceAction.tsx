@@ -4,38 +4,11 @@
 // Check-in / Check-out action panel with optional Face Verification & Photo Capture.
 
 import { useState } from "react";
-import { Clock, ScanFace, Camera, ShieldCheck } from "lucide-react";
+import { Clock, ScanFace, Camera, ShieldCheck, FingerprintPattern } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { AttendanceStatus } from "./AttendanceHeader";
 import { PhotoCaptureModal } from "./PhotoCaptureModal";
 
-// ─── Fingerprint icon (custom SVG — lucide doesn't have one) ─────────────────
-
-function FingerprintIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={className}
-      aria-hidden="true"
-    >
-      <path d="M12 2C6.48 2 2 6.48 2 12" />
-      <path d="M12 6c3.31 0 6 2.69 6 6" />
-      <path d="M12 10c1.1 0 2 .9 2 2" />
-      <path d="M7 12c0-2.76 2.24-5 5-5" />
-      <path d="M5 12a7 7 0 017-7" />
-      <path d="M12 14c0 2.21-1.79 4-4 4" />
-      <path d="M14 12a2 2 0 01-2 2" />
-      <path d="M12 22c3.31 0 6-2.69 6-6" />
-      <path d="M16 12a4 4 0 01-4 4" />
-      <path d="M8 20a7.93 7.93 0 004-1.06" />
-    </svg>
-  );
-}
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -286,7 +259,7 @@ export function AttendanceAction({
           )}
         >
           <div className="flex items-center gap-3">
-            <FingerprintIcon className="w-8 h-8 text-white/80" />
+            <FingerprintPattern className="w-8 h-8 text-white/80" />
             <div className="text-left">
               <p className="text-lg font-bold text-white leading-none">
                 {isLoading
